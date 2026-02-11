@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Goal List View -->
+    <record id="hr_appraisal_goal_view_list" model="ir.ui.view">
+        <field name="name">hr.appraisal.goal.list</field>
+        <field name="model">hr.appraisal.goal</field>
+        <field name="arch" type="xml">
+            <list string="Goals"
+                  decoration-success="state == 'completed'"
+                  decoration-muted="state == 'cancelled'"
+                  editable="bottom">
+                <field name="name"/>
+                <field name="employee_id" widget="many2one_avatar_employee"/>
+                <field name="category"/>
+                <field name="priority"/>
+                <field name="deadline"/>
+                <field name="target_value"/>
+                <field name="current_value"/>
+                <field name="progress" widget="progressbar"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'not_started'"
+                       decoration-warning="state == 'in_progress'"
+                       decoration-success="state == 'completed'"
+                       decoration-danger="state == 'cancelled'"/>
+                <field name="appraisal_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Goal Form View -->
+    <record id="hr_appraisal_goal_view_form" model="ir.ui.view">
+        <field name="name">hr.appraisal.goal.form</field>
+        <field name="model">hr.appraisal.goal</field>
+        <field name="arch" type="xml">
+            <form string="Goal">
+                <header>
+                    <button name="action_mark_complete" type="object" 
+                            string="Mark Complete" class="btn-success"
+                            invisible="state in ('completed', 'cancelled')"/>
+                    <button name="action_cancel" type="object" 
+                            string="Cancel" 
+                            invisible="state in ('completed', 'cancelled')"/>
+                    <button name="action_reset" type="object" 
+                            string="Reset"
+                            invisible="state not in ('completed', 'cancelled')"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Goal Details">
+                            <field name="name"/>
+                            <field name="category"/>
+                            <field name="priority"/>
+                            <field name="deadline"/>
+                            <field name="weight"/>
+                        </group>
+                        <group string="Measurement">
+                            <field name="metric_type"/>
+                            <field name="target_value"/>
+                            <field name="current_value"/>
+                            <field name="progress" widget="progressbar"/>
+                        </group>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                    <group>
+                        <group string="Employee Notes">
+                            <field name="employee_note" nolabel="1"/>
+                        </group>
+                        <group string="Manager Notes">
+                            <field name="manager_note" nolabel="1"/>
+                        </group>
+                    </group>
+                    <field name="appraisal_id" invisible="1"/>
+                    <field name="employee_id" invisible="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Goal Kanban View -->
+    <record id="hr_appraisal_goal_view_kanban" model="ir.ui.view">
+        <field name="name">hr.appraisal.goal.kanban</field>
+        <field name="model">hr.appraisal.goal</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" sample="1">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="category"/>
+                <field name="deadline"/>
+                <field name="progress"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="o_kanban_record_top mb-2">
+                            <strong class="o_kanban_record_title">
+                                <field name="name"/>
+                            </strong>
+                        </div>
+                        <div class="mb-2">
+                            <field name="employee_id" widget="many2one_avatar_employee"/>
+                        </div>
+                        <div class="text-muted">
+                            <span class="badge bg-secondary">
+                                <field name="category"/>
+                            </span>
+                        </div>
+                        <div class="mt-2">
+                            <i class="fa fa-calendar me-1"/>
+                            <field name="deadline"/>
+                        </div>
+                        <div class="mt-2">
+                            <field name="progress" widget="progressbar"/>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    
+    <!-- Goal Search View -->
+    <record id="hr_appraisal_goal_view_search" model="ir.ui.view">
+        <field name="name">hr.appraisal.goal.search</field>
+        <field name="model">hr.appraisal.goal</field>
+        <field name="arch" type="xml">
+            <search string="Search Goals">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="appraisal_id"/>
+                <separator/>
+                <filter name="filter_not_started" string="Not Started"
+                        domain="[('state', '=', 'not_started')]"/>
+                <filter name="filter_in_progress" string="In Progress"
+                        domain="[('state', '=', 'in_progress')]"/>
+                <filter name="filter_completed" string="Completed"
+                        domain="[('state', '=', 'completed')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_employee" string="Employee"
+                            context="{'group_by': 'employee_id'}"/>
+                    <filter name="group_category" string="Category"
+                            context="{'group_by': 'category'}"/>
+                    <filter name="group_state" string="Status"
+                            context="{'group_by': 'state'}"/>
+                    <filter name="group_deadline" string="Deadline"
+                            context="{'group_by': 'deadline:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Goal Actions -->
+    <record id="action_hr_appraisal_goal" model="ir.actions.act_window">
+        <field name="name">Goals</field>
+        <field name="res_model">hr.appraisal.goal</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="hr_appraisal_goal_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first goal!
+            </p>
+            <p>
+                Set objectives and track progress.
+            </p>
+        </field>
+    </record>
+    
+</odoo>

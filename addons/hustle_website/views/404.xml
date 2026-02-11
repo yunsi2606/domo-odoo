@@ -1,0 +1,96 @@
+<odoo>
+    <data>
+        <template id="fourofour" name="404 Page">
+            <t t-call="hustle_website.main">
+        
+                <main>
+                    <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">                
+                        <div class="offcanvas-header">                    
+                            <button type="button" class="btn-close ms-auto" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        
+                        <div class="offcanvas-body d-flex flex-column justify-content-center align-items-center">
+                            <nav>
+                                <ul>
+                                    <li>
+                                        <a href="/login">Login Form</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="/register">Create an account</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="/password-reset">Password Reset</a>
+                                    </li>
+
+                                    <li>
+                                        <a class="active" href="/404">404 Page</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="/contact">Contact Form</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="subscribeModal" tabindex="-1" aria-labelledby="subscribeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <form action="#" method="get" class="custom-form mt-lg-4 mt-2" role="form">
+                                        <h2 class="modal-title" id="subscribeModalLabel">Stay up to date</h2>
+
+                                        <input type="email" name="email" id="email" pattern="[^ @]*@[^ @]*" class="form-control" placeholder="your@email.com" required="" />
+
+                                        <button type="submit" class="form-control">Notify</button>
+                                    </form>
+                                </div>
+
+                                <div class="modal-footer justify-content-center">
+                                    <p>By signing up, you agree to our Privacy Notice</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <section class="hero-section hero-bg d-flex justify-content-center align-items-center">
+                        <div class="container">
+                            <div class="row">
+
+                                <div class="col-lg-8 col-12 text-center mx-auto">
+                                    <h2 class="page-404-title">404</h2>
+
+                                    <h3>Page Not Found</h3>
+
+                                    <p>The page you are looking for doesn't exist or has been moved.</p>
+
+                                    <a class="custom-btn btn mt-4" href="/">Back to Home</a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+
+                <!-- JAVASCRIPT FILES -->
+                <script src="hustle_website/static/js/jquery.min.js"></script>
+                <script src="hustle_website/static/js/bootstrap.bundle.min.js"></script>
+                <script src="hustle_website/static/js/countdown.js"></script>
+                <script src="hustle_website/static/js/init.js"></script>
+
+                
+            </t>
+        </template>
+    </data>
+</odoo>
+        

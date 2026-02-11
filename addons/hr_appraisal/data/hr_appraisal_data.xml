@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Rating Descriptions -->
+    <record id="appraisal_rating_1" model="ir.model.data">
+        <field name="name">rating_needs_improvement</field>
+        <field name="model">ir.model.data</field>
+    </record>
+    
+    <!-- Default Skill Categories -->
+    <record id="skill_category_technical" model="hr.appraisal.skill.category">
+        <field name="name">Technical Skills</field>
+        <field name="sequence">10</field>
+        <field name="description">Technical competencies and expertise</field>
+    </record>
+    
+    <record id="skill_category_communication" model="hr.appraisal.skill.category">
+        <field name="name">Communication</field>
+        <field name="sequence">20</field>
+        <field name="description">Written and verbal communication abilities</field>
+    </record>
+    
+    <record id="skill_category_leadership" model="hr.appraisal.skill.category">
+        <field name="name">Leadership</field>
+        <field name="sequence">30</field>
+        <field name="description">Leadership and management abilities</field>
+    </record>
+    
+    <record id="skill_category_teamwork" model="hr.appraisal.skill.category">
+        <field name="name">Teamwork</field>
+        <field name="sequence">40</field>
+        <field name="description">Collaboration and teamwork skills</field>
+    </record>
+    
+    <record id="skill_category_problem_solving" model="hr.appraisal.skill.category">
+        <field name="name">Problem Solving</field>
+        <field name="sequence">50</field>
+        <field name="description">Analytical and problem-solving abilities</field>
+    </record>
+    
+    <!-- Default Appraisal Template -->
+    <record id="appraisal_template_default" model="hr.appraisal.template">
+        <field name="name">Standard Performance Review</field>
+        <field name="description">Standard template for annual performance reviews</field>
+        <field name="employee_self_assessment">True</field>
+        <field name="skills_assessment">True</field>
+        <field name="goals_tracking">True</field>
+    </record>
+    
+    <!-- Template Skills -->
+    <record id="template_skill_job_knowledge" model="hr.appraisal.template.skill">
+        <field name="name">Job Knowledge</field>
+        <field name="template_id" ref="appraisal_template_default"/>
+        <field name="category">technical</field>
+        <field name="weight">100</field>
+        <field name="sequence">10</field>
+        <field name="description">Understanding of job requirements and responsibilities</field>
+    </record>
+    
+    <record id="template_skill_quality" model="hr.appraisal.template.skill">
+        <field name="name">Quality of Work</field>
+        <field name="template_id" ref="appraisal_template_default"/>
+        <field name="category">technical</field>
+        <field name="weight">100</field>
+        <field name="sequence">20</field>
+        <field name="description">Accuracy, thoroughness, and reliability of work</field>
+    </record>
+    
+    <record id="template_skill_productivity" model="hr.appraisal.template.skill">
+        <field name="name">Productivity</field>
+        <field name="template_id" ref="appraisal_template_default"/>
+        <field name="category">technical</field>
+        <field name="weight">100</field>
+        <field name="sequence">30</field>
+        <field name="description">Volume of work accomplished</field>
+    </record>
+    
+    <record id="template_skill_communication" model="hr.appraisal.template.skill">
+        <field name="name">Communication Skills</field>
+        <field name="template_id" ref="appraisal_template_default"/>
+        <field name="category">communication</field>
+        <field name="weight">100</field>
+        <field name="sequence">40</field>
+        <field name="description">Ability to communicate effectively</field>
+    </record>
+    
+    <record id="template_skill_teamwork" model="hr.appraisal.template.skill">
+        <field name="name">Teamwork</field>
+        <field name="template_id" ref="appraisal_template_default"/>
+        <field name="category">teamwork</field>
+        <field name="weight">100</field>
+        <field name="sequence">50</field>
+        <field name="description">Ability to work effectively with others</field>
+    </record>
+    
+    <record id="template_skill_initiative" model="hr.appraisal.template.skill">
+        <field name="name">Initiative</field>
+        <field name="template_id" ref="appraisal_template_default"/>
+        <field name="category">problem_solving</field>
+        <field name="weight">100</field>
+        <field name="sequence">60</field>
+        <field name="description">Self-motivation and proactive approach</field>
+    </record>
+    
+    <record id="template_skill_adaptability" model="hr.appraisal.template.skill">
+        <field name="name">Adaptability</field>
+        <field name="template_id" ref="appraisal_template_default"/>
+        <field name="category">adaptability</field>
+        <field name="weight">100</field>
+        <field name="sequence">70</field>
+        <field name="description">Flexibility in handling change</field>
+    </record>
+    
+</odoo>

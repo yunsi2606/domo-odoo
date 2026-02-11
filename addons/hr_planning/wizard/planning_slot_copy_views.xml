@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Planning Slot Copy Wizard Form -->
+    <record id="planning_slot_copy_view_form" model="ir.ui.view">
+        <field name="name">planning.slot.copy.form</field>
+        <field name="model">planning.slot.copy</field>
+        <field name="arch" type="xml">
+            <form string="Copy Planning">
+                <group>
+                    <group string="Copy Mode">
+                        <field name="copy_mode" widget="radio"/>
+                    </group>
+                </group>
+                
+                <group invisible="copy_mode != 'custom'">
+                    <group string="Source Period">
+                        <field name="source_start_date"/>
+                        <field name="source_end_date"/>
+                    </group>
+                </group>
+                
+                <group>
+                    <group string="Target">
+                        <field name="target_start_date"/>
+                    </group>
+                    <group string="Preview">
+                        <field name="preview_count" string="Shifts to Copy"/>
+                    </group>
+                </group>
+                
+                <group string="Filters (Optional)">
+                    <group>
+                        <field name="employee_ids" widget="many2many_tags"
+                               options="{'no_create': True}"/>
+                    </group>
+                    <group>
+                        <field name="role_ids" widget="many2many_tags"
+                               options="{'no_create': True}"/>
+                    </group>
+                </group>
+                
+                <group>
+                    <group>
+                        <field name="include_published"/>
+                        <field name="mark_as_draft"/>
+                    </group>
+                </group>
+                
+                <group string="Preview Details" invisible="not preview_info">
+                    <field name="preview_info" nolabel="1" readonly="1" class="text-muted"/>
+                </group>
+                
+                <footer>
+                    <button name="action_copy" type="object" 
+                            string="Copy Shifts" class="btn-primary"/>
+                    <button name="action_preview" type="object" 
+                            string="Preview" class="btn-secondary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Planning Slot Copy Action -->
+    <record id="action_planning_slot_copy" model="ir.actions.act_window">
+        <field name="name">Copy Previous Planning</field>
+        <field name="res_model">planning.slot.copy</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    
+</odoo>

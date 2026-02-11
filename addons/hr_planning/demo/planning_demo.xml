@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Demo: Assign roles to employees -->
+        <!-- This will work if hr demo data exists -->
+        
+        <!-- Demo Planning Slots for current week -->
+        <function model="planning.slot" name="_demo_create_slots"/>
+        
+    </data>
+</odoo>

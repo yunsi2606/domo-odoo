@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Planning Send Wizard Form -->
+    <record id="planning_send_view_form" model="ir.ui.view">
+        <field name="name">planning.send.form</field>
+        <field name="model">planning.send</field>
+        <field name="arch" type="xml">
+            <form string="Send Planning">
+                <group>
+                    <group string="Period">
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                    </group>
+                    <group string="Summary">
+                        <field name="slot_count" string="Shifts to Send"/>
+                        <field name="employee_ids" widget="many2many_tags" 
+                               options="{'no_create': True}"/>
+                    </group>
+                </group>
+                
+                <group>
+                    <group>
+                        <field name="include_unassigned"/>
+                        <field name="publish_slots"/>
+                    </group>
+                </group>
+                
+                <group string="Additional Note">
+                    <field name="note" nolabel="1" placeholder="Add a note to include in the notification..."/>
+                </group>
+                
+                <group>
+                    <field name="slot_ids" widget="many2many_tags" readonly="1" 
+                           string="Selected Shifts"/>
+                </group>
+                
+                <footer>
+                    <button name="action_send" type="object" 
+                            string="Send" class="btn-primary"/>
+                    <button name="action_send_all_published" type="object" 
+                            string="Send All Published" class="btn-secondary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Planning Send Action -->
+    <record id="action_planning_send" model="ir.actions.act_window">
+        <field name="name">Send Planning</field>
+        <field name="res_model">planning.send</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    
+</odoo>

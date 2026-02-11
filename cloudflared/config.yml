@@ -1,0 +1,7 @@
+tunnel: odoo-tunnel
+credentials-file: /etc/cloudflared/credentials.json
+
+ingress:
+  - hostname: domo.nhatcuong.io.vn
+    service: http://odoo18:8069  
+  - service: http_status:404

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    
+    <!-- Planning Gantt Pill Template -->
+    <t t-name="hr_planning.GanttPill" t-inherit="web.GanttRenderer.Pill" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o_gantt_pill')]" position="inside">
+            <t t-if="pill.record.has_conflict">
+                <span class="o_planning_conflict_badge ms-1" title="Scheduling conflict">
+                    <i class="fa fa-exclamation-triangle"/>
+                </span>
+            </t>
+        </xpath>
+    </t>
+    
+    <!-- Planning Gantt Popover -->
+    <t t-name="hr_planning.GanttPopover">
+        <div class="o_planning_gantt_popover">
+            <div class="popover-header d-flex align-items-center">
+                <t t-if="record.employee_id">
+                    <img class="o_planning_employee_avatar rounded-circle me-2" 
+                         t-att-src="'/web/image/hr.employee/' + record.employee_id[0] + '/avatar_128'"
+                         alt="Avatar"/>
+                    <span class="fw-bold" t-esc="record.employee_id[1]"/>
+                </t>
+                <t t-else="">
+                    <span class="text-muted fst-italic">Open Shift</span>
+                </t>
+            </div>
+            <div class="popover-body">
+                <div class="row mb-2">
+                    <div class="col-6">
+                        <small class="text-muted">Role</small><br/>
+                        <t t-if="record.role_id">
+                            <span class="o_planning_role_tag" t-esc="record.role_id[1]"/>
+                        </t>
+                        <t t-else="">
+                            <span class="text-muted">-</span>
+                        </t>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted">Duration</small><br/>
+                        <span class="o_planning_hours" t-esc="record.allocated_hours + 'h'"/>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-12">
+                        <small class="text-muted">Schedule</small><br/>
+                        <span class="o_planning_time">
+                            <i class="fa fa-clock-o me-1"/>
+                            <t t-esc="startTime"/> - <t t-esc="endTime"/>
+                        </span>
+                    </div>
+                </div>
+                <t t-if="record.has_conflict">
+                    <div class="alert alert-warning py-1 px-2 mb-0">
+                        <i class="fa fa-exclamation-triangle me-1"/>
+                        <small>Scheduling conflict detected</small>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+    
+    <!-- Employee Row Header -->
+    <t t-name="hr_planning.EmployeeRowHeader">
+        <div class="o_planning_employee_header d-flex align-items-center py-2">
+            <t t-if="group.employee_id">
+                <img class="o_planning_employee_avatar rounded-circle me-2" 
+                     t-att-src="'/web/image/hr.employee/' + group.employee_id[0] + '/avatar_128'"
+                     alt="Avatar"/>
+                <div class="flex-grow-1">
+                    <div class="fw-bold" t-esc="group.employee_id[1]"/>
+                    <t t-if="group.department_id">
+                        <small class="text-muted" t-esc="group.department_id[1]"/>
+                    </t>
+                </div>
+            </t>
+            <t t-else="">
+                <div class="o_planning_open_shifts">
+                    <i class="fa fa-users me-2 text-muted"/>
+                    <span class="text-muted fst-italic">Open Shifts</span>
+                </div>
+            </t>
+            <div class="ms-auto">
+                <span class="o_planning_utilization" t-att-class="utilizationClass">
+                    <t t-esc="totalHours"/>h
+                </span>
+            </div>
+        </div>
+    </t>
+    
+    <!-- Planning Quick Create Template -->
+    <t t-name="hr_planning.QuickCreate">
+        <div class="o_planning_quick_create p-3">
+            <div class="mb-3">
+                <label class="form-label">Employee</label>
+                <select class="form-select" name="employee_id">
+                    <option value="">-- Open Shift --</option>
+                    <t t-foreach="employees" t-as="employee">
+                        <option t-att-value="employee.id" t-esc="employee.name"/>
+                    </t>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Role</label>
+                <select class="form-select" name="role_id">
+                    <option value="">-- No Role --</option>
+                    <t t-foreach="roles" t-as="role">
+                        <option t-att-value="role.id" t-esc="role.name"/>
+                    </t>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Template</label>
+                <select class="form-select" name="template_id">
+                    <option value="">-- Custom --</option>
+                    <t t-foreach="templates" t-as="template">
+                        <option t-att-value="template.id" 
+                                t-att-data-duration="template.duration"
+                                t-esc="template.name + ' (' + template.start_time_display + '-' + template.end_time_display + ')'"/>
+                    </t>
+                </select>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-secondary me-2" data-dismiss="popover">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-primary" data-action="create">
+                    Create Shift
+                </button>
+            </div>
+        </div>
+    </t>
+    
+</templates>

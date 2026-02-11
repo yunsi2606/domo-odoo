@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_planning_slot_user,planning.slot.user,model_planning_slot,group_planning_user,1,1,0,0
+access_planning_slot_manager,planning.slot.manager,model_planning_slot,group_planning_manager,1,1,1,1
+access_planning_role_user,planning.role.user,model_planning_role,group_planning_user,1,0,0,0
+access_planning_role_manager,planning.role.manager,model_planning_role,group_planning_manager,1,1,1,1
+access_planning_template_user,planning.template.user,model_planning_template,group_planning_user,1,0,0,0
+access_planning_template_manager,planning.template.manager,model_planning_template,group_planning_manager,1,1,1,1
+access_planning_slot_recurrency_user,planning.slot.recurrency.user,model_planning_slot_recurrency,group_planning_user,1,0,0,0
+access_planning_slot_recurrency_manager,planning.slot.recurrency.manager,model_planning_slot_recurrency,group_planning_manager,1,1,1,1
+access_planning_send_manager,planning.send.manager,model_planning_send,group_planning_manager,1,1,1,1
+access_planning_slot_copy_manager,planning.slot.copy.manager,model_planning_slot_copy,group_planning_manager,1,1,1,1

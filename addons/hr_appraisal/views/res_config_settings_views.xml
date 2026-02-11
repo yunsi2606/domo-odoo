@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Simple Appraisal Settings - extend from HR settings -->
+    <record id="res_config_settings_view_form_appraisal" model="ir.ui.view">
+        <field name="name">res.config.settings.form.appraisal</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Use a simpler xpath that should work -->
+            <xpath expr="//form" position="inside">
+                <app string="Appraisal" name="hr_appraisal" groups="hr_appraisal.group_appraisal_manager">
+                    <block title="Appraisal Settings">
+                        <setting id="appraisal_auto_create" 
+                                 string="Automatic Appraisals"
+                                 help="Automatically create periodic appraisals for employees">
+                            <field name="appraisal_auto_create"/>
+                        </setting>
+                        <setting id="appraisal_frequency"
+                                 string="Appraisal Frequency"
+                                 help="Default number of days between appraisals">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="appraisal_frequency" class="col-lg-4"/>
+                                    <field name="appraisal_frequency" class="col-lg-2"/>
+                                    <span class="ms-2">days</span>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting id="appraisal_reminder"
+                                 string="Reminder Before Deadline"
+                                 help="Send reminder this many days before deadline">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="appraisal_reminder_days" class="col-lg-4"/>
+                                    <field name="appraisal_reminder_days" class="col-lg-2"/>
+                                    <span class="ms-2">days</span>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="Features">
+                        <setting id="appraisal_employee_feedback"
+                                 string="Employee Self-Assessment"
+                                 help="Allow employees to submit self-assessments">
+                            <field name="appraisal_employee_feedback"/>
+                        </setting>
+                        <setting id="appraisal_skills"
+                                 string="Skills Assessment"
+                                 help="Enable skills evaluation in appraisals">
+                            <field name="appraisal_skills"/>
+                        </setting>
+                        <setting id="appraisal_goals"
+                                 string="Goals Tracking"
+                                 help="Enable goal setting and tracking">
+                            <field name="appraisal_goals"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+    
+</odoo>

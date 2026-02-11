@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- List View -->
+    <record id="view_commission_rule_list" model="ir.ui.view">
+        <field name="name">hr.commission.rule.list</field>
+        <field name="model">hr.commission.rule</field>
+        <field name="arch" type="xml">
+            <list string="Commission Rules">
+                <field name="priority" optional="show"/>
+                <field name="name"/>
+                <field name="min_order_count"/>
+                <field name="min_revenue"/>
+                <field name="commission_rate"/>
+                <field name="active" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company" optional="show"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Form View -->
+    <record id="view_commission_rule_form" model="ir.ui.view">
+        <field name="name">hr.commission.rule.form</field>
+        <field name="model">hr.commission.rule</field>
+        <field name="arch" type="xml">
+            <form string="Commission Rule">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g., Gold Tier Commission"/></h1>
+                    </div>
+                    <group>
+                        <group string="Thresholds">
+                            <field name="min_order_count"/>
+                            <field name="min_revenue"/>
+                        </group>
+                        <group string="Commission">
+                            <field name="commission_rate"/>
+                            <field name="priority"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Settings">
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Internal notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Search View -->
+    <record id="view_commission_rule_search" model="ir.ui.view">
+        <field name="name">hr.commission.rule.search</field>
+        <field name="model">hr.commission.rule</field>
+        <field name="arch" type="xml">
+            <search string="Search Commission Rules">
+                <field name="name"/>
+                <filter string="Active" name="filter_active" domain="[('active', '=', True)]"/>
+                <filter string="Archived" name="filter_archived" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Action -->
+    <record id="action_commission_rule" model="ir.actions.act_window">
+        <field name="name">Commission Rules</field>
+        <field name="res_model">hr.commission.rule</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_commission_rule_search"/>
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first commission rule</p>
+        </field>
+    </record>
+    
+</odoo>

@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_appraisal_user,hr.appraisal.user,model_hr_appraisal,group_appraisal_user,1,1,1,0
+access_hr_appraisal_manager,hr.appraisal.manager,model_hr_appraisal,group_appraisal_manager,1,1,1,1
+access_hr_appraisal_goal_user,hr.appraisal.goal.user,model_hr_appraisal_goal,group_appraisal_user,1,1,1,1
+access_hr_appraisal_goal_manager,hr.appraisal.goal.manager,model_hr_appraisal_goal,group_appraisal_manager,1,1,1,1
+access_hr_appraisal_skill_user,hr.appraisal.skill.user,model_hr_appraisal_skill,group_appraisal_user,1,1,1,1
+access_hr_appraisal_skill_manager,hr.appraisal.skill.manager,model_hr_appraisal_skill,group_appraisal_manager,1,1,1,1
+access_hr_appraisal_skill_category_user,hr.appraisal.skill.category.user,model_hr_appraisal_skill_category,group_appraisal_user,1,1,1,0
+access_hr_appraisal_skill_category_manager,hr.appraisal.skill.category.manager,model_hr_appraisal_skill_category,group_appraisal_manager,1,1,1,1
+access_hr_appraisal_note_user,hr.appraisal.note.user,model_hr_appraisal_note,group_appraisal_user,1,1,1,1
+access_hr_appraisal_note_manager,hr.appraisal.note.manager,model_hr_appraisal_note,group_appraisal_manager,1,1,1,1
+access_hr_appraisal_template_user,hr.appraisal.template.user,model_hr_appraisal_template,group_appraisal_user,1,0,0,0
+access_hr_appraisal_template_manager,hr.appraisal.template.manager,model_hr_appraisal_template,group_appraisal_manager,1,1,1,1
+access_hr_appraisal_template_skill_user,hr.appraisal.template.skill.user,model_hr_appraisal_template_skill,group_appraisal_user,1,0,0,0
+access_hr_appraisal_template_skill_manager,hr.appraisal.template.skill.manager,model_hr_appraisal_template_skill,group_appraisal_manager,1,1,1,1
+access_hr_appraisal_template_goal_user,hr.appraisal.template.goal.user,model_hr_appraisal_template_goal,group_appraisal_user,1,0,0,0
+access_hr_appraisal_template_goal_manager,hr.appraisal.template.goal.manager,model_hr_appraisal_template_goal,group_appraisal_manager,1,1,1,1

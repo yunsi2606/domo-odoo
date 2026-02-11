@@ -1,0 +1,145 @@
+<odoo>
+    <data>
+        <template id="index" name="Front Page">
+            <t t-call="hustle_website.main">
+        
+                <main>
+                    <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">                
+                        <div class="offcanvas-header">                    
+                            <button type="button" class="btn-close ms-auto" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        
+                        <div class="offcanvas-body d-flex flex-column justify-content-center align-items-center">
+                            <nav>
+                                <ul>
+                                    <li>
+                                        <a href="/login">Login Form</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="/register">Create an account</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="/password-reset">Password Reset</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="/404">404 Page</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="/contact">Contact Form</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="subscribeModal" tabindex="-1" aria-labelledby="subscribeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <form action="#" method="get" class="custom-form mt-lg-4 mt-2" role="form">
+                                        <h2 class="modal-title" id="subscribeModalLabel">Stay up to date</h2>
+
+                                        <input type="email" name="email" id="email" pattern="[^ @]*@[^ @]*" class="form-control" placeholder="your@email.com" required="" />
+
+                                        <button type="submit" class="form-control">Notify</button>
+                                    </form>
+                                </div>
+
+                                <div class="modal-footer justify-content-center">
+                                    <p>By signing up, you agree to our Privacy Notice</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
+                        <div class="container">
+                            <div class="row">
+
+                                <div class="col-lg-6 col-12 mx-auto">
+                                    <small>our website is under construction. 
+                                    <a rel="nofollow" target="_blank" href="https://www.pexels.com/video/digital-projection-of-the-earth-mass-in-blue-lights-3129957/">Earth video by Pexels</a></small>
+                                    <!-- please set the date time in the init.js file -->
+                                    
+                                <h1 class="text-white mt-2 mb-4 pb-2">
+                                        Test TestoOooOOo!
+                                    </h1>
+                                    <ul class="countdown d-flex flex-wrap align-items-center" id="countdownTimer">
+                                        <li class="countdown-item d-flex flex-column justify-content-center align-items-center">
+                                            <h2 class="countdown-title days">14</h2>
+                                            <span class="countdown-text timeRefDays">Days</span>
+                                        </li>
+
+                                        <li class="countdown-item d-flex flex-column justify-content-center align-items-center">
+                                            <h2 class="countdown-title hours">10</h2>
+                                            <span class="countdown-text timeRefHours">Hours</span>
+                                        </li>
+
+                                        <li class="countdown-item d-flex flex-column justify-content-center align-items-center">
+                                            <h2 class="countdown-title minutes">15</h2>
+                                            <span class="countdown-text timeRefMinutes">Minutes</span>
+                                        </li>
+
+                                        <li class="countdown-item d-flex flex-column justify-content-center align-items-center">
+                                            <h2 class="countdown-title seconds">34</h2>
+                                            <span class="countdown-text timeRefSeconds">Seconds</span>
+                                        </li>
+                                    </ul>
+                                    <!-- <ul class="countdown d-flex flex-wrap align-items-center">
+                                    <li class="countdown-item d-flex flex-column justify-content-center align-items-center">
+                                            <h2 class="countdown-title days">14</h2>
+                                            <span class="countdown-text">Days</span>
+                                    </li>
+
+                                    <li class="countdown-item d-flex flex-column justify-content-center align-items-center">
+                                            <h2 class="countdown-title hours">10</h2>
+                                            <span class="countdown-text">Hours</span>
+                                    </li>
+
+                                    <li class="countdown-item d-flex flex-column justify-content-center align-items-center">
+                                            <h2 class="countdown-title minutes">15</h2>
+                                            <span class="countdown-text">Minutes</span>
+                                    </li>
+
+                                    <li class="countdown-item d-flex flex-column justify-content-center align-items-center">
+                                            <h2 class="countdown-title seconds">34</h2>
+                                            <span class="countdown-text">Seconds</span>
+                                    </li>     
+                                    </ul> -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="video-wrap">
+                            <video autoplay="" loop="" muted="" class="custom-video" poster="">
+                                <source src="/hustle_website/static/videos/video.mp4" type="video/mp4" />
+
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </section>
+                </main>
+
+                <!-- JAVASCRIPT FILES -->
+                <script src="hustle_website/static/js/jquery.min.js"></script>
+                <script src="hustle_website/static/js/bootstrap.bundle.min.js"></script>
+                <script src="hustle_website/static/js/countdown.js"></script>
+                <script src="hustle_website/static/js/init.js"></script>
+
+        
+            </t>
+        </template>
+    </data>
+</odoo>

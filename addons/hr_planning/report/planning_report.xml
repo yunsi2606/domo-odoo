@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Planning Report Action -->
+    <record id="action_planning_slot_report" model="ir.actions.act_window">
+        <field name="name">Planning Report</field>
+        <field name="res_model">planning.slot</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+    </record>
+    
+    <!-- Print Planning Schedule Report -->
+    <record id="action_report_planning_schedule" model="ir.actions.report">
+        <field name="name">Planning Schedule</field>
+        <field name="model">planning.slot</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hr_planning.report_planning_schedule</field>
+        <field name="report_file">hr_planning.report_planning_schedule</field>
+        <field name="binding_model_id" ref="model_planning_slot"/>
+        <field name="binding_type">report</field>
+    </record>
+    
+    <!-- Print Employee Schedule Report -->
+    <record id="action_report_employee_schedule" model="ir.actions.report">
+        <field name="name">Employee Schedule</field>
+        <field name="model">hr.employee</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hr_planning.report_employee_schedule</field>
+        <field name="report_file">hr_planning.report_employee_schedule</field>
+        <field name="binding_model_id" ref="hr.model_hr_employee"/>
+        <field name="binding_type">report</field>
+    </record>
+    
+</odoo>

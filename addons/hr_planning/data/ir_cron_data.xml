@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Cron: Auto-publish scheduled shifts -->
+        <record id="ir_cron_planning_auto_publish" model="ir.cron">
+            <field name="name">Planning: Auto-publish Shifts</field>
+            <field name="model_id" ref="model_planning_slot"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_auto_publish_slots()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active" eval="False"/>
+        </record>
+        
+        <!-- Cron: Archive past shifts -->
+        <record id="ir_cron_planning_archive_past" model="ir.cron">
+            <field name="name">Planning: Archive Past Shifts</field>
+            <field name="model_id" ref="model_planning_slot"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_archive_past_slots()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">weeks</field>
+            <field name="active" eval="False"/>
+        </record>
+        
+        <!-- Cron: Generate recurring slots -->
+        <record id="ir_cron_planning_generate_recurring" model="ir.cron">
+            <field name="name">Planning: Generate Recurring Shifts</field>
+            <field name="model_id" ref="model_planning_slot_recurrency"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_generate_recurring_slots()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active" eval="False"/>
+        </record>
+        
+    </data>
+</odoo>

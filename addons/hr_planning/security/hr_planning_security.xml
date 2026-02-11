@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Planning Security Groups -->
+    
+    <!-- Category -->
+    <record id="module_category_hr_planning" model="ir.module.category">
+        <field name="name">Planning</field>
+        <field name="description">Access rights for HR Planning module</field>
+        <field name="sequence">10</field>
+    </record>
+    
+    <!-- User Group -->
+    <record id="group_planning_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="module_category_hr_planning"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Can view and manage own planning slots</field>
+    </record>
+    
+    <!-- Manager Group -->
+    <record id="group_planning_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="module_category_hr_planning"/>
+        <field name="implied_ids" eval="[(4, ref('group_planning_user'))]"/>
+        <field name="comment">Can manage all planning slots, roles, and templates</field>
+    </record>
+    
+    <!-- Record Rules -->
+    
+    <!-- Planning Slot Rules -->
+    <record id="planning_slot_rule_user" model="ir.rule">
+        <field name="name">Planning Slot: User - Own Slots</field>
+        <field name="model_id" ref="model_planning_slot"/>
+        <field name="groups" eval="[(4, ref('group_planning_user'))]"/>
+        <field name="domain_force">[
+            '|',
+            ('employee_id.user_id', '=', user.id),
+            ('employee_id', '=', False)
+        ]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+    
+    <record id="planning_slot_rule_manager" model="ir.rule">
+        <field name="name">Planning Slot: Manager - All Slots</field>
+        <field name="model_id" ref="model_planning_slot"/>
+        <field name="groups" eval="[(4, ref('group_planning_manager'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    
+    <!-- Planning Role Rules -->
+    <record id="planning_role_rule_company" model="ir.rule">
+        <field name="name">Planning Role: Multi-Company</field>
+        <field name="model_id" ref="model_planning_role"/>
+        <field name="domain_force">[
+            '|',
+            ('company_id', '=', False),
+            ('company_id', 'in', company_ids)
+        ]</field>
+    </record>
+    
+    <!-- Planning Template Rules -->
+    <record id="planning_template_rule_company" model="ir.rule">
+        <field name="name">Planning Template: Multi-Company</field>
+        <field name="model_id" ref="model_planning_template"/>
+        <field name="domain_force">[
+            '|',
+            ('company_id', '=', False),
+            ('company_id', 'in', company_ids)
+        ]</field>
+    </record>
+    
+</odoo>

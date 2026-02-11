@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Appraisal Confirmation Email -->
+    <record id="mail_template_appraisal_confirm" model="mail.template">
+        <field name="name">Appraisal: Confirmation</field>
+        <field name="model_id" ref="model_hr_appraisal"/>
+        <field name="subject">Performance Appraisal Scheduled - {{ object.employee_id.name }}</field>
+        <field name="email_from">{{ (user.email_formatted or object.company_id.email_formatted) }}</field>
+        <field name="email_to">{{ object.employee_id.work_email }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        Dear <t t-out="object.employee_id.name"/>,
+    </p>
+    <br/>
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        Your performance appraisal has been scheduled for the following period:
+    </p>
+    <br/>
+    <table style="border-collapse: collapse; width: 100%;">
+        <tr>
+            <td style="padding: 8px; font-weight: bold;">Appraisal Period:</td>
+            <td style="padding: 8px;">
+                <t t-out="object.appraisal_period_start"/> to <t t-out="object.appraisal_period_end"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; font-weight: bold;">Deadline:</td>
+            <td style="padding: 8px;"><t t-out="object.date_close"/></td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; font-weight: bold;">Manager:</td>
+            <td style="padding: 8px;"><t t-out="object.manager_id.name"/></td>
+        </tr>
+    </table>
+    <br/>
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        Please prepare for your self-assessment when requested.
+    </p>
+    <br/>
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        Best regards,<br/>
+        Human Resources
+    </p>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+    
+    <!-- Employee Feedback Request -->
+    <record id="mail_template_employee_feedback" model="mail.template">
+        <field name="name">Appraisal: Employee Feedback Request</field>
+        <field name="model_id" ref="model_hr_appraisal"/>
+        <field name="subject">Action Required: Submit Your Self-Assessment</field>
+        <field name="email_from">{{ (user.email_formatted or object.company_id.email_formatted) }}</field>
+        <field name="email_to">{{ object.employee_id.work_email }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        Dear <t t-out="object.employee_id.name"/>,
+    </p>
+    <br/>
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        Your performance appraisal is now ready for your self-assessment.
+    </p>
+    <br/>
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        Please complete the following:
+    </p>
+    <ul>
+        <li>Review your accomplishments during the period</li>
+        <li>Document challenges you have faced</li>
+        <li>Identify your development goals</li>
+        <li>Rate your own performance</li>
+    </ul>
+    <br/>
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        <strong>Deadline:</strong> <t t-out="object.date_close"/>
+    </p>
+    <br/>
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        Best regards,<br/>
+        Human Resources
+    </p>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+    
+    <!-- Manager Feedback Request -->
+    <record id="mail_template_manager_feedback" model="mail.template">
+        <field name="name">Appraisal: Manager Feedback Request</field>
+        <field name="model_id" ref="model_hr_appraisal"/>
+        <field name="subject">Action Required: Complete Appraisal for {{ object.employee_id.name }}</field>
+        <field name="email_from">{{ (user.email_formatted or object.company_id.email_formatted) }}</field>
+        <field name="email_to">{{ object.manager_id.work_email }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        Dear <t t-out="object.manager_id.name"/>,
+    </p>
+    <br/>
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        <t t-out="object.employee_id.name"/> has submitted their self-assessment
+        and is awaiting your feedback.
+    </p>
+    <br/>
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        Please review and provide your assessment:
+    </p>
+    <ul>
+        <li>Review the employee's self-assessment</li>
+        <li>Provide your evaluation</li>
+        <li>Identify strengths and areas for improvement</li>
+        <li>Rate the employee's performance</li>
+    </ul>
+    <br/>
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        <strong>Deadline:</strong> <t t-out="object.date_close"/>
+    </p>
+    <br/>
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        Best regards,<br/>
+        Human Resources
+    </p>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+    
+    <!-- Appraisal Complete -->
+    <record id="mail_template_appraisal_done" model="mail.template">
+        <field name="name">Appraisal: Completed</field>
+        <field name="model_id" ref="model_hr_appraisal"/>
+        <field name="subject">Your Performance Appraisal is Complete</field>
+        <field name="email_from">{{ (user.email_formatted or object.company_id.email_formatted) }}</field>
+        <field name="email_to">{{ object.employee_id.work_email }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        Dear <t t-out="object.employee_id.name"/>,
+    </p>
+    <br/>
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        Your performance appraisal has been completed.
+    </p>
+    <br/>
+    <table style="border-collapse: collapse; width: 100%;">
+        <tr>
+            <td style="padding: 8px; font-weight: bold;">Period:</td>
+            <td style="padding: 8px;">
+                <t t-out="object.appraisal_period_start"/> to <t t-out="object.appraisal_period_end"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; font-weight: bold;">Final Rating:</td>
+            <td style="padding: 8px;"><t t-out="object.final_rating"/></td>
+        </tr>
+    </table>
+    <br/>
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        You can view the full appraisal in the system.
+    </p>
+    <br/>
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        Best regards,<br/>
+        Human Resources
+    </p>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+    
+    <!-- Appraisal Reminder -->
+    <record id="mail_template_appraisal_reminder" model="mail.template">
+        <field name="name">Appraisal: Deadline Reminder</field>
+        <field name="model_id" ref="model_hr_appraisal"/>
+        <field name="subject">Reminder: Appraisal Deadline Approaching</field>
+        <field name="email_from">{{ (user.email_formatted or object.company_id.email_formatted) }}</field>
+        <field name="email_to">{{ object.employee_id.work_email }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        Dear <t t-out="object.employee_id.name"/>,
+    </p>
+    <br/>
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        This is a reminder that your appraisal deadline is approaching.
+    </p>
+    <br/>
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        <strong>Deadline:</strong> <t t-out="object.date_close"/>
+    </p>
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        <strong>Current Status:</strong> <t t-out="object.state"/>
+    </p>
+    <br/>
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        Please ensure all required actions are completed before the deadline.
+    </p>
+    <br/>
+    <p style="margin: 0px; padding: 0px; font-size: 14px;">
+        Best regards,<br/>
+        Human Resources
+    </p>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+    
+</odoo>

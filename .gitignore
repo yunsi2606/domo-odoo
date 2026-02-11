@@ -1,0 +1,33 @@
+# Environment & secrets
+.env
+pass.txt
+
+# Database dumps
+*.sql
+*.zip
+
+# Odoo filestore (managed by Docker volume)
+filestore/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Cloudflare credentials (keep config templates only)
+cloudflared/*.json
+cloudflared/*.pem
+
+# Odoo manifest dump (auto-generated)
+manifest.json

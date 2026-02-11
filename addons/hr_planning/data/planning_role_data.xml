@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Default Planning Roles -->
+        <record id="planning_role_manager" model="planning.role">
+            <field name="name">Manager</field>
+            <field name="sequence">1</field>
+            <field name="color">1</field>
+        </record>
+        
+        <record id="planning_role_supervisor" model="planning.role">
+            <field name="name">Supervisor</field>
+            <field name="sequence">2</field>
+            <field name="color">2</field>
+        </record>
+        
+        <record id="planning_role_team_lead" model="planning.role">
+            <field name="name">Team Lead</field>
+            <field name="sequence">3</field>
+            <field name="color">3</field>
+        </record>
+        
+        <record id="planning_role_senior" model="planning.role">
+            <field name="name">Senior Staff</field>
+            <field name="sequence">4</field>
+            <field name="color">4</field>
+        </record>
+        
+        <record id="planning_role_staff" model="planning.role">
+            <field name="name">Staff</field>
+            <field name="sequence">5</field>
+            <field name="color">5</field>
+        </record>
+        
+        <record id="planning_role_junior" model="planning.role">
+            <field name="name">Junior Staff</field>
+            <field name="sequence">6</field>
+            <field name="color">6</field>
+        </record>
+        
+        <record id="planning_role_intern" model="planning.role">
+            <field name="name">Intern</field>
+            <field name="sequence">7</field>
+            <field name="color">7</field>
+        </record>
+        
+        <record id="planning_role_cashier" model="planning.role">
+            <field name="name">Cashier</field>
+            <field name="sequence">10</field>
+            <field name="color">8</field>
+        </record>
+        
+        <record id="planning_role_receptionist" model="planning.role">
+            <field name="name">Receptionist</field>
+            <field name="sequence">11</field>
+            <field name="color">9</field>
+        </record>
+        
+        <record id="planning_role_driver" model="planning.role">
+            <field name="name">Driver</field>
+            <field name="sequence">12</field>
+            <field name="color">10</field>
+        </record>
+        
+    </data>
+</odoo>

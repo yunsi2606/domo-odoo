@@ -1,0 +1,257 @@
+/* HR Planning Custom Styles */
+
+/* Planning Card Colors */
+.o_planning_slot_draft {
+    border-left: 4px solid #6c757d !important;
+}
+
+.o_planning_slot_published {
+    border-left: 4px solid #28a745 !important;
+}
+
+.o_planning_slot_done {
+    border-left: 4px solid #17a2b8 !important;
+}
+
+.o_planning_slot_cancel {
+    border-left: 4px solid #dc3545 !important;
+    opacity: 0.7;
+}
+
+/* Conflict Indicator */
+.o_planning_conflict {
+    background-color: #fff3cd !important;
+    border: 1px solid #ffc107 !important;
+}
+
+.o_planning_conflict_badge {
+    background-color: #dc3545;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+/* Gantt View Customization */
+.o_planning_gantt .o_gantt_row_header {
+    min-width: 200px;
+}
+
+.o_planning_gantt .o_gantt_pill {
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    transition: box-shadow 0.2s ease;
+}
+
+.o_planning_gantt .o_gantt_pill:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.o_planning_gantt .o_gantt_pill.o_gantt_pill_warning {
+    background-color: #fff3cd !important;
+    border: 1px solid #ffc107;
+}
+
+.o_planning_gantt .o_gantt_pill.o_gantt_consolidated_pill {
+    opacity: 0.8;
+}
+
+/* Calendar View */
+.o_planning_calendar .fc-event {
+    border-radius: 4px;
+    padding: 2px 4px;
+}
+
+.o_planning_calendar .fc-event.o_planning_conflict_event {
+    background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 5px,
+        rgba(220, 53, 69, 0.2) 5px,
+        rgba(220, 53, 69, 0.2) 10px
+    );
+}
+
+/* Kanban View */
+.o_planning_kanban .o_kanban_record {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.o_planning_kanban .o_kanban_record:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.o_planning_kanban .o_planning_time {
+    font-size: 12px;
+    color: #666;
+}
+
+.o_planning_kanban .o_planning_hours {
+    font-weight: bold;
+    color: #495057;
+}
+
+/* Utilization Indicators */
+.o_planning_utilization {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.o_planning_utilization.utilization_low {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.o_planning_utilization.utilization_normal {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.o_planning_utilization.utilization_high {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.o_planning_utilization.utilization_over {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Employee Avatar in Planning */
+.o_planning_employee_avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 8px;
+}
+
+/* Role Tags */
+.o_planning_role_tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Time slots visualization */
+.o_planning_time_slot {
+    position: relative;
+    padding: 8px 12px;
+    margin: 4px 0;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.o_planning_time_slot::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    border-radius: 4px 0 0 4px;
+}
+
+.o_planning_time_slot.slot_morning::before {
+    background-color: #ffc107;
+}
+
+.o_planning_time_slot.slot_day::before {
+    background-color: #28a745;
+}
+
+.o_planning_time_slot.slot_evening::before {
+    background-color: #17a2b8;
+}
+
+.o_planning_time_slot.slot_night::before {
+    background-color: #6f42c1;
+}
+
+/* Dashboard Widgets */
+.o_planning_dashboard_widget {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.o_planning_dashboard_widget .widget_title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 12px;
+}
+
+.o_planning_dashboard_widget .widget_value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #212529;
+}
+
+.o_planning_dashboard_widget .widget_description {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 4px;
+}
+
+/* Shift Template Cards */
+.o_planning_template_card {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.o_planning_template_card:hover {
+    border-color: #875A7B;
+    box-shadow: 0 4px 8px rgba(135, 90, 123, 0.2);
+}
+
+.o_planning_template_card .template_name {
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.o_planning_template_card .template_time {
+    color: #666;
+    font-size: 14px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .o_planning_gantt .o_gantt_row_header {
+        min-width: 120px;
+    }
+    
+    .o_planning_employee_avatar {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .o_planning_slot_draft,
+    .o_planning_slot_published,
+    .o_planning_slot_done,
+    .o_planning_slot_cancel {
+        border-left-width: 2px !important;
+    }
+    
+    .o_planning_conflict_badge {
+        background-color: #fff !important;
+        color: #dc3545 !important;
+        border: 1px solid #dc3545;
+    }
+}

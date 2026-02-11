@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Extend Employee Form View -->
+    <record id="hr_employee_view_form_appraisal" model="ir.ui.view">
+        <field name="name">hr.employee.form.appraisal</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_appraisals" type="object"
+                        class="oe_stat_button" icon="fa-clipboard"
+                        groups="hr_appraisal.group_appraisal_user">
+                    <div class="o_stat_info">
+                        <field name="appraisal_count" class="o_stat_value"/>
+                        <span class="o_stat_text">Appraisals</span>
+                    </div>
+                </button>
+            </xpath>
+            <xpath expr="//group[@name='managers']" position="after">
+                <group name="appraisal_info" string="Appraisal Information"
+                       groups="hr_appraisal.group_appraisal_user">
+                    <field name="last_appraisal_date"/>
+                    <field name="last_appraisal_rating"/>
+                    <field name="next_appraisal_date"/>
+                    <field name="appraisal_frequency"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Extend Employee List View -->
+    <record id="hr_employee_view_list_appraisal" model="ir.ui.view">
+        <field name="name">hr.employee.list.appraisal</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="last_appraisal_date" optional="hide"/>
+                <field name="last_appraisal_rating" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Employee Action with Appraisal -->
+    <record id="action_hr_employee_create_appraisal" model="ir.actions.act_window">
+        <field name="name">Create Appraisal</field>
+        <field name="res_model">hr.appraisal</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{
+            'default_employee_id': active_id,
+        }</field>
+    </record>
+    
+</odoo>

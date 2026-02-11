@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Planning Template List View -->
+    <record id="planning_template_view_list" model="ir.ui.view">
+        <field name="name">planning.template.list</field>
+        <field name="model">planning.template</field>
+        <field name="arch" type="xml">
+            <list string="Shift Templates" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="role_id"/>
+                <field name="start_time" widget="float_time"/>
+                <field name="duration"/>
+                <field name="end_time" widget="float_time"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Planning Template Form View -->
+    <record id="planning_template_view_form" model="ir.ui.view">
+        <field name="name">planning.template.form</field>
+        <field name="model">planning.template</field>
+        <field name="arch" type="xml">
+            <form string="Shift Template">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" 
+                            invisible="active"/>
+                    
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Template Name"/>
+                        </h1>
+                    </div>
+                    
+                    <group>
+                        <group string="Role">
+                            <field name="role_id"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group string="Timing">
+                            <field name="start_time" widget="float_time"/>
+                            <field name="duration"/>
+                            <field name="end_time" widget="float_time"/>
+                        </group>
+                    </group>
+                    
+                    <group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    
+                    <div class="alert alert-info" role="alert">
+                        <strong>Schedule:</strong> 
+                        <field name="start_time_display" class="oe_inline"/> - 
+                        <field name="end_time_display" class="oe_inline"/>
+                        (<field name="duration" class="oe_inline"/> hours)
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Planning Template Kanban View -->
+    <record id="planning_template_view_kanban" model="ir.ui.view">
+        <field name="name">planning.template.kanban</field>
+        <field name="model">planning.template</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_dashboard">
+                <field name="name"/>
+                <field name="role_id"/>
+                <field name="start_time"/>
+                <field name="end_time"/>
+                <field name="duration"/>
+                <field name="start_time_display"/>
+                <field name="end_time_display"/>
+                <templates>
+                    <t t-name="card">
+                        <div>
+                            <strong class="o_kanban_record_title">
+                                <field name="name"/>
+                            </strong>
+                            <div class="text-muted mt-1" t-if="record.role_id.raw_value">
+                                <i class="fa fa-user me-1"/>
+                                <field name="role_id"/>
+                            </div>
+                            <div class="mt-2">
+                                <span class="badge bg-primary">
+                                    <i class="fa fa-clock-o me-1"/>
+                                    <field name="start_time_display"/> - <field name="end_time_display"/>
+                                </span>
+                            </div>
+                            <div class="mt-1">
+                                <span class="badge bg-secondary">
+                                    <field name="duration"/> hours
+                                </span>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    
+    <!-- Planning Template Search View -->
+    <record id="planning_template_view_search" model="ir.ui.view">
+        <field name="name">planning.template.search</field>
+        <field name="model">planning.template</field>
+        <field name="arch" type="xml">
+            <search string="Search Templates">
+                <field name="name"/>
+                <field name="role_id"/>
+                <filter name="filter_active" string="Active" 
+                        domain="[('active', '=', True)]"/>
+                <filter name="filter_archived" string="Archived" 
+                        domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_role" string="Role" 
+                            context="{'group_by': 'role_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Planning Template Action -->
+    <record id="action_planning_template" model="ir.actions.act_window">
+        <field name="name">Shift Templates</field>
+        <field name="res_model">planning.template</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="planning_template_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first shift template!
+            </p>
+            <p>
+                Templates help speed up shift creation with pre-defined timing and roles.
+            </p>
+        </field>
+    </record>
+    
+</odoo>

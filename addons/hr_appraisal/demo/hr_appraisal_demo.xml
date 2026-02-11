@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Demo Employees (if needed) -->
+    
+    <!-- Demo Appraisals -->
+    <record id="demo_appraisal_1" model="hr.appraisal">
+        <field name="employee_id" ref="hr.employee_admin"/>
+        <field name="template_id" ref="appraisal_template_default"/>
+        <field name="state">done</field>
+        <field name="date_close" eval="(DateTime.today() - relativedelta(months=6)).strftime('%Y-%m-%d')"/>
+        <field name="appraisal_period_start" eval="(DateTime.today() - relativedelta(years=1)).strftime('%Y-%m-%d')"/>
+        <field name="appraisal_period_end" eval="(DateTime.today() - relativedelta(months=6)).strftime('%Y-%m-%d')"/>
+        <field name="employee_rating">4</field>
+        <field name="manager_rating">4</field>
+        <field name="final_rating">4</field>
+        <field name="employee_self_assessment"><![CDATA[
+            <p>I have exceeded my targets this period and contributed significantly to team projects.</p>
+        ]]></field>
+        <field name="employee_achievements"><![CDATA[
+            <ul>
+                <li>Completed major project ahead of schedule</li>
+                <li>Mentored 2 new team members</li>
+                <li>Improved process efficiency by 20%</li>
+            </ul>
+        ]]></field>
+        <field name="manager_assessment"><![CDATA[
+            <p>Excellent performance throughout the period. Consistently delivers high-quality work.</p>
+        ]]></field>
+        <field name="manager_strengths"><![CDATA[
+            <ul>
+                <li>Strong technical skills</li>
+                <li>Excellent communication</li>
+                <li>Good team player</li>
+            </ul>
+        ]]></field>
+    </record>
+    
+    <!-- Demo Goals -->
+    <record id="demo_goal_1" model="hr.appraisal.goal">
+        <field name="name">Complete Advanced Training</field>
+        <field name="appraisal_id" ref="demo_appraisal_1"/>
+        <field name="category">learning</field>
+        <field name="priority">2</field>
+        <field name="deadline" eval="(DateTime.today() + relativedelta(months=3)).strftime('%Y-%m-%d')"/>
+        <field name="progress">75</field>
+        <field name="state">in_progress</field>
+        <field name="metric_type">percentage</field>
+        <field name="target_value">100</field>
+        <field name="current_value">75</field>
+    </record>
+    
+    <record id="demo_goal_2" model="hr.appraisal.goal">
+        <field name="name">Improve Customer Satisfaction Score</field>
+        <field name="appraisal_id" ref="demo_appraisal_1"/>
+        <field name="category">performance</field>
+        <field name="priority">3</field>
+        <field name="deadline" eval="(DateTime.today() + relativedelta(months=6)).strftime('%Y-%m-%d')"/>
+        <field name="progress">60</field>
+        <field name="state">in_progress</field>
+        <field name="metric_type">percentage</field>
+        <field name="target_value">95</field>
+        <field name="current_value">57</field>
+    </record>
+    
+</odoo>

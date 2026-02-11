@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Email Template: Shift Notification -->
+        <record id="mail_template_slot_notification" model="mail.template">
+            <field name="name">Planning: Shift Notification</field>
+            <field name="model_id" ref="model_planning_slot"/>
+            <field name="subject">Your Shift Schedule - {{ object.start_datetime.strftime('%d/%m/%Y') }}</field>
+            <field name="email_from">{{ (object.company_id.email or user.email_formatted) }}</field>
+            <field name="email_to">{{ object.employee_id.work_email }}</field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-family: Arial, Helvetica, sans-serif;">
+    <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; width: 100%;">
+        <tr>
+            <td align="center" style="min-width: 590px;">
+                <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse: separate;">
+                    <tr>
+                        <td valign="middle" style="padding: 16px;">
+                            <img src="/logo" alt="Logo" style="max-height: 50px;"/>
+                        </td>
+                        <td valign="middle" align="right" style="padding: 16px; font-size: 14px;">
+                            <span style="color: #875A7B; font-weight: bold;">Shift Schedule</span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" style="min-width: 590px;">
+                <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 16px;">
+                    <tr>
+                        <td style="padding: 16px;">
+                            <p style="margin: 0 0 16px 0; font-size: 16px;">
+                                Hello <strong t-out="object.employee_id.name">Employee</strong>,
+                            </p>
+                            <p style="margin: 0 0 16px 0;">
+                                You have been scheduled for the following shift:
+                            </p>
+                            
+                            <table style="background-color: #F8F8F8; padding: 16px; width: 100%; border-radius: 4px; margin-bottom: 16px;">
+                                <tr>
+                                    <td style="padding: 8px; width: 30%;"><strong>Date:</strong></td>
+                                    <td style="padding: 8px;" t-out="object.start_datetime.strftime('%A, %d %B %Y')">Monday, 01 January 2024</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px;"><strong>Time:</strong></td>
+                                    <td style="padding: 8px;">
+                                        <span t-out="object.start_datetime.strftime('%H:%M')">08:00</span> - 
+                                        <span t-out="object.end_datetime.strftime('%H:%M')">17:00</span>
+                                        (<span t-out="'%.1f' % object.allocated_hours">8.0</span> hours)
+                                    </td>
+                                </tr>
+                                <t t-if="object.role_id">
+                                    <tr>
+                                        <td style="padding: 8px;"><strong>Role:</strong></td>
+                                        <td style="padding: 8px;" t-out="object.role_id.name">Staff</td>
+                                    </tr>
+                                </t>
+                                <t t-if="object.name">
+                                    <tr>
+                                        <td style="padding: 8px;"><strong>Note:</strong></td>
+                                        <td style="padding: 8px;" t-out="object.name">Notes</td>
+                                    </tr>
+                                </t>
+                            </table>
+                            
+                            <t t-if="ctx.get('custom_note')">
+                                <p style="margin: 16px 0; padding: 12px; background-color: #FFF8E1; border-left: 4px solid #FFC107; border-radius: 4px;">
+                                    <strong>Manager's Note:</strong><br/>
+                                    <span t-out="ctx.get('custom_note')">Note</span>
+                                </p>
+                            </t>
+                            
+                            <p style="margin-top: 24px; font-size: 12px; color: #666;">
+                                If you have any questions or need to make changes, please contact your manager.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" style="min-width: 590px;">
+                <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; padding: 16px; color: #999999; font-size: 11px;">
+                    <tr>
+                        <td align="center">
+                            <p style="margin: 0;">
+                                Sent by <span t-out="object.company_id.name">Company</span>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+        
+        <!-- Email Template: Schedule Published -->
+        <record id="mail_template_schedule_published" model="mail.template">
+            <field name="name">Planning: Schedule Published</field>
+            <field name="model_id" ref="model_planning_slot"/>
+            <field name="subject">Your Schedule Has Been Published</field>
+            <field name="email_from">{{ (object.company_id.email or user.email_formatted) }}</field>
+            <field name="email_to">{{ object.employee_id.work_email }}</field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-family: Arial, Helvetica, sans-serif;">
+    <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; width: 100%;">
+        <tr>
+            <td align="center" style="min-width: 590px;">
+                <table border="0" cellpadding="0" cellspacing="0" width="590" style="background-color: white; padding: 16px;">
+                    <tr>
+                        <td style="padding: 16px;">
+                            <h2 style="color: #875A7B; margin-bottom: 16px;">Schedule Published!</h2>
+                            <p>Hello <strong t-out="object.employee_id.name">Employee</strong>,</p>
+                            <p>Your work schedule has been published. Please check your planning portal to view your upcoming shifts.</p>
+                            <p style="margin-top: 24px;">
+                                <a href="/my/planning" style="display: inline-block; padding: 12px 24px; background-color: #875A7B; color: white; text-decoration: none; border-radius: 4px;">
+                                    View My Schedule
+                                </a>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+        
+    </data>
+</odoo>

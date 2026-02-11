@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Main Planning Menu -->
+    <menuitem id="menu_hr_planning_root"
+              name="Planning"
+              web_icon="hr_planning,static/description/icon.png"
+              sequence="35"
+              groups="hr_planning.group_planning_user"/>
+    
+    <!-- Planning Operations -->
+    <menuitem id="menu_hr_planning_schedule"
+              name="Schedule"
+              parent="menu_hr_planning_root"
+              sequence="10"/>
+    
+    <menuitem id="menu_planning_slot"
+              name="Planning"
+              parent="menu_hr_planning_schedule"
+              action="action_planning_slot"
+              sequence="1"/>
+    
+    <menuitem id="menu_planning_slot_my"
+              name="My Shifts"
+              parent="menu_hr_planning_schedule"
+              action="action_planning_slot_my"
+              sequence="2"/>
+    
+    <menuitem id="menu_planning_slot_open"
+              name="Open Shifts"
+              parent="menu_hr_planning_schedule"
+              action="action_planning_slot_open"
+              sequence="3"
+              groups="hr_planning.group_planning_manager"/>
+    
+    <menuitem id="menu_planning_slot_conflicts"
+              name="Conflicts"
+              parent="menu_hr_planning_schedule"
+              action="action_planning_slot_conflicts"
+              sequence="4"
+              groups="hr_planning.group_planning_manager"/>
+    
+    <!-- Configuration Menu -->
+    <menuitem id="menu_hr_planning_configuration"
+              name="Configuration"
+              parent="menu_hr_planning_root"
+              sequence="30"
+              groups="hr_planning.group_planning_manager"/>
+    
+    <menuitem id="menu_planning_role"
+              name="Roles"
+              parent="menu_hr_planning_configuration"
+              action="action_planning_role"
+              sequence="1"/>
+    
+    <menuitem id="menu_planning_template"
+              name="Shift Templates"
+              parent="menu_hr_planning_configuration"
+              action="action_planning_template"
+              sequence="2"/>
+    
+    <!-- Reporting Menu -->
+    <menuitem id="menu_hr_planning_reporting"
+              name="Reporting"
+              parent="menu_hr_planning_root"
+              sequence="20"
+              groups="hr_planning.group_planning_manager"/>
+    
+    <menuitem id="menu_planning_analysis"
+              name="Planning Analysis"
+              parent="menu_hr_planning_reporting"
+              action="action_planning_analysis"
+              sequence="1"/>
+    
+    <menuitem id="menu_planning_analysis_role"
+              name="Analysis by Role"
+              parent="menu_hr_planning_reporting"
+              action="action_planning_analysis_by_role"
+              sequence="2"/>
+    
+    <menuitem id="menu_planning_analysis_department"
+              name="Analysis by Department"
+              parent="menu_hr_planning_reporting"
+              action="action_planning_analysis_by_department"
+              sequence="3"/>
+    
+</odoo>

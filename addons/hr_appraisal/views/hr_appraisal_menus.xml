@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Appraisal Main Menu -->
+    <menuitem id="menu_hr_appraisal_root"
+              name="Appraisal"
+              web_icon="hr_appraisal,static/description/icon.png"
+              sequence="35"
+              groups="hr_appraisal.group_appraisal_user"/>
+    
+    <!-- Appraisals Menu -->
+    <menuitem id="menu_hr_appraisal_main"
+              name="Appraisals"
+              parent="menu_hr_appraisal_root"
+              sequence="10"/>
+    
+    <menuitem id="menu_hr_appraisal_all"
+              name="All Appraisals"
+              parent="menu_hr_appraisal_main"
+              action="action_hr_appraisal"
+              sequence="10"/>
+    
+    <menuitem id="menu_hr_appraisal_my"
+              name="My Appraisals"
+              parent="menu_hr_appraisal_main"
+              action="action_hr_appraisal_my"
+              sequence="20"/>
+    
+    <menuitem id="menu_hr_appraisal_team"
+              name="My Team"
+              parent="menu_hr_appraisal_main"
+              action="action_hr_appraisal_team"
+              sequence="30"
+              groups="hr_appraisal.group_appraisal_user"/>
+    
+    <menuitem id="menu_hr_appraisal_pending"
+              name="Pending"
+              parent="menu_hr_appraisal_main"
+              action="action_hr_appraisal_pending"
+              sequence="40"/>
+    
+    <!-- Goals Menu -->
+    <menuitem id="menu_hr_appraisal_goals"
+              name="Goals"
+              parent="menu_hr_appraisal_root"
+              action="action_hr_appraisal_goal"
+              sequence="20"/>
+    
+    <!-- Reporting Menu -->
+    <menuitem id="menu_hr_appraisal_reporting"
+              name="Reporting"
+              parent="menu_hr_appraisal_root"
+              sequence="30"
+              groups="hr_appraisal.group_appraisal_manager"/>
+    
+    <menuitem id="menu_hr_appraisal_report"
+              name="Appraisal Analysis"
+              parent="menu_hr_appraisal_reporting"
+              action="action_hr_appraisal"
+              sequence="10"/>
+    
+    <!-- Configuration Menu -->
+    <menuitem id="menu_hr_appraisal_configuration"
+              name="Configuration"
+              parent="menu_hr_appraisal_root"
+              sequence="40"
+              groups="hr_appraisal.group_appraisal_manager"/>
+    
+    <menuitem id="menu_hr_appraisal_templates"
+              name="Templates"
+              parent="menu_hr_appraisal_configuration"
+              action="action_hr_appraisal_template"
+              sequence="10"/>
+    
+    <menuitem id="menu_hr_appraisal_skill_categories"
+              name="Skill Categories"
+              parent="menu_hr_appraisal_configuration"
+              action="action_hr_appraisal_skill_category"
+              sequence="20"/>
+    
+    <menuitem id="menu_hr_appraisal_settings"
+              name="Settings"
+              parent="menu_hr_appraisal_configuration"
+              action="base.action_res_company_form"
+              sequence="30"/>
+    
+</odoo>

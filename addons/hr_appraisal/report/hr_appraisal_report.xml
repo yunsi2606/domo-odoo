@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Appraisal Report Views -->
+    <record id="hr_appraisal_report_view_pivot" model="ir.ui.view">
+        <field name="name">hr.appraisal.pivot</field>
+        <field name="model">hr.appraisal</field>
+        <field name="arch" type="xml">
+            <pivot string="Appraisal Analysis">
+                <field name="department_id" type="row"/>
+                <field name="final_rating" type="col"/>
+                <field name="goals_completion" type="measure"/>
+                <field name="skills_average" type="measure"/>
+                <field name="rating_score" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    
+    <record id="hr_appraisal_report_view_graph" model="ir.ui.view">
+        <field name="name">hr.appraisal.graph</field>
+        <field name="model">hr.appraisal</field>
+        <field name="arch" type="xml">
+            <graph string="Appraisal Analysis" type="bar">
+                <field name="department_id"/>
+                <field name="rating_score" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Report Actions -->
+    <record id="action_hr_appraisal_report" model="ir.actions.act_window">
+        <field name="name">Appraisal Analysis</field>
+        <field name="res_model">hr.appraisal</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="domain">[('state', '=', 'done')]</field>
+        <field name="context">{}</field>
+    </record>
+    
+</odoo>

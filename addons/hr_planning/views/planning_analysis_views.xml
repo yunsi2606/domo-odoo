@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Planning Analysis Pivot View -->
+    <record id="planning_slot_view_pivot" model="ir.ui.view">
+        <field name="name">planning.slot.pivot</field>
+        <field name="model">planning.slot</field>
+        <field name="arch" type="xml">
+            <pivot string="Planning Analysis" sample="1">
+                <field name="employee_id" type="row"/>
+                <field name="start_datetime" type="col" interval="week"/>
+                <field name="allocated_hours" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    
+    <!-- Planning Analysis Graph View -->
+    <record id="planning_slot_view_graph" model="ir.ui.view">
+        <field name="name">planning.slot.graph</field>
+        <field name="model">planning.slot</field>
+        <field name="arch" type="xml">
+            <graph string="Planning Analysis" type="bar" sample="1">
+                <field name="employee_id"/>
+                <field name="allocated_hours" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Planning Analysis - Hours by Role -->
+    <record id="planning_slot_view_graph_by_role" model="ir.ui.view">
+        <field name="name">planning.slot.graph.role</field>
+        <field name="model">planning.slot</field>
+        <field name="arch" type="xml">
+            <graph string="Hours by Role" type="pie" sample="1">
+                <field name="role_id"/>
+                <field name="allocated_hours" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Planning Analysis - Hours by Department -->
+    <record id="planning_slot_view_graph_by_department" model="ir.ui.view">
+        <field name="name">planning.slot.graph.department</field>
+        <field name="model">planning.slot</field>
+        <field name="arch" type="xml">
+            <graph string="Hours by Department" type="bar" sample="1">
+                <field name="department_id"/>
+                <field name="allocated_hours" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Planning Analysis - Timeline View -->
+    <record id="planning_slot_view_graph_timeline" model="ir.ui.view">
+        <field name="name">planning.slot.graph.timeline</field>
+        <field name="model">planning.slot</field>
+        <field name="arch" type="xml">
+            <graph string="Hours Over Time" type="line" sample="1">
+                <field name="start_datetime" interval="day"/>
+                <field name="allocated_hours" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Planning Analysis Action -->
+    <record id="action_planning_analysis" model="ir.actions.act_window">
+        <field name="name">Planning Analysis</field>
+        <field name="res_model">planning.slot</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="search_view_id" ref="planning_slot_view_search"/>
+        <field name="context">{
+            'search_default_filter_this_week': 0,
+            'search_default_group_employee': 1,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No planning data to analyze
+            </p>
+            <p>
+                Create some shifts to see analysis and reports.
+            </p>
+        </field>
+    </record>
+    
+    <!-- Planning Analysis - By Role -->
+    <record id="action_planning_analysis_by_role" model="ir.actions.act_window">
+        <field name="name">Analysis by Role</field>
+        <field name="res_model">planning.slot</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="context">{
+            'search_default_group_role': 1,
+        }</field>
+    </record>
+    
+    <!-- Planning Analysis - By Department -->
+    <record id="action_planning_analysis_by_department" model="ir.actions.act_window">
+        <field name="name">Analysis by Department</field>
+        <field name="res_model">planning.slot</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="context">{
+            'search_default_group_department': 1,
+        }</field>
+    </record>
+    
+</odoo>

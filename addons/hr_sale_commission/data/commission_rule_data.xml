@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <record id="commission_rule_tier1" model="hr.commission.rule">
+        <field name="name">Tier 1 - Entry Level (1%)</field>
+        <field name="min_order_count">0</field>
+        <field name="min_revenue">0</field>
+        <field name="commission_rate">1.0</field>
+        <field name="priority">10</field>
+        <field name="notes">Base commission rate for any sales activity. Applies when no other rules match.</field>
+    </record>
+
+    <record id="commission_rule_tier2_orders" model="hr.commission.rule">
+        <field name="name">Tier 2 - Bronze by Orders (1.5%)</field>
+        <field name="min_order_count">5</field>
+        <field name="min_revenue">0</field>
+        <field name="commission_rate">1.5</field>
+        <field name="priority">20</field>
+        <field name="notes">Commission for salesperson with 5+ completed orders in the month.</field>
+    </record>
+
+    <record id="commission_rule_tier2_revenue" model="hr.commission.rule">
+        <field name="name">Tier 2 - Bronze by Revenue (1.5%)</field>
+        <field name="min_order_count">0</field>
+        <field name="min_revenue">5000000</field>
+        <field name="commission_rate">1.5</field>
+        <field name="priority">20</field>
+        <field name="notes">Commission for salesperson with 5M+ VND revenue in the month.</field>
+    </record>
+
+    <record id="commission_rule_tier3_orders" model="hr.commission.rule">
+        <field name="name">Tier 3 - Silver by Orders (2%)</field>
+        <field name="min_order_count">10</field>
+        <field name="min_revenue">0</field>
+        <field name="commission_rate">2.0</field>
+        <field name="priority">30</field>
+        <field name="notes">Commission for salesperson with 10+ completed orders in the month.</field>
+    </record>
+
+    <record id="commission_rule_tier3_revenue" model="hr.commission.rule">
+        <field name="name">Tier 3 - Silver by Revenue (2%)</field>
+        <field name="min_order_count">0</field>
+        <field name="min_revenue">15000000</field>
+        <field name="commission_rate">2.0</field>
+        <field name="priority">30</field>
+        <field name="notes">Commission for salesperson with 15M+ VND revenue in the month.</field>
+    </record>
+
+    <record id="commission_rule_tier4_orders" model="hr.commission.rule">
+        <field name="name">Tier 4 - Gold by Orders (2.5%)</field>
+        <field name="min_order_count">20</field>
+        <field name="min_revenue">0</field>
+        <field name="commission_rate">2.5</field>
+        <field name="priority">40</field>
+        <field name="notes">Commission for salesperson with 20+ completed orders in the month.</field>
+    </record>
+
+    <record id="commission_rule_tier4_revenue" model="hr.commission.rule">
+        <field name="name">Tier 4 - Gold by Revenue (2.5%)</field>
+        <field name="min_order_count">0</field>
+        <field name="min_revenue">30000000</field>
+        <field name="commission_rate">2.5</field>
+        <field name="priority">40</field>
+        <field name="notes">Commission for salesperson with 30M+ VND revenue in the month.</field>
+    </record>
+
+    <record id="commission_rule_tier5" model="hr.commission.rule">
+        <field name="name">Tier 5 - Platinum (3%)</field>
+        <field name="min_order_count">30</field>
+        <field name="min_revenue">50000000</field>
+        <field name="commission_rate">3.0</field>
+        <field name="priority">50</field>
+        <field name="notes">Top tier commission for elite performers with both 30+ orders AND 50M+ VND revenue.</field>
+    </record>
+
+    <record id="commission_rule_tier6" model="hr.commission.rule">
+        <field name="name">Tier 6 - Diamond (4%)</field>
+        <field name="min_order_count">50</field>
+        <field name="min_revenue">100000000</field>
+        <field name="commission_rate">4.0</field>
+        <field name="priority">60</field>
+        <field name="notes">Highest tier for exceptional performers with both 50+ orders AND 100M+ VND revenue.</field>
+    </record>
+
+</odoo>

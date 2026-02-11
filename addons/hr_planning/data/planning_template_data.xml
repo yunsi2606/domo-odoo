@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Default Shift Templates -->
+        
+        <!-- Morning Shift -->
+        <record id="planning_template_morning" model="planning.template">
+            <field name="name">Morning Shift</field>
+            <field name="sequence">1</field>
+            <field name="start_time">6.0</field>
+            <field name="duration">8.0</field>
+        </record>
+        
+        <!-- Standard Day Shift -->
+        <record id="planning_template_day" model="planning.template">
+            <field name="name">Day Shift</field>
+            <field name="sequence">2</field>
+            <field name="start_time">8.0</field>
+            <field name="duration">8.0</field>
+        </record>
+        
+        <!-- Office Hours -->
+        <record id="planning_template_office" model="planning.template">
+            <field name="name">Office Hours</field>
+            <field name="sequence">3</field>
+            <field name="start_time">9.0</field>
+            <field name="duration">8.0</field>
+        </record>
+        
+        <!-- Afternoon Shift -->
+        <record id="planning_template_afternoon" model="planning.template">
+            <field name="name">Afternoon Shift</field>
+            <field name="sequence">4</field>
+            <field name="start_time">13.0</field>
+            <field name="duration">8.0</field>
+        </record>
+        
+        <!-- Evening Shift -->
+        <record id="planning_template_evening" model="planning.template">
+            <field name="name">Evening Shift</field>
+            <field name="sequence">5</field>
+            <field name="start_time">16.0</field>
+            <field name="duration">8.0</field>
+        </record>
+        
+        <!-- Night Shift -->
+        <record id="planning_template_night" model="planning.template">
+            <field name="name">Night Shift</field>
+            <field name="sequence">6</field>
+            <field name="start_time">22.0</field>
+            <field name="duration">8.0</field>
+        </record>
+        
+        <!-- Half Day Morning -->
+        <record id="planning_template_half_morning" model="planning.template">
+            <field name="name">Half Day (Morning)</field>
+            <field name="sequence">7</field>
+            <field name="start_time">8.0</field>
+            <field name="duration">4.0</field>
+        </record>
+        
+        <!-- Half Day Afternoon -->
+        <record id="planning_template_half_afternoon" model="planning.template">
+            <field name="name">Half Day (Afternoon)</field>
+            <field name="sequence">8</field>
+            <field name="start_time">13.0</field>
+            <field name="duration">4.0</field>
+        </record>
+        
+        <!-- 12-Hour Shifts -->
+        <record id="planning_template_12hr_day" model="planning.template">
+            <field name="name">12-Hour Day</field>
+            <field name="sequence">9</field>
+            <field name="start_time">6.0</field>
+            <field name="duration">12.0</field>
+        </record>
+        
+        <record id="planning_template_12hr_night" model="planning.template">
+            <field name="name">12-Hour Night</field>
+            <field name="sequence">10</field>
+            <field name="start_time">18.0</field>
+            <field name="duration">12.0</field>
+        </record>
+        
+    </data>
+</odoo>

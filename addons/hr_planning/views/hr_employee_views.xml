@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Employee Form View Extension -->
+    <record id="hr_employee_view_form_planning" model="ir.ui.view">
+        <field name="name">hr.employee.form.planning</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <!-- Add button box -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_planning" type="object" 
+                        class="oe_stat_button" icon="fa-calendar"
+                        groups="hr_planning.group_planning_user">
+                    <div class="o_stat_info">
+                        <field name="planning_slot_count" class="o_stat_value"/>
+                        <span class="o_stat_text">Shifts</span>
+                    </div>
+                </button>
+            </xpath>
+            
+            <!-- Add planning page to notebook -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Planning" name="planning" 
+                      groups="hr_planning.group_planning_user">
+                    <group>
+                        <group string="Planning Roles">
+                            <field name="planning_role_ids" widget="many2many_tags"/>
+                            <field name="default_planning_role_id"/>
+                        </group>
+                        <group string="Statistics">
+                            <field name="allocated_hours_this_week"/>
+                            <field name="allocated_hours_this_month"/>
+                            <field name="planning_utilization" widget="percentage"/>
+                            <field name="current_week_slots"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="is_available" widget="boolean_toggle"/>
+                            <field name="has_planning_conflict"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Employee List View Extension -->
+    <record id="hr_employee_view_list_planning" model="ir.ui.view">
+        <field name="name">hr.employee.list.planning</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='department_id']" position="after">
+                <field name="planning_slot_count" string="Shifts" optional="hide"/>
+                <field name="allocated_hours_this_week" string="Hours/Week" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Employee Kanban View Extension -->
+    <record id="hr_employee_view_kanban_planning" model="ir.ui.view">
+        <field name="name">hr.employee.kanban.planning</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.hr_kanban_view_employees"/>
+        <field name="arch" type="xml">
+            <xpath expr="//templates" position="before">
+                <field name="planning_slot_count"/>
+                <field name="allocated_hours_this_week"/>
+            </xpath>
+        </field>
+    </record>
+    
+</odoo>

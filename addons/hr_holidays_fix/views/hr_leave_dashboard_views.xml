@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- 
+        Fix Time Off Dashboard (menu id 416, action id 599)
+        
+        Problem: 
+        Original domain = [('user_id', '=', uid)    , ('employee_id.company_id', 'in', allowed_company_ids)]
+        This only shows leaves belonging to the current logged-in user.
+        If user (like admin) has no employee record, dashboard is empty.
+        
+        Solution:
+        Change domain to show all leaves in the company, not just current user's.
+        Users can still filter by their own leaves using search filters.
+    -->
+    <record id="hr_holidays.hr_leave_action_new_request" model="ir.actions.act_window">
+        <field name="domain">[('employee_id.company_id', 'in', allowed_company_ids)]</field>
+        <field name="context">{
+            'short_name': 1
+        }</field>
+    </record>
+
+    <!-- 
+        Also fix the Calendar action (id 619) for "All Time Off" in Overview menu
+    -->
+    <record id="hr_holidays.action_hr_holidays_dashboard" model="ir.actions.act_window">
+        <field name="domain">[]</field>
+        <field name="context">{
+            'hide_employee_name': 0
+        }</field>
+    </record>
+
+</odoo>

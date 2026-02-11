@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_commission_rule_manager,hr.commission.rule.manager,model_hr_commission_rule,hr.group_hr_manager,1,1,1,1
+access_commission_rule_user,hr.commission.rule.user,model_hr_commission_rule,hr.group_hr_user,1,0,0,0
+access_commission_record_manager,hr.commission.record.manager,model_hr_commission_record,hr.group_hr_manager,1,1,1,1
+access_commission_record_user,hr.commission.record.user,model_hr_commission_record,hr.group_hr_user,1,0,0,0
+access_commission_line_manager,hr.commission.line.manager,model_hr_commission_line,hr.group_hr_manager,1,1,1,1
+access_commission_line_user,hr.commission.line.user,model_hr_commission_line,hr.group_hr_user,1,0,0,0
+access_commission_rule_sales,hr.commission.rule.sales,model_hr_commission_rule,sales_team.group_sale_salesman,1,0,0,0
+access_commission_record_sales,hr.commission.record.sales,model_hr_commission_record,sales_team.group_sale_salesman,1,0,0,0
+access_commission_line_sales,hr.commission.line.sales,model_hr_commission_line,sales_team.group_sale_salesman,1,0,0,0
+access_commission_rule_admin,hr.commission.rule.admin,model_hr_commission_rule,base.group_system,1,1,1,1
+access_commission_record_admin,hr.commission.record.admin,model_hr_commission_record,base.group_system,1,1,1,1
+access_commission_line_admin,hr.commission.line.admin,model_hr_commission_line,base.group_system,1,1,1,1

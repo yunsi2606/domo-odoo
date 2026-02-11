@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Planning Settings -->
+    <record id="res_config_settings_view_form_planning" model="ir.ui.view">
+        <field name="name">res.config.settings.form.planning</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Planning" string="Planning" name="hr_planning" 
+                     logo="/hr_planning/static/description/icon.png" 
+                     groups="hr_planning.group_planning_manager">
+                    <block title="Planning Settings" name="planning_settings">
+                        <setting string="Planning Generation" 
+                                 help="Choose default planning generation interval">
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <field name="planning_generation_interval" 
+                                           class="o_light_label" widget="radio"/>
+                                </div>
+                            </div>
+                        </setting>
+                        
+                        <setting string="Self Unassign" 
+                                 help="Allow employees to unassign themselves from shifts">
+                            <field name="planning_allow_self_unassign"/>
+                        </setting>
+                        
+                        <setting string="Open Shifts" 
+                                 help="Allow creating shifts without assigned employees">
+                            <field name="planning_allow_open_shift"/>
+                        </setting>
+                        
+                        <setting string="Automatic Notifications" 
+                                 help="Send email notifications when shifts are published">
+                            <field name="planning_send_notification"/>
+                        </setting>
+                    </block>
+                    
+                    <block title="Default Values" name="planning_defaults">
+                        <setting string="Default Shift Start Time">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label string="Start Time" for="planning_default_start_time" 
+                                           class="col-lg-3 o_light_label"/>
+                                    <field name="planning_default_start_time" 
+                                           widget="float_time" class="col-lg-2"/>
+                                </div>
+                            </div>
+                        </setting>
+                        
+                        <setting string="Default Shift Duration">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label string="Duration (hours)" for="planning_default_duration" 
+                                           class="col-lg-3 o_light_label"/>
+                                    <field name="planning_default_duration" class="col-lg-2"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                    
+                    <block title="Constraints" name="planning_constraints">
+                        <setting string="Maximum Hours Per Week">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label string="Max Hours" for="planning_max_hours_per_week" 
+                                           class="col-lg-3 o_light_label"/>
+                                    <field name="planning_max_hours_per_week" class="col-lg-2"/>
+                                </div>
+                            </div>
+                        </setting>
+                        
+                        <setting string="Utilization Warning Threshold" 
+                                 help="Show warning when employee utilization exceeds this percentage">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label string="Threshold (%)" for="planning_warning_threshold" 
+                                           class="col-lg-3 o_light_label"/>
+                                    <field name="planning_warning_threshold" class="col-lg-2"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+    
+</odoo>
