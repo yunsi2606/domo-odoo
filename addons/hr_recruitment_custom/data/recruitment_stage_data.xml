@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ============================= -->
+        <!-- Default Recruitment Stages -->
+        <!-- ============================= -->
+        <record id="stage_new" model="hr.recruitment.stage">
+            <field name="name">New Application</field>
+            <field name="sequence">1</field>
+            <field name="fold">False</field>
+        </record>
+
+        <record id="stage_screening" model="hr.recruitment.stage">
+            <field name="name">Initial Screening</field>
+            <field name="sequence">2</field>
+            <field name="fold">False</field>
+        </record>
+
+        <record id="stage_first_interview" model="hr.recruitment.stage">
+            <field name="name">First Interview</field>
+            <field name="sequence">3</field>
+            <field name="fold">False</field>
+        </record>
+
+        <record id="stage_second_interview" model="hr.recruitment.stage">
+            <field name="name">Second Interview</field>
+            <field name="sequence">4</field>
+            <field name="fold">False</field>
+        </record>
+
+        <record id="stage_offer" model="hr.recruitment.stage">
+            <field name="name">Offer Sent</field>
+            <field name="sequence">5</field>
+            <field name="fold">False</field>
+        </record>
+
+        <record id="stage_hired" model="hr.recruitment.stage">
+            <field name="name">Hired</field>
+            <field name="sequence">6</field>
+            <field name="hired_stage">True</field>
+            <field name="fold">True</field>
+        </record>
+
+        <record id="stage_refused" model="hr.recruitment.stage">
+            <field name="name">Refused</field>
+            <field name="sequence">7</field>
+            <field name="fold">True</field>
+        </record>
+
+        <!-- ============================= -->
+        <!-- Default Source Channels -->
+        <!-- ============================= -->
+        <record id="source_channel_website" model="hr.recruitment.source.channel">
+            <field name="name">Company Website</field>
+            <field name="code">website</field>
+            <field name="channel_type">website</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="source_channel_vietnamworks" model="hr.recruitment.source.channel">
+            <field name="name">VietnamWorks</field>
+            <field name="code">job_board</field>
+            <field name="channel_type">job_board</field>
+            <field name="url">https://www.vietnamworks.com</field>
+            <field name="sequence">2</field>
+        </record>
+
+        <record id="source_channel_topcv" model="hr.recruitment.source.channel">
+            <field name="name">TopCV</field>
+            <field name="code">job_board</field>
+            <field name="channel_type">job_board</field>
+            <field name="url">https://www.topcv.vn</field>
+            <field name="sequence">3</field>
+        </record>
+
+        <record id="source_channel_facebook" model="hr.recruitment.source.channel">
+            <field name="name">Facebook</field>
+            <field name="code">social_media</field>
+            <field name="channel_type">social_media</field>
+            <field name="url">https://www.facebook.com</field>
+            <field name="sequence">4</field>
+        </record>
+
+        <record id="source_channel_linkedin" model="hr.recruitment.source.channel">
+            <field name="name">LinkedIn</field>
+            <field name="code">social_media</field>
+            <field name="channel_type">social_media</field>
+            <field name="url">https://www.linkedin.com</field>
+            <field name="sequence">5</field>
+        </record>
+
+        <record id="source_channel_referral" model="hr.recruitment.source.channel">
+            <field name="name">Employee Referral</field>
+            <field name="code">referral</field>
+            <field name="channel_type">referral</field>
+            <field name="sequence">6</field>
+        </record>
+
+        <record id="source_channel_walk_in" model="hr.recruitment.source.channel">
+            <field name="name">Walk-in (Store)</field>
+            <field name="code">walk_in</field>
+            <field name="channel_type">walk_in</field>
+            <field name="sequence">7</field>
+        </record>
+
+        <!-- ============================= -->
+        <!-- Default Refuse Reasons -->
+        <!-- ============================= -->
+        <record id="refuse_reason_not_qualified" model="hr.applicant.refuse.reason">
+            <field name="name">Not Qualified</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="refuse_reason_overqualified" model="hr.applicant.refuse.reason">
+            <field name="name">Overqualified</field>
+            <field name="sequence">2</field>
+        </record>
+
+        <record id="refuse_reason_salary" model="hr.applicant.refuse.reason">
+            <field name="name">Salary Expectation Too High</field>
+            <field name="sequence">3</field>
+        </record>
+
+        <record id="refuse_reason_culture" model="hr.applicant.refuse.reason">
+            <field name="name">Culture Mismatch</field>
+            <field name="sequence">4</field>
+        </record>
+
+        <record id="refuse_reason_withdrew" model="hr.applicant.refuse.reason">
+            <field name="name">Candidate Withdrew</field>
+            <field name="sequence">5</field>
+        </record>
+
+        <record id="refuse_reason_position_filled" model="hr.applicant.refuse.reason">
+            <field name="name">Position Already Filled</field>
+            <field name="sequence">6</field>
+        </record>
+
+    </data>
+</odoo>

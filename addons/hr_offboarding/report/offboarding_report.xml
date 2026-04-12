@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_offboarding_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                    <style>
+                        .title { font-size:20px; font-weight:bold; text-align:center; margin-bottom:6px; }
+                        .subtitle { text-align:center; color:#555; margin-bottom:20px; }
+                        table.main { width:100%; border-collapse:collapse; }
+                        table.main th { background:#2c3e50; color:white; padding:8px; text-align:left; }
+                        table.main td { padding:7px 10px; border-bottom:1px solid #eee; }
+                        .badge-ok { color:#27ae60; font-weight:bold; }
+                        .badge-dmg { color:#e67e22; font-weight:bold; }
+                        .badge-miss { color:#e74c3c; font-weight:bold; }
+                        .sig-table { width:100%; margin-top:50px; text-align:center; }
+                    </style>
+
+                    <div class="title">ASSET RECOVERY MINUTES</div>
+                    <div class="subtitle">Biên Bản Thu Hồi Tài Sản | Ref: <t t-esc="doc.name"/></div>
+
+                    <table style="width:100%; margin-bottom:16px; font-size:13px;">
+                        <tr>
+                            <td><b>Employee:</b> <t t-esc="doc.employee_id.name"/></td>
+                            <td><b>Department:</b> <t t-esc="doc.department_id.name or ''"/></td>
+                        </tr>
+                        <tr>
+                            <td><b>Resignation Date:</b> <t t-esc="doc.date_resign"/></td>
+                            <td><b>Last Working Day:</b> <t t-esc="doc.date_last_work"/></td>
+                        </tr>
+                        <tr>
+                            <td><b>Branch Manager:</b> <t t-esc="doc.branch_manager_id.name or ''"/></td>
+                            <td><b>Asset Return Deadline:</b> <t t-esc="doc.date_asset_deadline or doc.date_last_work"/></td>
+                        </tr>
+                    </table>
+
+                    <table class="main">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Code</th>
+                                <th>Asset Name</th>
+                                <th>Value (VNĐ)</th>
+                                <th>Return Status</th>
+                                <th>Compensation</th>
+                                <th>Note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="i" t-value="0"/>
+                            <t t-foreach="doc.line_ids" t-as="line">
+                                <t t-set="i" t-value="i + 1"/>
+                                <tr>
+                                    <td><t t-esc="i"/></td>
+                                    <td><t t-esc="line.asset_id.code or ''"/></td>
+                                    <td><t t-esc="line.asset_id.name"/></td>
+                                    <td style="text-align:right;"><t t-esc="'{:,.0f}'.format(line.asset_value)"/></td>
+                                    <td>
+                                        <t t-if="line.return_state == 'returned_ok'">
+                                            <span class="badge-ok">✓ Good Condition</span>
+                                        </t>
+                                        <t t-elif="line.return_state == 'returned_damaged'">
+                                            <span class="badge-dmg">⚠ Damaged</span>
+                                        </t>
+                                        <t t-elif="line.return_state == 'missing'">
+                                            <span class="badge-miss">✗ Missing</span>
+                                        </t>
+                                        <t t-else="">Pending</t>
+                                    </td>
+                                    <td style="text-align:right;" t-att-style="'color:#e74c3c;' if line.compensation_amount else ''">
+                                        <t t-esc="'{:,.0f}'.format(line.compensation_amount) if line.compensation_amount else '—'"/>
+                                    </td>
+                                    <td><t t-esc="line.note or ''"/></td>
+                                </tr>
+                            </t>
+                            <t t-if="doc.compensation_amount > 0">
+                                <tr style="font-weight:bold; background:#fdf2f2;">
+                                    <td colspan="5" style="text-align:right;">Total Compensation:</td>
+                                    <td style="text-align:right; color:#e74c3c;">
+                                        <t t-esc="'{:,.0f}'.format(doc.compensation_amount)"/> VNĐ
+                                    </td>
+                                    <td/>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <table class="sig-table">
+                        <tr>
+                            <td><b>Employee</b><br/><br/><br/><br/>________________<br/><t t-esc="doc.employee_id.name"/></td>
+                            <td><b>Branch Manager</b><br/><br/><br/><br/>________________<br/><t t-esc="doc.branch_manager_id.name or ''"/></td>
+                            <td><b>Director</b><br/><br/><br/><br/>________________<br/><t t-esc="doc.director_approved_by.name or ''"/></td>
+                        </tr>
+                    </table>
+                </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_offboarding" model="ir.actions.report">
+        <field name="name">Asset Recovery Minutes</field>
+        <field name="model">hr.offboarding</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hr_offboarding.report_offboarding_document</field>
+        <field name="report_file">hr_offboarding.report_offboarding_document</field>
+        <field name="print_report_name">'Offboarding_%s' % object.name.replace('/','_')</field>
+        <field name="binding_model_id" ref="model_hr_offboarding"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

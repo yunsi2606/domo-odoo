@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         Menu Structure — HR Attendance Custom
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <!-- ── Manager Menu: Correction Requests ── -->
+    <menuitem
+        id="menu_attendance_correction_root"
+        name="Correction Requests"
+        parent="hr_attendance.menu_hr_attendance_root"
+        sequence="30"/>
+
+    <menuitem
+        id="menu_attendance_correction_all"
+        name="All Requests"
+        parent="menu_attendance_correction_root"
+        action="action_attendance_correction_all"
+        groups="hr_attendance_custom.group_attendance_manager"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_attendance_correction_my"
+        name="My Requests"
+        parent="menu_attendance_correction_root"
+        action="action_attendance_correction_my"
+        sequence="20"/>
+
+</odoo>

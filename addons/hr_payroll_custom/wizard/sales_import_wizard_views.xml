@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_sales_import_wizard_view" model="ir.ui.view">
+        <field name="name">hr.sales.import.wizard.form</field>
+        <field name="model">hr.sales.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import Sales from Excel">
+                <sheet>
+                    <group>
+                        <field name="file" filename="filename" widget="binary"/>
+                        <field name="filename" invisible="1"/>
+                        <field name="date_override" help="Nếu file Excel không có cột Date, nhập ngày tại đây"/>
+                    </group>
+                    <div class="alert alert-info" invisible="not result_msg">
+                        <field name="result_msg" readonly="1" nolabel="1"/>
+                    </div>
+                    <div class="text-muted mt-2">
+                        <p><b>Expected Excel columns (row 1 = header, data from row 2):</b></p>
+                        <p>A: Employee ID or Name | B: Name (optional) | C: Sales Amount | D: Products Sold | E: Shift | F: Date</p>
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_import" string="Import" type="object" class="btn-primary"/>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

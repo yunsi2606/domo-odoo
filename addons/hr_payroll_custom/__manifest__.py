@@ -1,0 +1,26 @@
+# -*- coding: utf-8 -*-
+{
+    'name': 'HR Payroll Custom',
+    'version': '18.0.1.0.0',
+    'category': 'Human Resources/Payroll',
+    'summary': 'Tính lương tùy chỉnh cho Odoo 18 Community',
+    'author': 'FORHER',
+    'depends': ['hr', 'hr_attendance', 'hr_contract', 'mail', 'hr_attendance_custom', 'sale'],
+    'data': [
+        'security/hr_payroll_security.xml',
+        'security/ir.model.access.csv',
+        'data/sequence_data.xml',
+        'views/hr_payslip_views.xml',
+        'views/hr_sales_record_views.xml',
+        'views/hr_employee_payroll_views.xml',
+        'wizard/sales_import_wizard_views.xml',
+        'wizard/sales_sync_wizard_views.xml',
+        'wizard/payroll_run_wizard_views.xml',
+        'views/menus.xml',
+        'report/payslip_report.xml',
+        'report/payslip_report_action.xml',
+    ],
+    'installable': True,
+    'application': True,
+    'license': 'LGPL-3',
+}

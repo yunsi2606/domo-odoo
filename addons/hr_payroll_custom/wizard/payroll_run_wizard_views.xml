@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_payroll_run_wizard_view" model="ir.ui.view">
+        <field name="name">hr.payroll.run.wizard.form</field>
+        <field name="model">hr.payroll.run.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate Payslips">
+                <sheet>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="department_id" options="{'no_create':True}"/>
+                        <field name="employee_ids" widget="many2many_tags" options="{'no_create':True}"/>
+                    </group>
+                    <div class="alert alert-success" invisible="not result_msg">
+                        <field name="result_msg" readonly="1" nolabel="1"/>
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_run" string="Generate" type="object" class="btn-primary"/>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

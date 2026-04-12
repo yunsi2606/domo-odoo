@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- HR ATTENDANCE — Extended Views -->
+
+    <!-- Form View Inheritance -->
+    <record id="hr_attendance_view_form_custom" model="ir.ui.view">
+        <field name="name">hr.attendance.form.custom</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Thêm trường Source vào header area -->
+            <xpath expr="//field[@name='employee_id']" position="after">
+                <field name="source" widget="badge"
+                       decoration-info="source == 'kiosk'"
+                       decoration-warning="source == 'manual'"
+                       decoration-success="source == 'correction'"/>
+                <field name="attendance_status" widget="badge"
+                       decoration-success="attendance_status == 'normal'"
+                       decoration-warning="attendance_status in ('late_in','early_out')"
+                       decoration-danger="attendance_status in ('forgot_checkout','late_in_early_out')"
+                       decoration-info="attendance_status in ('manual','corrected')"/>
+            </xpath>
+
+            <!-- Thêm tab thông tin ca làm việc -->
+            <xpath expr="//field[@name='check_out']" position="after">
+                <separator string="Work Schedule Info"/>
+                <group col="2">
+                    <field name="work_schedule_shift" readonly="1"/>
+                    <field name="planned_hours" widget="float_time" readonly="1"/>
+                    <field name="planned_check_in" readonly="1"/>
+                    <field name="planned_check_out" readonly="1"/>
+                </group>
+                <group col="2">
+                    <field name="late_minutes" readonly="1"/>
+                    <field name="early_out_minutes" readonly="1"/>
+                </group>
+                <separator string="Notes"/>
+                <field name="note" nolabel="1"/>
+            </xpath>
+
+            <!-- Button sửa công -->
+            <xpath expr="//header" position="inside">
+                <button name="action_request_correction"
+                        string="Request Correction"
+                        type="object"
+                        class="btn-secondary"
+                        invisible="correction_id != False"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- List View Inheritance -->
+    <record id="hr_attendance_view_list_custom" model="ir.ui.view">
+        <field name="name">hr.attendance.list.custom</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='worked_hours']" position="after">
+                <field name="attendance_status" widget="badge"
+                       decoration-success="attendance_status == 'normal'"
+                       decoration-warning="attendance_status in ('late_in','early_out')"
+                       decoration-danger="attendance_status in ('forgot_checkout','late_in_early_out')"
+                       decoration-info="attendance_status in ('manual','corrected')"
+                       optional="show"/>
+                <field name="late_minutes" optional="show" string="Late (min)"/>
+                <field name="source" optional="hide" widget="badge"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Search View Inheritance -->
+    <record id="hr_attendance_view_search_custom" model="ir.ui.view">
+        <field name="name">hr.attendance.search.custom</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_filter"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//search" position="inside">
+                <separator/>
+                <filter string="Late Check-in" name="filter_late"
+                        domain="[('attendance_status', 'in', ('late_in', 'late_in_early_out'))]"/>
+                <filter string="Early Check-out" name="filter_early"
+                        domain="[('attendance_status', 'in', ('early_out', 'late_in_early_out'))]"/>
+                <filter string="Forgot Check-out" name="filter_forgot"
+                        domain="[('attendance_status', '=', 'forgot_checkout')]"/>
+                <filter string="Normal" name="filter_normal"
+                        domain="[('attendance_status', '=', 'normal')]"/>
+                <separator/>
+                <filter string="Kiosk" name="filter_kiosk"
+                        domain="[('source', '=', 'kiosk')]"/>
+                <filter string="Corrected" name="filter_corrected"
+                        domain="[('source', '=', 'correction')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_status"
+                            context="{'group_by': 'attendance_status'}"/>
+                    <filter string="Source" name="group_source"
+                            context="{'group_by': 'source'}"/>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

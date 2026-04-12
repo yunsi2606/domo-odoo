@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Recruitment Custom Module Category -->
+    <record id="module_category_hr_recruitment_custom" model="ir.module.category">
+        <field name="name">Recruitment Management</field>
+        <field name="description">Manage recruitment process including requests, interviews, and offers</field>
+        <field name="sequence">11</field>
+    </record>
+
+    <!-- Recruitment User Group -->
+    <record id="group_recruitment_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="module_category_hr_recruitment_custom"/>
+        <field name="implied_ids" eval="[(4, ref('hr_recruitment.group_hr_recruitment_user'))]"/>
+        <field name="comment">Access to own recruitment features and basic operations</field>
+    </record>
+
+    <!-- Recruitment Manager Group -->
+    <record id="group_recruitment_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="module_category_hr_recruitment_custom"/>
+        <field name="implied_ids" eval="[(4, ref('group_recruitment_user'))]"/>
+        <field name="comment">Full access to all recruitment features including approval</field>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <!-- Approver Group -->
+    <record id="group_recruitment_approver" model="res.groups">
+        <field name="name">Approver</field>
+        <field name="category_id" ref="module_category_hr_recruitment_custom"/>
+        <field name="implied_ids" eval="[(4, ref('group_recruitment_user'))]"/>
+        <field name="comment">Can approve/reject recruitment requests</field>
+    </record>
+
+    <!-- Make HR Manager imply Recruitment Manager -->
+    <record id="hr.group_hr_manager" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('group_recruitment_manager')), (4, ref('group_recruitment_approver'))]"/>
+    </record>
+
+    <!-- Record Rules -->
+
+    <!-- Recruitment Request - User: Own department -->
+    <record id="request_rule_user" model="ir.rule">
+        <field name="name">Recruitment Request: User - Own Department</field>
+        <field name="model_id" ref="model_hr_recruitment_request"/>
+        <field name="domain_force">[
+            '|',
+            ('requested_by', '=', user.id),
+            ('department_id.member_ids.user_id', '=', user.id)
+        ]</field>
+        <field name="groups" eval="[(4, ref('group_recruitment_user'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Recruitment Request - Manager: All -->
+    <record id="request_rule_manager" model="ir.rule">
+        <field name="name">Recruitment Request: Manager - All</field>
+        <field name="model_id" ref="model_hr_recruitment_request"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_recruitment_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- Interview - User: Own interviews -->
+    <record id="interview_rule_user" model="ir.rule">
+        <field name="name">Interview: User - Own</field>
+        <field name="model_id" ref="model_hr_recruitment_interview"/>
+        <field name="domain_force">[
+            '|',
+            ('responsible_id', '=', user.id),
+            ('interviewer_ids.user_id', '=', user.id)
+        ]</field>
+        <field name="groups" eval="[(4, ref('group_recruitment_user'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Interview - Manager: All -->
+    <record id="interview_rule_manager" model="ir.rule">
+        <field name="name">Interview: Manager - All</field>
+        <field name="model_id" ref="model_hr_recruitment_interview"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_recruitment_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- Offer Letter - Manager: All -->
+    <record id="offer_rule_manager" model="ir.rule">
+        <field name="name">Offer Letter: Manager - All</field>
+        <field name="model_id" ref="model_hr_offer_letter"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_recruitment_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- Company Rule -->
+    <record id="recruitment_request_rule_company" model="ir.rule">
+        <field name="name">Recruitment Request: Multi-Company</field>
+        <field name="model_id" ref="model_hr_recruitment_request"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="offer_letter_rule_company" model="ir.rule">
+        <field name="name">Offer Letter: Multi-Company</field>
+        <field name="model_id" ref="model_hr_offer_letter"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+</odoo>

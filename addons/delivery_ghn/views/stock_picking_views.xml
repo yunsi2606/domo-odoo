@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="stock_picking_ghn_form" model="ir.ui.view">
+        <field name="name">stock.picking.ghn.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <!-- Shipping action buttons -->
+            <xpath expr="//header/button[last()]" position="after">
+                <button name="action_push_to_carrier" string="📦 Push to Carrier" type="object"
+                        class="btn-primary"
+                        invisible="tracking_number or state not in ('assigned','done') or not carrier_id"/>
+                <button name="action_sync_shipping_status" string="🔄 Sync Status" type="object"
+                        invisible="not tracking_number"/>
+                <button name="action_cancel_shipment" string="✖ Cancel Shipment" type="object"
+                        invisible="not tracking_number or shipping_status == 'delivered'"
+                        confirm="Cancel this shipment with the carrier?"/>
+            </xpath>
+            <!-- Tracking info group -->
+            <xpath expr="//page[@name='extra']" position="after">
+                <page string="Shipping / COD" invisible="not carrier_id">
+                    <group>
+                        <group string="Tracking">
+                            <field name="tracking_number"/>
+                            <field name="shipping_status" widget="badge"
+                                   decoration-success="shipping_status == 'delivered'"
+                                   decoration-warning="shipping_status in ('picking','in_transit')"
+                                   decoration-danger="shipping_status in ('returned','cancelled')"
+                                   decoration-info="shipping_status == 'submitted'"/>
+                            <field name="shipping_provider" readonly="1"/>
+                        </group>
+                        <group string="COD">
+                            <field name="cod_amount" widget="monetary"/>
+                        </group>
+                    </group>
+                    <div invisible="not label_url">
+                        <field name="label_url" widget="url" text="🖨️ Print Label" class="btn btn-sm btn-outline-secondary"/>
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Add tracking to picking list -->
+    <record id="stock_picking_ghn_list" model="ir.ui.view">
+        <field name="name">stock.picking.ghn.list</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='scheduled_date']" position="after">
+                <field name="tracking_number" optional="show"/>
+                <field name="shipping_status" optional="show" widget="badge"
+                       decoration-success="shipping_status == 'delivered'"
+                       decoration-warning="shipping_status in ('picking','in_transit')"
+                       decoration-danger="shipping_status in ('returned','cancelled')"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_payroll_root" name="Payroll" sequence="50"
+              web_icon="hr_payroll_custom,static/description/icon.png"
+              groups="hr_payroll_custom.group_payroll_user"/>
+
+    <menuitem id="menu_payslips" name="Payslips" parent="menu_payroll_root"
+              action="action_payslip_custom" sequence="10"/>
+
+    <menuitem id="menu_sales_root" name="Sales Data" parent="menu_payroll_root" sequence="20"/>
+    <menuitem id="menu_sales_records" name="Sales Records" parent="menu_sales_root"
+              action="action_sales_records" sequence="10"/>
+    <menuitem id="menu_sales_import" name="Import from Excel" parent="menu_sales_root"
+              action="action_sales_import_wizard" sequence="20"/>
+    <menuitem id="menu_sales_sync" name="Sync from Sale Orders" parent="menu_sales_root"
+              action="action_sales_sync_wizard" sequence="30"/>
+
+
+    <menuitem id="menu_deductions_root" name="Deductions" parent="menu_payroll_root" sequence="30"/>
+    <menuitem id="menu_penalties" name="Penalties" parent="menu_deductions_root"
+              action="action_payslip_penalty" sequence="10"/>
+
+    <menuitem id="menu_payroll_actions" name="Actions" parent="menu_payroll_root" sequence="40"
+              groups="hr_payroll_custom.group_payroll_manager"/>
+    <menuitem id="menu_payroll_run" name="Generate Payslips" parent="menu_payroll_actions"
+              action="action_payroll_run_wizard" sequence="10"/>
+</odoo>

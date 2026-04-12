@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_employee_document_self,hr.employee.document.self,model_hr_employee_document,group_employee_self,1,0,0,0
+access_employee_document_branch,hr.employee.document.branch,model_hr_employee_document,group_employee_branch_manager,1,1,1,0
+access_employee_document_director,hr.employee.document.director,model_hr_employee_document,group_employee_director,1,1,1,1
+access_position_history_self,hr.position.history.self,model_hr_position_history,group_employee_self,1,0,0,0
+access_position_history_branch,hr.position.history.branch,model_hr_position_history,group_employee_branch_manager,1,1,1,0
+access_position_history_director,hr.position.history.director,model_hr_position_history,group_employee_director,1,1,1,1

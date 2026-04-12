@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- MỞ RỘNG FORM VIEW hr.employee -->
+    <record id="view_hr_employee_form_extended" model="ir.ui.view">
+        <field name="name">hr.employee.form.extended</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Thêm Stat Button vào button_box -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_position_history"
+                        class="oe_stat_button"
+                        icon="fa-history"
+                        type="object"
+                        groups="hr.group_hr_user">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value"><field name="position_history_count"/></span>
+                        <span class="o_stat_text">Position History</span>
+                    </div>
+                </button>
+            </xpath>
+
+            <!-- Thêm Mã nhân viên và Chi nhánh vào header / thông tin cơ bản -->
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="employee_code"
+                       string="Employee Code"
+                       readonly="1"
+                       class="o_field_badge text-primary fw-bold fs-5"/>
+            </xpath>
+
+            <!-- Thêm Chi nhánh cạnh Phòng ban -->
+            <xpath expr="//field[@name='department_id']" position="after">
+                <field name="branch_id"
+                       string="Branch"
+                       readonly="1"
+                       options="{'no_create': True}"
+                       groups="hr.group_hr_user"/>
+            </xpath>
+
+            <!-- Thêm Ngày vào công ty và Trạng thái nhân viên cạnh thông tin công việc -->
+            <xpath expr="//field[@name='job_title']" position="after">
+                <field name="join_date"
+                       string="Join Date"
+                       groups="hr.group_hr_user"/>
+                <field name="employee_status"
+                       string="Status"
+                       widget="badge"
+                       decoration-success="employee_status == 'official'"
+                       decoration-warning="employee_status == 'probation'"
+                       decoration-danger="employee_status == 'resigned'"
+                       decoration-info="employee_status in ('suspended', 'maternity')"
+                       groups="hr.group_hr_user"/>
+            </xpath>
+
+            <!-- Tab: Thông tin cá nhân mở rộng (CCCD, liên hệ khẩn cấp) -->
+            <!-- Thêm sau tab "Private Information" có sẵn -->
+            <xpath expr="//notebook" position="inside">
+
+                <page string="Personal Information"
+                      name="extended_personal_info"
+                      groups="hr.group_hr_user">
+
+                    <group>
+                        <group string="ID Card">
+                            <!-- identification_id là field có sẵn của Odoo (số CMND) -->
+                            <field name="identification_id"
+                                   string="ID Card Number"/>
+                            <field name="id_issue_date"
+                                   string="Issue Date"/>
+                            <field name="id_issue_place"
+                                   string="Issue Place"/>
+                        </group>
+                        <group string="Emergency Contact">
+                            <field name="emergency_contact_name"/>
+                            <field name="emergency_contact_phone"/>
+                            <field name="emergency_contact_relation"/>
+                        </group>
+                    </group>
+
+                    <!-- Liên kết tuyển dụng -->
+                    <group string="Recruitment Connection"
+                           invisible="not applicant_id">
+                        <field name="applicant_id"
+                               readonly="1"
+                               string="Original Applicant"/>
+                    </group>
+
+                </page>
+
+                <!-- Tab: Ngân hàng & Tài chính -->
+                <page string="Bank &amp; Finance"
+                      name="bank_info"
+                      groups="hr.group_hr_user">
+                    <group>
+                        <group string="Bank Account Information">
+                            <field name="bank_name" string="Bank"/>
+                            <field name="bank_account_number" string="Account Number"/>
+                            <field name="bank_account_holder" string="Account Holder"/>
+                            <field name="bank_branch_name" string="Bank Branch"/>
+                        </group>
+                    </group>
+                    <div class="alert alert-info" role="alert">
+                        <i class="fa fa-info-circle me-1"/>
+                        <strong>Note:</strong> Bank account information will be used to pay salaries.
+                        Employees can update this information themselves when needed.
+                    </div>
+                </page>
+
+                <!-- Tab: Giấy tờ & Tài liệu -->
+                <page string="Documents"
+                      name="documents"
+                      groups="hr.group_hr_user">
+                    <field name="document_ids"
+                           nolabel="1"
+                           widget="one2many_list"
+                           mode="list">
+                        <list string="Documents" editable="bottom"
+                              decoration-danger="alert_level == 'danger'"
+                              decoration-warning="alert_level == 'warning'">
+                            <field name="name" string="Document Name"/>
+                            <field name="document_type" string="Document Type"/>
+                            <field name="document_number" string="Document Number"/>
+                            <field name="issue_date" string="Issue Date"/>
+                            <field name="expiry_date" string="Expiry Date"/>
+                            <field name="days_to_expiry" string="Days to Expiry"
+                                   decoration-danger="days_to_expiry &lt; 0"
+                                   decoration-warning="days_to_expiry &gt;= 0 and days_to_expiry &lt;= 30"/>
+                            <field name="state" string="Status" widget="badge"
+                                   decoration-success="state == 'valid'"
+                                   decoration-warning="state == 'draft'"
+                                   decoration-danger="state in ('expired', 'lost')"/>
+                            <field name="alert_level" column_invisible="1"/>
+                            <button name="action_validate" type="object"
+                                    string="Validate" icon="fa-check"
+                                    class="btn-sm btn-success"
+                                    invisible="state != 'draft'"/>
+                        </list>
+                    </field>
+                    <div class="o_hr_employee_document_stats mt-3">
+                        <span class="text-muted small">
+                            Documents expiring within 30 days:
+                            <strong><field name="expiring_document_count" nolabel="1"/></strong>
+                        </span>
+                    </div>
+                </page>
+
+                <!-- Tab: Lịch sử vị trí -->
+                <page string="Position History"
+                      name="position_history"
+                      groups="hr.group_hr_user">
+                    <field name="position_history_ids"
+                           nolabel="1"
+                           widget="one2many_list"
+                           mode="list">
+                        <list string="Position History"
+                              decoration-success="is_current == True">
+                            <field name="date_start" string="From Date"/>
+                            <field name="date_end" string="To Date"/>
+                            <field name="is_current" string="Current" widget="boolean"/>
+                            <field name="branch_id" string="Branch"/>
+                            <field name="department_id" string="Department"/>
+                            <field name="job_id" string="Job"/>
+                            <field name="job_title" string="Job Title"/>
+                            <field name="change_type" string="Change Type"/>
+                            <field name="reason" string="Reason"/>
+                            <field name="approved_by" string="Approved By"/>
+                        </list>
+                    </field>
+                </page>
+
+                <!-- Tab: Nghỉ việc (chỉ hiển thị khi trạng thái là nghỉ việc) -->
+                <page string="Resignation Information"
+                      name="resignation_info"
+                      groups="hr.group_hr_manager"
+                      invisible="employee_status != 'resigned'">
+                    <group>
+                        <field name="resignation_date" string="Resignation Date"/>
+                        <field name="resignation_reason" string="Resignation Reason"/>
+                    </group>
+                </page>
+
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- MỞ RỘNG LIST VIEW hr.employee -->
+    <record id="view_hr_employee_list_extended" model="ir.ui.view">
+        <field name="name">hr.employee.list.extended</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="employee_code" string="Employee Code" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='department_id']" position="after">
+                <field name="branch_id" string="Branch" optional="show"
+                       groups="hr.group_hr_user"/>
+            </xpath>
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="employee_status" string="Status" optional="show"
+                       widget="badge"
+                       decoration-success="employee_status == 'official'"
+                       decoration-warning="employee_status == 'probation'"
+                       decoration-danger="employee_status == 'resigned'"
+                       groups="hr.group_hr_user"/>
+                <field name="join_date" string="Join Date" optional="hide"
+                       groups="hr.group_hr_user"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ACTION: HR Employee custom  -->
+
+    <!-- Action: xem tất cả nhân viên theo chi nhánh (cho quản lý) -->
+    <record id="action_hr_employee_by_branch" model="ir.actions.act_window">
+        <field name="name">Employees by Branch</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('active', '=', True)]</field>
+        <field name="context">{'search_default_group_by_branch': 1}</field>
+        <field name="groups_id" eval="[(4, ref('group_employee_branch_manager'))]"/>
+    </record>
+
+    <!-- Action: Nhân viên sắp hết hạn tài liệu -->
+    <record id="action_hr_employee_expiring_docs" model="ir.actions.act_window">
+        <field name="name">Expiring Documents</field>
+        <field name="res_model">hr.employee.document</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('alert_level', 'in', ['warning', 'danger']), ('state', '!=', 'lost')]</field>
+        <field name="context">{'search_default_group_by_employee': 1}</field>
+    </record>
+
+</odoo>

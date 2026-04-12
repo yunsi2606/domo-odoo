@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pos_order_form_tailoring" model="ir.ui.view">
+        <field name="name">pos.order.form.tailoring</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='lines']/list/field[@name='price_unit']" position="before">
+                <field name="is_tailoring" column_invisible="True"/>
+                <field name="deposit_percent" optional="hide"/>
+                <field name="tailoring_note" optional="show"/>
+            </xpath>
+            <xpath expr="//group[@name='order_total']" position="after">
+                <group invisible="not has_tailoring">
+                    <span class="text-warning fw-bold">
+                        <i class="fa fa-scissors"/> Đơn hàng này có yêu cầu may đo/sửa đồ. Vui lòng kiểm tra "Tailoring Note" ở từng dòng sản phẩm.
+                    </span>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_asset_user,hr.asset (User),model_hr_asset,hr_offboarding.group_offboarding_user,1,1,1,0
+access_asset_mgr,hr.asset (Mgr),model_hr_asset,hr_offboarding.group_offboarding_manager,1,1,1,1
+access_asset_category_user,hr.asset.category (User),model_hr_asset_category,hr_offboarding.group_offboarding_user,1,0,0,0
+access_asset_category_mgr,hr.asset.category (Mgr),model_hr_asset_category,hr_offboarding.group_offboarding_manager,1,1,1,1
+access_asset_assignment_user,hr.asset.assignment (User),model_hr_asset_assignment,hr_offboarding.group_offboarding_user,1,1,1,0
+access_asset_assignment_mgr,hr.asset.assignment (Mgr),model_hr_asset_assignment,hr_offboarding.group_offboarding_manager,1,1,1,1
+access_offboarding_user,hr.offboarding (User),model_hr_offboarding,hr_offboarding.group_offboarding_user,1,1,1,0
+access_offboarding_mgr,hr.offboarding (Mgr),model_hr_offboarding,hr_offboarding.group_offboarding_manager,1,1,1,1
+access_offboarding_line_user,hr.offboarding.line (User),model_hr_offboarding_line,hr_offboarding.group_offboarding_user,1,1,1,0
+access_offboarding_line_mgr,hr.offboarding.line (Mgr),model_hr_offboarding_line,hr_offboarding.group_offboarding_manager,1,1,1,1

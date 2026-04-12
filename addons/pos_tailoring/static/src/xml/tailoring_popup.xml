@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <!-- The Tailoring Popup Dialog -->
+    <t t-name="pos_tailoring.TailoringPopup" owl="1">
+        <Dialog title="props.title">
+            <t t-set-slot="default">
+                <div class="p-3">
+                    <div class="mb-3 d-flex align-items-center">
+                        <input type="checkbox" id="is_tailoring_check"
+                               class="me-2" style="width:20px;height:20px;"
+                               t-model="state.isTailoring"/>
+                        <label for="is_tailoring_check" class="fw-bold">
+                            Đây là đơn đặt may / sửa đồ
+                        </label>
+                    </div>
+
+                    <div class="mb-3" t-if="state.isTailoring">
+                        <label class="d-block mb-1 fw-bold">Phần trăm đặt cọc (%)</label>
+                        <input type="number" class="form-control"
+                               t-model="state.depositPercent" min="0" max="100"/>
+                        <small class="text-muted">
+                            Giá dòng sản phẩm sẽ tự động tính theo % đặt cọc này.
+                        </small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="d-block mb-1 fw-bold">Ghi chú chi tiết</label>
+                        <textarea class="form-control" rows="4"
+                                  t-model="state.tailoringNote"
+                                  placeholder="Ví dụ: Bóp eo 2cm, cắt lai 3cm..."/>
+                    </div>
+                </div>
+            </t>
+            <t t-set-slot="footer">
+                <button class="btn btn-primary" t-on-click="confirm">
+                    <t t-esc="props.confirmText"/>
+                </button>
+                <button class="btn btn-secondary ms-2" t-on-click="cancel">
+                    <t t-esc="props.cancelText"/>
+                </button>
+            </t>
+        </Dialog>
+    </t>
+
+    <!-- The Tailoring Button template -->
+    <t t-name="pos_tailoring.TailoringButton" owl="1">
+        <button class="control-button btn btn-light" t-on-click="onClick">
+            <i class="fa fa-scissors me-1" role="img" aria-label="May đo" title="May đo"/>
+            May đo / Sửa
+        </button>
+    </t>
+
+    <!-- Inject TailoringButton into the ControlButtons panel -->
+    <t t-name="pos_tailoring.ControlButtonsExtension"
+       t-inherit="point_of_sale.ControlButtons"
+       t-inherit-mode="extension" owl="1">
+        <!-- Add to the "more" modal dialog panel -->
+        <xpath expr="//t[@t-if='props.showRemainingButtons']//div[hasclass('control-buttons-modal')]" position="inside">
+            <TailoringButton/>
+        </xpath>
+    </t>
+
+</templates>

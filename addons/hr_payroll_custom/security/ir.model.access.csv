@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_payslip_user,hr.payslip.custom (User),model_hr_payslip_custom,hr_payroll_custom.group_payroll_user,1,1,1,0
+access_payslip_manager,hr.payslip.custom (Manager),model_hr_payslip_custom,hr_payroll_custom.group_payroll_manager,1,1,1,1
+access_payslip_line_user,hr.payslip.custom.line (User),model_hr_payslip_custom_line,hr_payroll_custom.group_payroll_user,1,1,1,0
+access_payslip_line_mgr,hr.payslip.custom.line (Mgr),model_hr_payslip_custom_line,hr_payroll_custom.group_payroll_manager,1,1,1,1
+access_sales_record_user,hr.sales.record (User),model_hr_sales_record,hr_payroll_custom.group_payroll_user,1,1,1,0
+access_sales_record_mgr,hr.sales.record (Mgr),model_hr_sales_record,hr_payroll_custom.group_payroll_manager,1,1,1,1
+access_penalty_user,hr.payslip.penalty (User),model_hr_payslip_penalty,hr_payroll_custom.group_payroll_user,1,0,0,0
+access_penalty_mgr,hr.payslip.penalty (Mgr),model_hr_payslip_penalty,hr_payroll_custom.group_payroll_manager,1,1,1,1
+access_sales_import_wizard,hr.sales.import.wizard,model_hr_sales_import_wizard,hr_payroll_custom.group_payroll_user,1,1,1,1
+access_sales_sync_wizard,hr.sales.sync.wizard,model_hr_sales_sync_wizard,hr_payroll_custom.group_payroll_manager,1,1,1,1
+access_payroll_run_wizard,hr.payroll.run.wizard,model_hr_payroll_run_wizard,hr_payroll_custom.group_payroll_manager,1,1,1,1

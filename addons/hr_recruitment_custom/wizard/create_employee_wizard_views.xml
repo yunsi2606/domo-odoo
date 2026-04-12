@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- =========================================== -->
+    <!-- CREATE EMPLOYEE WIZARD VIEW -->
+    <!-- =========================================== -->
+
+    <record id="view_create_employee_wizard_form" model="ir.ui.view">
+        <field name="name">hr.recruitment.create.employee.wizard.form</field>
+        <field name="model">hr.recruitment.create.employee.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Employee from Applicant">
+                <group>
+                    <group string="Applicant Info">
+                        <field name="applicant_id" readonly="1"/>
+                        <field name="offer_letter_id" readonly="1"
+                               invisible="not offer_letter_id"/>
+                    </group>
+                </group>
+                <group>
+                    <group string="Employee Details">
+                        <field name="employee_name"/>
+                        <field name="job_id"/>
+                        <field name="department_id"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                    <group string="Work Information">
+                        <field name="work_email"/>
+                        <field name="work_phone"/>
+                        <field name="start_date"/>
+                        <field name="offered_salary"/>
+                    </group>
+                </group>
+                <div class="alert alert-info" role="alert">
+                    <strong>ℹ️ Lưu ý:</strong> Hệ thống sẽ tự động tạo hồ sơ nhân viên mới
+                    từ thông tin ứng viên. Toàn bộ dữ liệu liên quan sẽ được chuyển sang
+                    module Quản lý Hồ sơ Nhân viên.
+                </div>
+                <footer>
+                    <button name="action_create_employee" type="object"
+                            string="🎉 Create Employee" class="oe_highlight"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

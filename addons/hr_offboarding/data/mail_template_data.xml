@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Notify employee & manager of asset return list -->
+        <record id="mail_template_asset_notify" model="mail.template">
+            <field name="name">Offboarding: Asset Return Notification</field>
+            <field name="model_id" ref="model_hr_offboarding"/>
+            <field name="subject">Asset Return Required – {{ object.employee_id.name }}</field>
+            <field name="body_html"><![CDATA[
+<p>Dear <b>{{ object.employee_id.name }}</b>,</p>
+<p>As part of the offboarding process, please return the following company assets by
+    <b>{{ object.date_asset_deadline or object.date_last_work }}</b>:</p>
+<table style="width:100%; border-collapse: collapse;">
+    <thead>
+        <tr style="background:#2c3e50; color:white;">
+            <th style="padding:8px; text-align:left;">Asset Code</th>
+            <th style="padding:8px; text-align:left;">Asset Name</th>
+            <th style="padding:8px; text-align:left;">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for line in object.line_ids %}
+        <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:7px;">{{ line.asset_id.code or '' }}</td>
+            <td style="padding:7px;">{{ line.asset_id.name }}</td>
+            <td style="padding:7px;">{{ '{:,.0f}'.format(line.asset_value) }} VNĐ</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<p>Please coordinate with your Branch Manager for the handover. Failure to return assets may result in financial deductions.</p>
+<p>Regards,<br/>HR Department</p>
+            ]]></field>
+            <field name="email_to">{{ object.employee_id.work_email }}</field>
+            <field name="lang">{{ object.employee_id.lang }}</field>
+        </record>
+
+        <!-- Notify director for review -->
+        <record id="mail_template_director_review" model="mail.template">
+            <field name="name">Offboarding: Director Review Request</field>
+            <field name="model_id" ref="model_hr_offboarding"/>
+            <field name="subject">Offboarding Review Required – {{ object.employee_id.name }}</field>
+            <field name="body_html"><![CDATA[
+<p>Dear Director,</p>
+<p>The offboarding process for <b>{{ object.employee_id.name }}</b> is ready for your review and approval.</p>
+<ul>
+    <li>Total Assets: {{ object.total_assets }}</li>
+    <li>Returned (Good): {{ object.returned_assets }}</li>
+    <li>Damaged: {{ object.damaged_assets }}</li>
+    <li>Missing: {{ object.missing_assets }}</li>
+    {% if object.compensation_amount > 0 %}
+    <li><b>Compensation Required: {{ '{:,.0f}'.format(object.compensation_amount) }} VNĐ</b></li>
+    {% endif %}
+</ul>
+<p>Please log in to Odoo to approve and finalize the offboarding record: <b>{{ object.name }}</b>.</p>
+<p>Regards,<br/>HR Department</p>
+            ]]></field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- WIZARD: Từ chối hợp đồng -->
+    <record id="view_hr_contract_reject_wizard_form" model="ir.ui.view">
+        <field name="name">hr.contract.reject.wizard.form</field>
+        <field name="model">hr.contract.reject.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Reject Contract">
+                <div class="alert alert-warning" role="alert">
+                    <i class="fa fa-exclamation-triangle me-1"/>
+                    The contract will be <strong>rejected</strong> and the Branch Manager will be notified.
+                </div>
+                <group>
+                    <field name="contract_id" readonly="1"/>
+                    <field name="rejection_reason"
+                           placeholder="Enter the reason for rejecting the contract..."
+                           nolabel="1"
+                           rows="4"/>
+                </group>
+                <footer>
+                    <button name="action_confirm_reject" type="object"
+                            string="Confirm Reject" class="btn-danger"/>
+                    <button special="cancel" string="Cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- MỞ RỘNG FORM VIEW hr.contract -->
+    <record id="view_hr_contract_form_extended" model="ir.ui.view">
+        <field name="name">hr.contract.form.extended</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Thêm approval statusbar trên header -->
+            <xpath expr="//header" position="inside">
+                <!-- Buttons cho Quản lý chi nhánh -->
+                <button name="action_submit_for_approval"
+                        type="object"
+                        string="Send for Approval"
+                        class="oe_highlight"
+                        invisible="approval_state != 'draft'"
+                        groups="hr_employee_custom.group_employee_branch_manager"/>
+
+                <button name="action_reset_to_draft"
+                        type="object"
+                        string="Reset to Draft"
+                        invisible="approval_state not in ('submitted', 'rejected')"
+                        groups="hr_employee_custom.group_employee_branch_manager"/>
+
+                <!-- Buttons cho Giám đốc -->
+                <button name="action_approve"
+                        type="object"
+                        string="✓ Approve"
+                        class="oe_highlight btn-success"
+                        invisible="approval_state != 'submitted'"
+                        groups="hr_employee_custom.group_employee_director"/>
+
+                <button name="action_reject"
+                        type="object"
+                        string="✗ Reject"
+                        class="btn-danger"
+                        invisible="approval_state != 'submitted'"
+                        groups="hr_employee_custom.group_employee_director"/>
+
+                <button name="action_renew"
+                        type="object"
+                        string="Renew"
+                        invisible="approval_state != 'approved'"
+                        groups="hr_employee_custom.group_employee_director"/>
+
+                <button name="action_terminate"
+                        type="object"
+                        string="Terminate"
+                        class="btn-outline-danger"
+                        invisible="state not in ('open',)"
+                        groups="hr_employee_custom.group_employee_director"/>
+
+                <!-- Button nhân viên xác nhận -->
+                <button name="action_employee_confirm"
+                        type="object"
+                        string="I have read and agree"
+                        class="oe_highlight"
+                        invisible="approval_state != 'approved' or employee_confirmed"/>
+
+                <!-- Approval statusbar -->
+                <field name="approval_state" widget="statusbar"
+                       statusbar_visible="draft,submitted,approved"
+                       readonly="1"/>
+            </xpath>
+
+            <!-- Alert thông tin từ chối -->
+            <xpath expr="//sheet" position="before">
+                <div class="alert alert-danger mb-0" role="alert"
+                     invisible="approval_state != 'rejected'">
+                    <i class="fa fa-times-circle me-1"/>
+                    <strong>The contract has been rejected.</strong>
+                    Reason: <field name="rejection_reason" nolabel="1" class="d-inline" readonly="1"/>
+                </div>
+                <div class="alert alert-warning mb-0" role="alert"
+                     invisible="expiry_alert_level not in ('warning', 'danger') or not date_end">
+                    <i class="fa fa-exclamation-triangle me-1"/>
+                    <strong>Contract expiry warning:</strong> This contract will expire in
+                    <field name="days_to_expiry" nolabel="1" class="d-inline" readonly="1"/> days
+                    (on <field name="date_end" nolabel="1" class="d-inline" readonly="1"/>).
+                </div>
+                <div class="alert alert-success mb-0" role="alert"
+                     invisible="not employee_confirmed">
+                    <i class="fa fa-check-circle me-1"/>
+                    The employee has confirmed the contract on
+                    <field name="employee_confirmed_date" nolabel="1" class="d-inline" readonly="1"/>.
+                </div>
+            </xpath>
+
+            <!-- Thêm thông tin phê duyệt vào header sheet -->
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="branch_id" readonly="1" string="Branch"/>
+            </xpath>
+
+            <!-- Thêm Stat Button -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_allowances"
+                        class="oe_stat_button"
+                        icon="fa-money"
+                        type="object">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="total_allowance" widget="monetary" nolabel="1"/>
+                        </span>
+                        <span class="o_stat_text">Total Allowance</span>
+                    </div>
+                </button>
+            </xpath>
+
+            <!-- Thêm tabs mới sau tab hợp đồng cơ bản -->
+            <xpath expr="//notebook" position="inside">
+
+                <!-- Tab: Phụ cấp -->
+                <page string="Allowances" name="allowances">
+                    <field name="allowance_ids" nolabel="1" mode="list">
+                        <list editable="bottom" string="Allowances">
+                            <field name="sequence" widget="handle"/>
+                            <field name="allowance_type" string="Allowance Type"/>
+                            <field name="name" string="Allowance Name"/>
+                            <field name="amount" string="Amount"/>
+                            <field name="notes" string="Notes" optional="show"/>
+                        </list>
+                    </field>
+                    <group class="mt-2">
+                        <group>
+                            <field name="total_allowance" string="Total Allowance"/>
+                        </group>
+                        <group>
+                            <field name="total_package" string="Total Package (Salary + Allowance)"/>
+                        </group>
+                    </group>
+                </page>
+
+                <!-- Tab: Thỏa thuận & Chính sách -->
+                <page string="Agreements &amp; Policies" name="agreements">
+                    <group>
+                        <group string="Time">
+                            <field name="probation_period_months" string="Probation (months)"/>
+                        </group>
+                    </group>
+                    <group string="Leave Policy">
+                        <field name="leave_policy_notes" nolabel="1"
+                               placeholder="For example: 12 days/year, add 1 day/year seniority..."/>
+                    </group>
+                    <group string="Other Agreements">
+                        <field name="other_agreements" nolabel="1"
+                               placeholder="For example: Special terms, confidentiality agreements, non-compete..."/>
+                    </group>
+                </page>
+
+                <!-- Tab: Thông tin Phê duyệt -->
+                <page string="Approval Info" name="approval_info"
+                      groups="hr_employee_custom.group_employee_branch_manager">
+                    <group>
+                        <group string="Submitted">
+                            <field name="submitted_by" readonly="1" string="Submitted By"/>
+                            <field name="submitted_date" readonly="1" string="Submitted Date"/>
+                        </group>
+                        <group string="Approved">
+                            <field name="approved_by" readonly="1" string="Approved By"/>
+                            <field name="approved_date" readonly="1" string="Approved Date"/>
+                        </group>
+                    </group>
+                    <group string="Employee Confirmation">
+                        <field name="employee_confirmed" readonly="1" string="Confirmed"/>
+                        <field name="employee_confirmed_date" readonly="1" string="Confirmed Date"
+                               invisible="not employee_confirmed"/>
+                    </group>
+                </page>
+
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- MỞ RỘNG LIST VIEW hr.contract -->
+    <record id="view_hr_contract_list_extended" model="ir.ui.view">
+        <field name="name">hr.contract.list.extended</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_id']" position="after">
+                <field name="branch_id" string="Branch" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='wage']" position="after">
+                <field name="total_allowance" string="Allowance" optional="show"/>
+                <field name="total_package" string="Total Package" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='date_end']" position="after">
+                <field name="days_to_expiry" string="Expiring (Days)"
+                       decoration-danger="expiry_alert_level == 'danger'"
+                       decoration-warning="expiry_alert_level == 'warning'"
+                       optional="show"/>
+                <field name="expiry_alert_level" column_invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="approval_state" string="Approval"
+                       widget="badge"
+                       decoration-success="approval_state == 'approved'"
+                       decoration-warning="approval_state == 'submitted'"
+                       decoration-danger="approval_state == 'rejected'"
+                       optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- SEARCH VIEW MỞ RỘNG -->
+    <record id="view_hr_contract_search_extended" model="ir.ui.view">
+        <field name="name">hr.contract.search.extended</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <separator/>
+                <filter string="Submitted" name="filter_submitted"
+                        domain="[('approval_state', '=', 'submitted')]"/>
+                <filter string="Approved" name="filter_approved"
+                        domain="[('approval_state', '=', 'approved')]"/>
+                <filter string="Rejected" name="filter_rejected"
+                        domain="[('approval_state', '=', 'rejected')]"/>
+                <separator/>
+                <filter string="Expiring (60 days)" name="filter_expiring_60"
+                        domain="[('expiry_alert_level', 'in', ['warning', 'danger'])]"/>
+                <filter string="Expiring (30 days)" name="filter_expiring_30"
+                        domain="[('expiry_alert_level', '=', 'danger')]"/>
+                <separator/>
+                <group expand="0" string="Group by">
+                    <filter string="Branch" name="group_by_branch"
+                            context="{'group_by': 'branch_id'}"/>
+                    <filter string="Approval State" name="group_by_approval_state"
+                            context="{'group_by': 'approval_state'}"/>
+                    <filter string="Expiry Alert" name="group_by_expiry_alert"
+                            context="{'group_by': 'expiry_alert_level'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ACTIONS -->
+
+    <!-- Hợp đồng chờ phê duyệt (dành cho Giám đốc) -->
+    <record id="action_hr_contract_pending_approval" model="ir.actions.act_window">
+        <field name="name">Submitted Contracts</field>
+        <field name="res_model">hr.contract</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('approval_state', '=', 'submitted')]</field>
+        <field name="context">{'search_default_filter_submitted': 1}</field>
+    </record>
+
+    <!-- Hợp đồng sắp hết hạn -->
+    <record id="action_hr_contract_expiring" model="ir.actions.act_window">
+        <field name="name">Expiring Contracts</field>
+        <field name="res_model">hr.contract</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('expiry_alert_level', 'in', ['warning', 'danger']), ('state', '=', 'open')]</field>
+        <field name="context">{'search_default_group_by_branch': 1}</field>
+    </record>
+
+    <!-- Tất cả hợp đồng -->
+    <record id="action_hr_contract_all" model="ir.actions.act_window">
+        <field name="name">All Contracts</field>
+        <field name="res_model">hr.contract</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+    </record>
+
+</odoo>

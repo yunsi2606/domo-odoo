@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══ Payslip Form ═══ -->
+    <record id="hr_payslip_custom_view_form" model="ir.ui.view">
+        <field name="name">hr.payslip.custom.form</field>
+        <field name="model">hr.payslip.custom</field>
+        <field name="arch" type="xml">
+            <form string="Payslip">
+                <header>
+                    <button name="action_compute" string="Compute Salary" type="object"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_confirm" string="Confirm" type="object"
+                            class="btn-primary" invisible="state != 'computed'"/>
+                    <button name="action_done" string="Mark Done" type="object"
+                            invisible="state != 'confirmed'"/>
+                    <button name="action_print_payslip" string="Print Payslip" type="object"
+                            class="btn-secondary" invisible="state not in ('confirmed','done')"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state in ('cancelled','done')"/>
+                    <button name="action_reset_draft" string="Reset to Draft" type="object"
+                            invisible="state not in ('computed','cancelled')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,computed,confirmed,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Employee">
+                            <field name="employee_id" readonly="state != 'draft'" options="{'no_create':True}"/>
+                            <field name="contract_id" readonly="state != 'draft'" options="{'no_create':True}"/>
+                            <field name="department_id" readonly="1"/>
+                            <field name="job_id" readonly="1"/>
+                        </group>
+                        <group string="Period">
+                            <field name="date_from" readonly="state != 'draft'"/>
+                            <field name="date_to" readonly="state != 'draft'"/>
+                            <field name="abc_rating"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <!-- Tab 1: Inputs -->
+                        <page string="Inputs" name="inputs">
+                            <group>
+                                <group string="Work Time">
+                                    <field name="wage"/>
+                                    <field name="daily_wage"/>
+                                    <field name="actual_work_days"/>
+                                    <field name="valid_leave_days"/>
+                                    <field name="ot_hours_normal"/>
+                                    <field name="ot_hours_holiday"/>
+                                </group>
+                                <group string="Allowances">
+                                    <field name="position_allowance"/>
+                                    <field name="job_allowance"/>
+                                    <field name="allowance_reduction_pct"
+                                           help="% giảm do hiệu suất kém (0=không giảm, 50=giảm 50%)"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="Deductions">
+                                    <field name="num_dependents"/>
+                                    <field name="advance_amount"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Tab 2: Salary Lines -->
+                        <page string="Salary Breakdown" name="lines">
+                            <field name="line_ids" readonly="1">
+                                <list>
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="amount" widget="monetary"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer">
+                                <field name="basic_salary" readonly="1"/>
+                                <field name="ot_salary" readonly="1"/>
+                                <field name="total_allowance" readonly="1"/>
+                                <field name="hot_bonus" readonly="1"/>
+                                <field name="livestream_bonus" readonly="1"/>
+                                <field name="abc_bonus" readonly="1"/>
+                                <field name="gross_salary" readonly="1" class="oe_subtotal_footer_separator"/>
+                                <field name="si_employee" readonly="1"/>
+                                <field name="pit_amount" readonly="1"/>
+                                <field name="advance_amount" readonly="1"/>
+                                <field name="penalty_total" readonly="1"/>
+                                <field name="net_salary" readonly="1" class="oe_subtotal_footer_separator"/>
+                            </group>
+                        </page>
+
+                        <!-- Tab 3: Tax Details -->
+                        <page string="Tax &amp; Insurance" name="tax">
+                            <group>
+                                <field name="si_employee" readonly="1" string="Employee BHXH/BHYT/BHTN (10.5%)"/>
+                                <field name="si_employer" readonly="1" string="Employer contribution (21.5%)"/>
+                                <separator string="Personal Income Tax (PIT)"/>
+                                <field name="gross_salary" readonly="1" string="Gross Salary"/>
+                                <field name="si_employee" readonly="1" string="(-) BHXH/BHYT/BHTN"/>
+                                <field name="personal_deduction" readonly="1" string="(-) Giảm trừ bản thân"/>
+                                <field name="dependent_deduction_total" readonly="1" string="(-) Giảm trừ người phụ thuộc"/>
+                                <field name="taxable_income" readonly="1" string="= Thu nhập chịu thuế"/>
+                                <field name="pit_amount" readonly="1" string="Thuế TNCN phải nộp"/>
+                            </group>
+                        </page>
+
+                        <!-- Tab 4: Notes -->
+                        <page string="Notes">
+                            <field name="note" nolabel="1" placeholder="Ghi chú..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ═══ Payslip List ═══ -->
+    <record id="hr_payslip_custom_view_list" model="ir.ui.view">
+        <field name="name">hr.payslip.custom.list</field>
+        <field name="model">hr.payslip.custom</field>
+        <field name="arch" type="xml">
+            <list string="Payslips"
+                  decoration-success="state == 'done'"
+                  decoration-warning="state == 'confirmed'"
+                  decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="gross_salary" widget="monetary" sum="Total Gross"/>
+                <field name="net_salary" widget="monetary" sum="Total Net"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'done'"
+                       decoration-info="state == 'confirmed'"
+                       decoration-warning="state == 'computed'"
+                       decoration-muted="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ═══ Payslip Search ═══ -->
+    <record id="hr_payslip_custom_view_search" model="ir.ui.view">
+        <field name="name">hr.payslip.custom.search</field>
+        <field name="model">hr.payslip.custom</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="date_from"/>
+                <filter string="Draft" name="draft" domain="[('state','=','draft')]"/>
+                <filter string="Confirmed" name="confirmed" domain="[('state','=','confirmed')]"/>
+                <filter string="Done" name="done" domain="[('state','=','done')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Employee" name="gb_emp" context="{'group_by':'employee_id'}"/>
+                    <filter string="Department" name="gb_dept" context="{'group_by':'department_id'}"/>
+                    <filter string="Month" name="gb_month" context="{'group_by':'date_from:month'}"/>
+                    <filter string="Status" name="gb_state" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ═══ Penalty Views ═══ -->
+    <record id="hr_payslip_penalty_view_list" model="ir.ui.view">
+        <field name="name">hr.payslip.penalty.list</field>
+        <field name="model">hr.payslip.penalty</field>
+        <field name="arch" type="xml">
+            <list string="Penalties" decoration-danger="state=='draft'" decoration-success="state=='approved'">
+                <field name="employee_id"/>
+                <field name="date"/>
+                <field name="reason"/>
+                <field name="amount" widget="monetary"/>
+                <field name="payslip_id"/>
+                <field name="state" widget="badge"/>
+                <button name="action_approve" string="Approve" type="object"
+                        invisible="state != 'draft'"
+                        groups="hr_payroll_custom.group_payroll_manager"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hr_payslip_penalty_view_form" model="ir.ui.view">
+        <field name="name">hr.payslip.penalty.form</field>
+        <field name="model">hr.payslip.penalty</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_approve" string="Approve" type="object"
+                            class="btn-primary" invisible="state != 'draft'"
+                            groups="hr_payroll_custom.group_payroll_manager"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state != 'draft'"
+                            groups="hr_payroll_custom.group_payroll_manager"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="employee_id" options="{'no_create':True}"/>
+                        <field name="date"/>
+                        <field name="amount"/>
+                        <field name="reason"/>
+                        <field name="approved_by" readonly="1"/>
+                        <field name="payslip_id" readonly="1"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ═══ Actions ═══ -->
+    <record id="action_payslip_custom" model="ir.actions.act_window">
+        <field name="name">Payslips</field>
+        <field name="res_model">hr.payslip.custom</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hr_payslip_custom_view_search"/>
+    </record>
+
+    <record id="action_payslip_penalty" model="ir.actions.act_window">
+        <field name="name">Penalties</field>
+        <field name="res_model">hr.payslip.penalty</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_payroll_run_wizard" model="ir.actions.act_window">
+        <field name="name">Generate Payslips</field>
+        <field name="res_model">hr.payroll.run.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

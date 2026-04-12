@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- =========================================== -->
+    <!-- HR APPLICANT VIEWS (Inherit + Extend) -->
+    <!-- =========================================== -->
+
+    <!-- Inherit Form View -->
+    <record id="view_hr_applicant_form_inherit" model="ir.ui.view">
+        <field name="name">hr.applicant.form.inherit.recruitment.custom</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Add button box buttons -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_interviews" type="object"
+                        class="oe_stat_button" icon="fa-calendar">
+                    <field name="interview_count" widget="statinfo" string="Interviews"/>
+                </button>
+                <button name="action_view_offer_letters" type="object"
+                        class="oe_stat_button" icon="fa-file-text">
+                    <field name="offer_letter_count" widget="statinfo" string="Offers"/>
+                </button>
+            </xpath>
+
+            <!-- Add custom fields after job_id -->
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="recruitment_request_id"/>
+                <field name="source_channel"/>
+                <field name="screening_status" widget="badge"
+                       decoration-info="screening_status in ('new', 'screened')"
+                       decoration-warning="screening_status in ('shortlisted', 'interview')"
+                       decoration-success="screening_status in ('offer', 'hired')"
+                       decoration-danger="screening_status == 'rejected'"/>
+                <field name="overall_interview_score" widget="float" readonly="1"/>
+            </xpath>
+
+            <!-- Add new notebook pages -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Applicant Details" name="applicant_details">
+                    <group>
+                        <group string="Personal Information">
+                            <field name="date_of_birth"/>
+                            <field name="gender"/>
+                            <field name="address"/>
+                            <field name="phone_secondary"/>
+                        </group>
+                        <group string="Education">
+                            <field name="education_level"/>
+                            <field name="education_detail"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Experience">
+                            <field name="years_of_experience"/>
+                        </group>
+                        <group string="Skills">
+                            <field name="skill_tags"/>
+                        </group>
+                    </group>
+                    <group string="Experience Details">
+                        <field name="experience_detail" nolabel="1"/>
+                    </group>
+                </page>
+                <page string="CV / Documents" name="cv_documents">
+                    <group>
+                        <field name="cv_attachment_ids" widget="many2many_binary" nolabel="1"/>
+                    </group>
+                </page>
+                <page string="Screening Notes" name="screening">
+                    <group>
+                        <field name="screening_notes" nolabel="1" placeholder="Add screening notes here..."/>
+                    </group>
+                </page>
+                <page string="Interviews" name="interviews">
+                    <field name="interview_ids" nolabel="1">
+                        <list string="Interviews" editable="bottom" create="0">
+                            <field name="interview_round"/>
+                            <field name="interview_date"/>
+                            <field name="interview_mode"/>
+                            <field name="location"/>
+                            <field name="average_score"/>
+                            <field name="interview_result"/>
+                            <field name="state" widget="badge"/>
+                        </list>
+                    </field>
+                    <div class="mt-3">
+                        <button name="action_schedule_interview" type="object"
+                                string="Schedule New Interview"
+                                class="btn-primary"
+                                icon="fa-calendar-plus-o"/>
+                    </div>
+                </page>
+                <page string="Offer Letters" name="offers">
+                    <field name="offer_letter_ids" nolabel="1">
+                        <list string="Offer Letters" create="0">
+                            <field name="name"/>
+                            <field name="offered_salary"/>
+                            <field name="start_date"/>
+                            <field name="expiry_date"/>
+                            <field name="state" widget="badge"/>
+                        </list>
+                    </field>
+                    <div class="mt-3">
+                        <button name="action_create_offer" type="object"
+                                string="Create Offer Letter"
+                                class="btn-primary"
+                                icon="fa-file-text-o"/>
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit List View -->
+    <record id="view_hr_applicant_list_inherit" model="ir.ui.view">
+        <field name="name">hr.applicant.list.inherit.recruitment.custom</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.crm_case_tree_view_job"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='stage_id']" position="after">
+                <field name="screening_status" widget="badge"
+                       decoration-info="screening_status in ('new', 'screened')"
+                       decoration-warning="screening_status in ('shortlisted', 'interview')"
+                       decoration-success="screening_status in ('offer', 'hired')"
+                       decoration-danger="screening_status == 'rejected'"
+                       optional="show"/>
+                <field name="source_channel" optional="show"/>
+                <field name="overall_interview_score" optional="hide"/>
+                <field name="education_level" optional="hide"/>
+                <field name="years_of_experience" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit Search View -->
+    <record id="view_hr_applicant_search_inherit" model="ir.ui.view">
+        <field name="name">hr.applicant.search.inherit.recruitment.custom</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_search_bis"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="recruitment_request_id"/>
+                <field name="source_channel"/>
+                <field name="screening_status"/>
+                <separator/>
+                <filter string="New" name="new_applicants" domain="[('screening_status', '=', 'new')]"/>
+                <filter string="Screened" name="screened" domain="[('screening_status', '=', 'screened')]"/>
+                <filter string="Shortlisted" name="shortlisted" domain="[('screening_status', '=', 'shortlisted')]"/>
+                <filter string="Interview" name="interview" domain="[('screening_status', '=', 'interview')]"/>
+                <filter string="Offer Sent" name="offer_sent" domain="[('screening_status', '=', 'offer')]"/>
+                <filter string="Hired" name="hired_custom" domain="[('screening_status', '=', 'hired')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Screening Status" name="group_screening" context="{'group_by': 'screening_status'}"/>
+                    <filter string="Source Channel" name="group_source" context="{'group_by': 'source_channel'}"/>
+                    <filter string="Education Level" name="group_education" context="{'group_by': 'education_level'}"/>
+                    <filter string="Recruitment Request" name="group_request" context="{'group_by': 'recruitment_request_id'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

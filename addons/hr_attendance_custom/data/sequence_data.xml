@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Sequence: Attendance Correction Request -->
+        <record id="seq_attendance_correction" model="ir.sequence">
+            <field name="name">Attendance Correction Request</field>
+            <field name="code">hr.attendance.correction</field>
+            <field name="prefix">ATT-COR/%(year)s/%(month)s/</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Cron: Auto-flag Forgot Check-out -->
+        <record id="cron_flag_forgot_checkout" model="ir.cron">
+            <field name="name">HR Attendance: Auto-flag Forgot Check-out</field>
+            <field name="model_id" ref="hr_attendance.model_hr_attendance"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_flag_forgot_checkout()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active">True</field>
+            <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 01:00:00')"/>
+        </record>
+
+    </data>
+</odoo>

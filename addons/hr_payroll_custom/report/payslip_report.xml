@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_payslip_custom_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <style>
+                            .payslip-title { font-size: 20px; font-weight: bold; text-align: center; margin-bottom: 10px; }
+                            .payslip-period { text-align: center; color: #555; margin-bottom: 20px; }
+                            table.payslip-table { width: 100%; border-collapse: collapse; }
+                            table.payslip-table th { background: #2c3e50; color: white; padding: 8px; }
+                            table.payslip-table td { padding: 7px 10px; border-bottom: 1px solid #eee; }
+                            table.payslip-table tr.section-header td { background: #ecf0f1; font-weight: bold; }
+                            table.payslip-table tr.total-row td { border-top: 2px solid #2c3e50; font-weight: bold; font-size: 15px; }
+                            .amount-col { text-align: right; }
+                            .positive { color: #27ae60; }
+                            .negative { color: #e74c3c; }
+                        </style>
+
+                        <div class="payslip-title">PHIẾU LƯƠNG THÁNG</div>
+                        <div class="payslip-period">
+                            Từ <t t-esc="doc.date_from"/> đến <t t-esc="doc.date_to"/>
+                            &#160;|&#160; Số: <t t-esc="doc.name"/>
+                        </div>
+
+                        <!-- Employee Info -->
+                        <table style="width:100%; margin-bottom:16px;">
+                            <tr>
+                                <td><b>Employee:</b> <t t-esc="doc.employee_id.name"/></td>
+                                <td><b>Department:</b> <t t-esc="doc.department_id.name or ''"/></td>
+                            </tr>
+                            <tr>
+                                <td><b>Position:</b> <t t-esc="doc.job_id.name or ''"/></td>
+                                <td><b>Contract:</b> <t t-esc="doc.contract_id.name or ''"/></td>
+                            </tr>
+                        </table>
+
+                        <!-- Salary Table -->
+                        <table class="payslip-table">
+                            <thead>
+                                <tr><th>Khoản mục</th><th class="amount-col">Amount (VNĐ)</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr class="section-header"><td colspan="2">I. INCOME</td></tr>
+                                <tr>
+                                    <td>Basic Salary (<t t-esc="doc.actual_work_days"/> (days) +
+                                        <t t-esc="doc.valid_leave_days"/> leave (days))</td>
+                                    <td class="amount-col positive">
+                                        <t t-esc="'{:,.0f}'.format(doc.basic_salary)"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>OT Salary (<t t-esc="doc.ot_hours_normal"/> normal (hours) +
+                                        <t t-esc="doc.ot_hours_holiday"/> holiday (hours)</td>
+                                    <td class="amount-col positive"><t t-esc="'{:,.0f}'.format(doc.ot_salary)"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Allowance (position + work
+                                        <t t-if="doc.allowance_reduction_pct"> - reduce <t t-esc="doc.allowance_reduction_pct"/>%</t>)
+                                    </td>
+                                    <td class="amount-col positive"><t t-esc="'{:,.0f}'.format(doc.total_allowance)"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Hot Sales Bonus</td>
+                                    <td class="amount-col positive"><t t-esc="'{:,.0f}'.format(doc.hot_bonus)"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Livestream Bonus</td>
+                                    <td class="amount-col positive"><t t-esc="'{:,.0f}'.format(doc.livestream_bonus)"/></td>
+                                </tr>
+                                <tr>
+                                    <td>ABC Bonus (<t t-esc="doc.abc_rating or 'N/A'"/>)</td>
+                                    <td class="amount-col positive"><t t-esc="'{:,.0f}'.format(doc.abc_bonus)"/></td>
+                                </tr>
+                                <tr style="font-weight:bold; background:#e8f5e9;">
+                                    <td>GROSS INCOME</td>
+                                    <td class="amount-col"><t t-esc="'{:,.0f}'.format(doc.gross_salary)"/></td>
+                                </tr>
+
+                                <tr class="section-header"><td colspan="2">II. DEDUCTIONS</td></tr>
+                                <tr>
+                                    <td>Social Insurance (10.5%)</td>
+                                    <td class="amount-col negative">
+                                        (<t t-esc="'{:,.0f}'.format(doc.si_employee)"/>)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Personal Income Tax (taxable income: <t t-esc="'{:,.0f}'.format(doc.taxable_income)"/>)</td>
+                                    <td class="amount-col negative">
+                                        (<t t-esc="'{:,.0f}'.format(doc.pit_amount)"/>)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Advance</td>
+                                    <td class="amount-col negative">
+                                        (<t t-esc="'{:,.0f}'.format(doc.advance_amount)"/>)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Fine</td>
+                                    <td class="amount-col negative">
+                                        (<t t-esc="'{:,.0f}'.format(doc.penalty_total)"/>)
+                                    </td>
+                                </tr>
+
+                                <tr class="total-row">
+                                    <td>NET SALARY</td>
+                                    <td class="amount-col" style="font-size:16px; color:#2980b9;">
+                                        <t t-esc="'{:,.0f}'.format(doc.net_salary)"/> VNĐ
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Employer contribution note -->
+                        <div style="margin-top:12px; font-size:11px; color:#777;">
+                            * The Company Contributes (Social Insurance, Health Insurance, Unemployment Insurance): <t t-esc="'{:,.0f}'.format(doc.si_employer)"/> VNĐ (21.5%)
+                        </div>
+
+                        <!-- Signature -->
+                        <table style="width:100%; margin-top:40px; text-align:center;">
+                            <tr>
+                                <td><b>Nhân viên xác nhận</b><br/><br/><br/><br/>________________</td>
+                                <td><b>Kế toán</b><br/><br/><br/><br/>________________</td>
+                                <td><b>Giám đốc</b><br/><br/><br/><br/>________________</td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="report_payslip_custom" model="ir.actions.report">
+        <field name="name">Payslip</field>
+        <field name="model">hr.payslip.custom</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hr_payroll_custom.report_payslip_custom_document</field>
+        <field name="report_file">hr_payroll_custom.report_payslip_custom_document</field>
+        <field name="print_report_name">'Payslip - %s' % object.name</field>
+        <field name="binding_model_id" ref="model_hr_payslip_custom"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

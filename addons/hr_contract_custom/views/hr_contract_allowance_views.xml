@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- FORM VIEW: hr.contract.allowance -->
+    <record id="view_hr_contract_allowance_form" model="ir.ui.view">
+        <field name="name">hr.contract.allowance.form</field>
+        <field name="model">hr.contract.allowance</field>
+        <field name="arch" type="xml">
+            <form string="Allowance">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="contract_id"/>
+                            <field name="allowance_type"/>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="amount"/>
+                            <field name="notes"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- LIST VIEW: hr.contract.allowance -->
+    <record id="view_hr_contract_allowance_list" model="ir.ui.view">
+        <field name="name">hr.contract.allowance.list</field>
+        <field name="model">hr.contract.allowance</field>
+        <field name="arch" type="xml">
+            <list string="Allowance">
+                <field name="contract_id" string="Contract"/>
+                <field name="allowance_type" string="Type"/>
+                <field name="name" string="Allowance Name"/>
+                <field name="amount" string="Amount"/>
+                <field name="notes" string="Notes" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+</odoo>

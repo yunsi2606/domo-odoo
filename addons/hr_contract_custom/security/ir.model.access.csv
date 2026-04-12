@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_contract_allowance_employee,hr.contract.allowance.employee,model_hr_contract_allowance,hr_employee_custom.group_employee_self,1,0,0,0
+access_hr_contract_allowance_branch,hr.contract.allowance.branch,model_hr_contract_allowance,hr_employee_custom.group_employee_branch_manager,1,1,1,0
+access_hr_contract_allowance_director,hr.contract.allowance.director,model_hr_contract_allowance,hr_employee_custom.group_employee_director,1,1,1,1
+access_hr_contract_reject_wizard_user,hr.contract.reject.wizard.user,model_hr_contract_reject_wizard,base.group_user,1,1,1,1

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_offboarding_root" name="Offboarding" sequence="55"
+              groups="hr_offboarding.group_offboarding_user"/>
+
+    <menuitem id="menu_offboarding_records" name="Offboarding Records"
+              parent="menu_offboarding_root" action="action_hr_offboarding" sequence="10"/>
+
+    <menuitem id="menu_offboarding_assets_root" name="Assets" parent="menu_offboarding_root" sequence="20"/>
+    <menuitem id="menu_assets" name="Company Assets" parent="menu_offboarding_assets_root"
+              action="action_hr_asset" sequence="10"/>
+    <menuitem id="menu_asset_categories" name="Categories" parent="menu_offboarding_assets_root"
+              action="action_hr_asset_category" sequence="20"
+              groups="hr_offboarding.group_offboarding_manager"/>
+</odoo>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Menu: Quản lý Hợp đồng - dưới HR app -->
+    <menuitem id="menu_hr_contract_custom_root"
+              name="Contract"
+              parent="hr.menu_hr_root"
+              sequence="10"
+              groups="hr_employee_custom.group_employee_self"/>
+
+    <!-- Sub: Hợp đồng của tôi (mọi nhân viên) -->
+    <menuitem id="menu_hr_my_contract"
+              name="My Contract"
+              parent="menu_hr_contract_custom_root"
+              action="hr_contract_custom.action_hr_contract_all"
+              sequence="10"
+              groups="hr_employee_custom.group_employee_self"/>
+
+    <!-- Sub: Tất cả hợp đồng (Branch Manager+) -->
+    <menuitem id="menu_hr_all_contracts"
+              name="All Contract"
+              parent="menu_hr_contract_custom_root"
+              action="hr_contract_custom.action_hr_contract_all"
+              sequence="20"
+              groups="hr_employee_custom.group_employee_branch_manager"/>
+
+    <!-- Sub: Chờ phê duyệt (Director) -->
+    <menuitem id="menu_hr_contract_pending"
+              name="Pending Contract"
+              parent="menu_hr_contract_custom_root"
+              action="hr_contract_custom.action_hr_contract_pending_approval"
+              sequence="30"
+              groups="hr_employee_custom.group_employee_director"/>
+
+    <!-- Sub: Sắp hết hạn -->
+    <menuitem id="menu_hr_contract_expiring"
+              name="Expiring Contract"
+              parent="menu_hr_contract_custom_root"
+              action="hr_contract_custom.action_hr_contract_expiring"
+              sequence="40"
+              groups="hr_employee_custom.group_employee_branch_manager"/>
+
+</odoo>

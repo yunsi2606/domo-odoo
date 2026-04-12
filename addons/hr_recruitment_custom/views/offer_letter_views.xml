@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- =========================================== -->
+    <!-- OFFER LETTER VIEWS -->
+    <!-- =========================================== -->
+
+    <!-- Form View -->
+    <record id="view_offer_letter_form" model="ir.ui.view">
+        <field name="name">hr.offer.letter.form</field>
+        <field name="model">hr.offer.letter</field>
+        <field name="arch" type="xml">
+            <form string="Offer Letter">
+                <header>
+                    <button name="action_send_offer" type="object" string="Send Offer"
+                            class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_accept" type="object" string="Mark Accepted"
+                            class="oe_highlight btn-success"
+                            invisible="state != 'sent'"/>
+                    <button name="action_reject" type="object" string="Mark Rejected"
+                            class="btn-danger"
+                            invisible="state != 'sent'"/>
+                    <button name="action_create_employee" type="object"
+                            string="🎉 Create Employee"
+                            class="oe_highlight btn-success"
+                            invisible="state != 'accepted'"
+                            groups="hr_recruitment_custom.group_recruitment_manager"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            invisible="state in ('accepted', 'cancelled', 'expired')"/>
+                    <button name="action_reset_to_draft" type="object" string="Reset to Draft"
+                            invisible="state in ('draft', 'accepted')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,sent,accepted"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_regenerate_content" type="object"
+                                class="oe_stat_button" icon="fa-refresh"
+                                invisible="state != 'draft'">
+                            <span>Regenerate Content</span>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Applicant Information">
+                            <field name="applicant_id"/>
+                            <field name="applicant_name" readonly="1"/>
+                            <field name="applicant_email" readonly="1"/>
+                            <field name="applicant_phone" readonly="1"/>
+                        </group>
+                        <group string="Job Details">
+                            <field name="job_id"/>
+                            <field name="department_id"/>
+                            <field name="employment_type"/>
+                            <field name="recruitment_request_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Compensation">
+                            <field name="offered_salary"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="probation_period"/>
+                            <field name="probation_salary_percentage"/>
+                            <field name="probation_salary" readonly="1"/>
+                        </group>
+                        <group string="Dates">
+                            <field name="offer_date"/>
+                            <field name="expiry_date"/>
+                            <field name="start_date"/>
+                            <field name="response_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Working Conditions">
+                            <field name="working_hours"/>
+                            <field name="work_location"/>
+                        </group>
+                        <group string="Responsible">
+                            <field name="responsible_id"/>
+                            <field name="employee_id" readonly="1"
+                                   invisible="not employee_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Benefits" name="benefits">
+                            <field name="benefits" nolabel="1" placeholder="Describe benefits and perks..."/>
+                        </page>
+                        <page string="Offer Letter Content" name="content">
+                            <field name="offer_content" nolabel="1"/>
+                        </page>
+                        <page string="Rejection Details" name="rejection"
+                              invisible="state != 'rejected'">
+                            <group>
+                                <field name="rejection_reason"/>
+                            </group>
+                        </page>
+                        <page string="Internal Notes" name="notes">
+                            <field name="notes" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- List View -->
+    <record id="view_offer_letter_list" model="ir.ui.view">
+        <field name="name">hr.offer.letter.list</field>
+        <field name="model">hr.offer.letter</field>
+        <field name="arch" type="xml">
+            <list string="Offer Letters"
+                  decoration-info="state == 'draft'"
+                  decoration-warning="state == 'sent'"
+                  decoration-success="state == 'accepted'"
+                  decoration-danger="state in ('rejected', 'expired')"
+                  decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="applicant_name"/>
+                <field name="job_id"/>
+                <field name="department_id"/>
+                <field name="offered_salary"/>
+                <field name="start_date"/>
+                <field name="expiry_date"/>
+                <field name="responsible_id"/>
+                <field name="employee_id" optional="show"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'sent'"
+                       decoration-success="state == 'accepted'"
+                       decoration-danger="state in ('rejected', 'expired')"
+                       decoration-muted="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_offer_letter_search" model="ir.ui.view">
+        <field name="name">hr.offer.letter.search</field>
+        <field name="model">hr.offer.letter</field>
+        <field name="arch" type="xml">
+            <search string="Search Offer Letters">
+                <field name="name"/>
+                <field name="applicant_name"/>
+                <field name="job_id"/>
+                <field name="department_id"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Sent" name="sent" domain="[('state', '=', 'sent')]"/>
+                <filter string="Accepted" name="accepted" domain="[('state', '=', 'accepted')]"/>
+                <filter string="Rejected" name="rejected" domain="[('state', '=', 'rejected')]"/>
+                <filter string="Expired" name="expired" domain="[('state', '=', 'expired')]"/>
+                <separator/>
+                <filter string="Pending Response" name="pending_response"
+                        domain="[('state', '=', 'sent'), ('expiry_date', '>=', context_today().strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="Expiring Soon" name="expiring_soon"
+                        domain="[('state', '=', 'sent'), ('expiry_date', '&lt;=', (context_today() + datetime.timedelta(days=3)).strftime('%%Y-%%m-%%d'))]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Job Position" name="group_job" context="{'group_by': 'job_id'}"/>
+                    <filter string="Department" name="group_department" context="{'group_by': 'department_id'}"/>
+                    <filter string="Offer Date" name="group_date" context="{'group_by': 'offer_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_offer_letter" model="ir.actions.act_window">
+        <field name="name">Offer Letters</field>
+        <field name="res_model">hr.offer.letter</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_offer_letter_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create an offer letter
+            </p>
+            <p>
+                Send offer letters to selected candidates and track their responses.
+            </p>
+        </field>
+    </record>
+
+</odoo>

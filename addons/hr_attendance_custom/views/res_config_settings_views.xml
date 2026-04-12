@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Config Settings: Attendance Section -->
+    <record id="res_config_settings_view_attendance_custom" model="ir.ui.view">
+        <field name="name">res.config.settings.attendance.custom</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Attendance Custom" name="hr_attendance_custom">
+                    <block title="Attendance Status Thresholds">
+                        <setting string="Late Check-in Threshold"
+                                 help="Số phút trễ tối đa vẫn coi là 'đúng giờ'. Vượt qua sẽ bị đánh dấu Đi trễ.">
+                            <field name="late_threshold_minutes"/>
+                            <span class="text-muted ms-1">phút</span>
+                        </setting>
+                        <setting string="Early Check-out Threshold"
+                                 help="Số phút về sớm tối đa vẫn coi là 'bình thường'. Vượt qua sẽ bị đánh dấu Về sớm.">
+                            <field name="early_threshold_minutes"/>
+                            <span class="text-muted ms-1">phút</span>
+                        </setting>
+                    </block>
+                    <block title="Kiosk Settings">
+                        <setting string="Require PIN for Kiosk"
+                                 help="Bắt buộc nhân viên nhập mã PIN khi chấm công tại kiosk.">
+                            <field name="kiosk_require_pin"/>
+                        </setting>
+                        <setting string="Auto-flag Forgot Check-out"
+                                 help="Tự động gắn cờ 'Quên check-out' cho bản ghi thiếu giờ ra.">
+                            <field name="attendance_forgot_checkout_auto_flag"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

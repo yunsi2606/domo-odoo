@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_recruitment_request_user,hr.recruitment.request.user,model_hr_recruitment_request,group_recruitment_user,1,1,1,0
+access_recruitment_request_manager,hr.recruitment.request.manager,model_hr_recruitment_request,group_recruitment_manager,1,1,1,1
+access_recruitment_request_approver,hr.recruitment.request.approver,model_hr_recruitment_request,group_recruitment_approver,1,1,1,0
+access_interview_user,hr.recruitment.interview.user,model_hr_recruitment_interview,group_recruitment_user,1,1,1,0
+access_interview_manager,hr.recruitment.interview.manager,model_hr_recruitment_interview,group_recruitment_manager,1,1,1,1
+access_interview_evaluation_user,hr.recruitment.interview.evaluation.user,model_hr_recruitment_interview_evaluation,group_recruitment_user,1,1,1,0
+access_interview_evaluation_manager,hr.recruitment.interview.evaluation.manager,model_hr_recruitment_interview_evaluation,group_recruitment_manager,1,1,1,1
+access_offer_letter_user,hr.offer.letter.user,model_hr_offer_letter,group_recruitment_user,1,0,0,0
+access_offer_letter_manager,hr.offer.letter.manager,model_hr_offer_letter,group_recruitment_manager,1,1,1,1
+access_source_channel_user,hr.recruitment.source.channel.user,model_hr_recruitment_source_channel,group_recruitment_user,1,0,0,0
+access_source_channel_manager,hr.recruitment.source.channel.manager,model_hr_recruitment_source_channel,group_recruitment_manager,1,1,1,1
+access_create_employee_wizard_manager,hr.recruitment.create.employee.wizard.manager,model_hr_recruitment_create_employee_wizard,group_recruitment_manager,1,1,1,1

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_delivery_carrier_ghn_settings_form" model="ir.ui.view">
+        <field name="name">res.config.settings.ghn.form</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="stock.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='stock']" position="inside">
+                <block title="Shipping Carriers (GHN / GHTK)" name="delivery_ghn_settings">
+                    <setting string="Default GHN Service">
+                        <div class="text-muted">
+                            2 = Express | 3 = Standard | 5 = Economy
+                        </div>
+                        <div class="content-group mt8">
+                            <field name="ghn_default_service_id" class="o_light_label"/>
+                        </div>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

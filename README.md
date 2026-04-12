@@ -28,6 +28,23 @@ Dockerized Odoo 18 Community with custom addons for **sales commission tracking*
 | **odoo17**    | `odoo:17.0`               | 8067  | Secondary instance               |
 | **cloudflared** | `cloudflare/cloudflared` | —     | Exposes Odoo via Cloudflare Tunnel |
 
+## Business Logic Documentation
+
+The custom modules come with detailed business logic documentation covering workflows, internal calculations, and user manuals. You can refer to the following Markdown files directly in the repository:
+
+- **[Employee Custom (`hr_employee_custom`)](addons/hr_employee_custom/EMPLOYEE_FLOW.md)**: Employee profile setup, hierarchy organization, and integration metrics (PIN configuration for Kiosks, dependents for PIT calculation, and ABC performance rating).
+- **[Recruitment Custom (`hr_recruitment_custom`)](addons/hr_recruitment_custom/RECRUITMENT_FLOW.md)**: Customized applicant tracking pipeline, collaborative review and interview scheduling, status flagging, and direct employee onboarding conversion.
+- **[Attendance Custom (`hr_attendance_custom`)](addons/hr_attendance_custom/ATTENDANCE_FLOW.md)**: Kiosk check-in/out procedures via PIN, automated status flagging (Late In / Early Out / Forgot Checkout) based on work schedules, and a multi-level approval workflow for Attendance Correction Requests.
+- **[Payroll Custom (`hr_payroll_custom`)](addons/hr_payroll_custom/PAYROLL_FLOW.md)**: Salary computation formulas (Basic, OT, Allowances), performance-based bonuses (Sales, Livestream, ABC rating), penalty approval systems, Social Insurances deductions, and progressive Personal Income Tax (PIT) processing.
+- **[Contract Custom (`hr_contract_custom`)](addons/hr_contract_custom/CONTRACT_FLOW.md)**: Three-tier approval workflow for contracts (Branch Manager $\rightarrow$ HR $\rightarrow$ Director), detailed allowance tracking, automated contract expiry alerts via cron jobs, and employee electronic confirmation processes.
+- **[Offboarding & Asset Recovery (`hr_offboarding`)](addons/hr_offboarding/OFFBOARDING_FLOW.md)**: Automates employee resignation procedures, asset collection check-listing, financial compensation computation for lost/damaged hardware, and final employee archiving.
+- **[POS Sales Sync (`pos_sales_sync`)](addons/pos_sales_sync/POS_SALES_SYNC_FLOW.md)**: Auto-syncs Point of Sale session data strictly categorizing total sales logic directly into HR Payroll tracking tables solving data isolation per cashier.
+- **[Shipping API Integration (`delivery_ghn`)](addons/delivery_ghn/DELIVERY_GHN_FLOW.md)**: Pushes warehouse Delivery Orders to GHN & GHTK web portals tracking physical orders directly over Odoo.
+- **[COD Reconciliation (`account_cod_reconcile`)](addons/account_cod_reconcile/ACCOUNT_COD_RECONCILE_FLOW.md)**: Intake spreadsheet logic mapping tracking numbers directly into the native accounting ledger reconciling paid COD figures implicitly. 
+- **[Tailoring / Alterations Point of Sale (`pos_tailoring`)](addons/pos_tailoring/POS_TAILORING_FLOW.md)**: Owl-based GUI buttons appending Deposit logic arrays tracking tailoring instructions mapped to backend workshop fulfillment.
+
+---
+
 ## Custom Modules
 
 ### 1. HR Sales Commission (`hr_sale_commission`)

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Action: Danh sách phòng ban/chi nhánh dùng nội bộ -->
+    <record id="action_hr_department_list" model="ir.actions.act_window">
+        <field name="name">Branches / Departments</field>
+        <field name="res_model">hr.department</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+    </record>
+
+    <!-- MENU dưới Employees app -->
+
+    <!-- Menu Hồ sơ nhân viên - root -->
+    <menuitem id="menu_hr_employee_custom_root"
+              name="Profile"
+              parent="hr.menu_hr_root"
+              sequence="5"
+              groups="hr_employee_custom.group_employee_self"/>
+
+    <!-- Sub: Danh sách tất cả nhân viên -->
+    <menuitem id="menu_hr_employee_all"
+              name="All Profile"
+              parent="menu_hr_employee_custom_root"
+              action="hr.open_view_employee_list"
+              sequence="10"
+              groups="hr_employee_custom.group_employee_branch_manager"/>
+
+    <!-- Sub: Nhân viên theo chi nhánh -->
+    <menuitem id="menu_hr_employee_by_branch"
+              name="Profile by Branch"
+              parent="menu_hr_employee_custom_root"
+              action="hr_employee_custom.action_hr_employee_by_branch"
+              sequence="20"
+              groups="hr_employee_custom.group_employee_branch_manager"/>
+
+    <!-- Sub: Quản lý Giấy tờ -->
+    <menuitem id="menu_hr_employee_document"
+              name="Documents"
+              parent="menu_hr_employee_custom_root"
+              action="hr_employee_custom.action_hr_employee_document"
+              sequence="30"
+              groups="hr_employee_custom.group_employee_branch_manager"/>
+
+    <!-- Sub: Tài liệu sắp hết hạn -->
+    <menuitem id="menu_hr_employee_expiring_docs"
+              name="Expiring Documents"
+              parent="menu_hr_employee_custom_root"
+              action="hr_employee_custom.action_hr_employee_expiring_docs"
+              sequence="40"
+              groups="hr_employee_custom.group_employee_branch_manager"/>
+
+    <!-- Sub: Lịch sử vị trí -->
+    <menuitem id="menu_hr_position_history"
+              name="Position History"
+              parent="menu_hr_employee_custom_root"
+              action="hr_employee_custom.action_hr_position_history"
+              sequence="50"
+              groups="hr_employee_custom.group_employee_branch_manager"/>
+
+    <!-- Sub: Cấu hình (Director only) -->
+    <menuitem id="menu_hr_employee_config"
+              name="Configuration"
+              parent="menu_hr_employee_custom_root"
+              sequence="100"
+              groups="hr_employee_custom.group_employee_director"/>
+
+    <menuitem id="menu_hr_branch_list"
+              name="Branches / Departments"
+              parent="menu_hr_employee_config"
+              action="hr_employee_custom.action_hr_department_list"
+              sequence="10"
+              groups="hr_employee_custom.group_employee_director"/>
+
+</odoo>

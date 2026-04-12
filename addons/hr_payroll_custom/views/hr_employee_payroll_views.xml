@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Extend Employee form: add Payroll tab -->
+    <record id="hr_employee_payroll_form_view" model="ir.ui.view">
+        <field name="name">hr.employee.payroll.form</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Smart button for payslips -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" icon="fa-money"
+                        name="action_view_payslips" type="object">
+                    <field name="payslip_count" widget="statinfo" string="Payslips"/>
+                </button>
+            </xpath>
+
+            <!-- Add Payroll tab -->
+            <xpath expr="//page[@name='hr_settings']" position="after">
+                <page string="Payroll" name="payroll_info">
+                    <group>
+                        <group string="Tax &amp; Insurance">
+                            <field name="num_dependents"/>
+                        </group>
+                        <group string="Performance">
+                            <field name="abc_rating"/>
+                        </group>
+                    </group>
+                    <separator string="Sales Records (this month)"/>
+                    <field name="sales_record_ids" nolabel="1">
+                        <list editable="bottom">
+                            <field name="date"/>
+                            <field name="shift"/>
+                            <field name="sales_amount"/>
+                            <field name="products_sold"/>
+                            <field name="hot_bonus_preview"/>
+                            <field name="source" readonly="1"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Extend Contract form: add allowances -->
+    <record id="hr_contract_payroll_form_view" model="ir.ui.view">
+        <field name="name">hr.contract.payroll.form</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='wage']" position="after">
+                <field name="position_allowance"/>
+                <field name="job_allowance"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

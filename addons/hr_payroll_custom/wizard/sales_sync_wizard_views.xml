@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_sales_sync_wizard_view" model="ir.ui.view">
+        <field name="name">hr.sales.sync.wizard.form</field>
+        <field name="model">hr.sales.sync.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Sync Sales Records from Confirmed Sale Orders">
+                <sheet>
+                    <group>
+                        <group string="Date Range">
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                        <group string="Options">
+                            <field name="employee_ids" widget="many2many_tags"
+                                   placeholder="Leave empty = sync all employees"/>
+                            <field name="overwrite"/>
+                        </group>
+                    </group>
+                    <div class="alert alert-info" role="alert">
+                        <p><b>How it works:</b></p>
+                        <p>This wizard reads <b>Confirmed/Done Sale Orders</b>
+                            in the selected period, automatically calculates total sales and number of products by
+                            date + salesperson, then writes to <b>Sales Records</b>.
+                        </p>
+                        <p>Requirement: Salesperson on Sale Order must be linked
+                           to HR Employee (HR Employee → Related User).
+                        </p>
+                    </div>
+                    <div class="alert alert-success" invisible="not result_msg">
+                        <field name="result_msg" readonly="1" nolabel="1"/>
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_sync" string="Sync Now" type="object"
+                            class="btn-primary"/>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sales_sync_wizard" model="ir.actions.act_window">
+        <field name="name">Sync from Sale Orders</field>
+        <field name="res_model">hr.sales.sync.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

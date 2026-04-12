@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- =========================================== -->
+    <!-- INTERVIEW VIEWS -->
+    <!-- =========================================== -->
+
+    <!-- Interview Form View -->
+    <record id="view_interview_form" model="ir.ui.view">
+        <field name="name">hr.recruitment.interview.form</field>
+        <field name="model">hr.recruitment.interview</field>
+        <field name="arch" type="xml">
+            <form string="Interview">
+                <header>
+                    <button name="action_schedule" type="object" string="Schedule &amp; Notify"
+                            class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_confirm" type="object" string="Confirm"
+                            class="oe_highlight"
+                            invisible="state != 'scheduled'"/>
+                    <button name="action_start" type="object" string="Start Interview"
+                            invisible="state != 'confirmed'"/>
+                    <button name="action_complete" type="object" string="Complete"
+                            class="oe_highlight"
+                            invisible="state not in ('confirmed', 'in_progress')"/>
+                    <button name="action_no_show" type="object" string="No Show"
+                            class="btn-warning"
+                            invisible="state not in ('confirmed', 'in_progress')"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            invisible="state in ('done', 'cancelled', 'no_show')"/>
+                    <button name="action_reset_to_draft" type="object" string="Reset to Draft"
+                            invisible="state in ('draft', 'done')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,scheduled,confirmed,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Applicant Information">
+                            <field name="applicant_id"/>
+                            <field name="applicant_name" readonly="1"/>
+                            <field name="job_id" readonly="1"/>
+                            <field name="department_id" readonly="1"/>
+                        </group>
+                        <group string="Interview Schedule">
+                            <field name="interview_round"/>
+                            <field name="interview_date"/>
+                            <field name="interview_duration"/>
+                            <field name="interview_end_date" readonly="1"/>
+                            <field name="interview_mode"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Location &amp; Details">
+                            <field name="location"/>
+                            <field name="meeting_link" invisible="interview_mode == 'in_person'"/>
+                            <field name="responsible_id"/>
+                        </group>
+                        <group string="Result">
+                            <field name="average_score" readonly="1" widget="float"/>
+                            <field name="interview_result"/>
+                            <field name="calendar_event_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Interviewers">
+                        <field name="interviewer_ids" widget="many2many_tags" nolabel="1"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="candidate_notification_sent" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="interviewer_notification_sent" readonly="1"/>
+                        </group>
+                    </group>
+                    <div class="mt-2 mb-4" invisible="state != 'scheduled'">
+                        <button name="action_send_candidate_notification" type="object"
+                                string="📧 Send Candidate Notification" class="btn-primary me-2"
+                                icon="fa-envelope"/>
+                        <button name="action_send_interviewer_notification" type="object"
+                                string="📧 Send Interviewer Notification" class="btn-secondary"
+                                icon="fa-envelope"/>
+                    </div>
+                    <notebook>
+                        <page string="Evaluations" name="evaluations">
+                            <field name="evaluation_ids" nolabel="1">
+                                <list string="Evaluations" editable="bottom">
+                                    <field name="evaluator_id"/>
+                                    <field name="score_communication" column_invisible="parent.interview_round not in ('1', '2')"/>
+                                    <field name="score_attitude" column_invisible="parent.interview_round != '1'"/>
+                                    <field name="score_technical" column_invisible="parent.interview_round != '2'"/>
+                                    <field name="score_problem_solving" column_invisible="parent.interview_round != '2'"/>
+                                    <field name="score_experience" column_invisible="parent.interview_round not in ('1', '2')"/>
+                                    <field name="score_culture_fit" column_invisible="parent.interview_round not in ('3', '4')"/>
+                                    <field name="score_teamwork" column_invisible="parent.interview_round not in ('3', '4')"/>
+                                    <field name="total_score" readonly="1" decoration-bf="1"/>
+                                    <field name="recommendation" widget="badge"
+                                           decoration-success="recommendation in ('strong_hire', 'hire')"
+                                           decoration-warning="recommendation == 'maybe'"
+                                           decoration-danger="recommendation in ('no_hire', 'strong_no_hire')"/>
+                                </list>
+                            </field>
+                            <div class="mt-3">
+                                <button name="action_add_evaluation" type="object"
+                                        string="Add Detailed Evaluation"
+                                        class="btn-primary"
+                                        icon="fa-star"/>
+                            </div>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" nolabel="1" placeholder="Add interview notes here..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Interview List View -->
+    <record id="view_interview_list" model="ir.ui.view">
+        <field name="name">hr.recruitment.interview.list</field>
+        <field name="model">hr.recruitment.interview</field>
+        <field name="arch" type="xml">
+            <list string="Interviews"
+                  decoration-info="state == 'draft'"
+                  decoration-warning="state in ('scheduled', 'confirmed')"
+                  decoration-success="state == 'done'"
+                  decoration-muted="state in ('cancelled', 'no_show')">
+                <field name="name"/>
+                <field name="applicant_name"/>
+                <field name="job_id"/>
+                <field name="interview_round"/>
+                <field name="interview_date"/>
+                <field name="interview_mode"/>
+                <field name="interviewer_ids" widget="many2many_tags"/>
+                <field name="average_score"/>
+                <field name="interview_result" widget="badge"
+                       decoration-success="interview_result == 'pass'"
+                       decoration-danger="interview_result == 'fail'"
+                       decoration-warning="interview_result == 'hold'"
+                       optional="show"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state in ('scheduled', 'confirmed')"
+                       decoration-success="state == 'done'"
+                       decoration-danger="state in ('cancelled', 'no_show')"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Interview Calendar View -->
+    <record id="view_interview_calendar" model="ir.ui.view">
+        <field name="name">hr.recruitment.interview.calendar</field>
+        <field name="model">hr.recruitment.interview</field>
+        <field name="arch" type="xml">
+            <calendar string="Interview Schedule"
+                      date_start="interview_date"
+                      date_stop="interview_end_date"
+                      color="interview_round"
+                      mode="week">
+                <field name="applicant_name"/>
+                <field name="job_id"/>
+                <field name="interview_round"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Interview Search View -->
+    <record id="view_interview_search" model="ir.ui.view">
+        <field name="name">hr.recruitment.interview.search</field>
+        <field name="model">hr.recruitment.interview</field>
+        <field name="arch" type="xml">
+            <search string="Search Interviews">
+                <field name="applicant_name"/>
+                <field name="job_id"/>
+                <field name="interviewer_ids"/>
+                <filter string="Today" name="today" domain="[('interview_date', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0))), ('interview_date', '&lt;', datetime.datetime.combine(context_today() + datetime.timedelta(days=1), datetime.time(0,0,0)))]"/>
+                <filter string="This Week" name="this_week" domain="[('interview_date', '&gt;=', (context_today() - datetime.timedelta(days=context_today().weekday())).strftime('%%Y-%%m-%%d')), ('interview_date', '&lt;', (context_today() + datetime.timedelta(days=7-context_today().weekday())).strftime('%%Y-%%m-%%d'))]"/>
+                <separator/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Scheduled" name="scheduled" domain="[('state', '=', 'scheduled')]"/>
+                <filter string="Completed" name="completed" domain="[('state', '=', 'done')]"/>
+                <separator/>
+                <filter string="My Interviews" name="my_interviews" domain="[('interviewer_ids.user_id', '=', uid)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Round" name="group_round" context="{'group_by': 'interview_round'}"/>
+                    <filter string="Job Position" name="group_job" context="{'group_by': 'job_id'}"/>
+                    <filter string="Interview Date" name="group_date" context="{'group_by': 'interview_date:week'}"/>
+                    <filter string="Result" name="group_result" context="{'group_by': 'interview_result'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Interview Action -->
+    <record id="action_interview" model="ir.actions.act_window">
+        <field name="name">Interviews</field>
+        <field name="res_model">hr.recruitment.interview</field>
+        <field name="view_mode">list,calendar,form</field>
+        <field name="search_view_id" ref="view_interview_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Schedule an interview
+            </p>
+            <p>
+                Schedule interviews with candidates, track evaluations and results.
+            </p>
+        </field>
+    </record>
+
+    <!-- =========================================== -->
+    <!-- INTERVIEW EVALUATION VIEWS -->
+    <!-- =========================================== -->
+
+    <!-- Evaluation Form View -->
+    <record id="view_interview_evaluation_form" model="ir.ui.view">
+        <field name="name">hr.recruitment.interview.evaluation.form</field>
+        <field name="model">hr.recruitment.interview.evaluation</field>
+        <field name="arch" type="xml">
+            <form string="Interview Evaluation">
+                <sheet>
+                    <group>
+                        <group string="Interview Info">
+                            <field name="interview_id"/>
+                            <field name="applicant_id" readonly="1"/>
+                            <field name="evaluator_id"/>
+                        </group>
+                        <group string="Recommendation">
+                            <field name="recommendation" widget="radio"/>
+                            <field name="total_score" readonly="1" widget="float"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Scoring" name="scoring">
+                            <group>
+                                <field name="interview_round" invisible="1"/>
+                                <group string="Technical &amp; Skills">
+                                    <field name="score_technical" widget="integer" invisible="interview_round != '2'"/>
+                                    <field name="score_experience" widget="integer" invisible="interview_round not in ('1', '2')"/>
+                                    <field name="score_problem_solving" widget="integer" invisible="interview_round != '2'"/>
+                                </group>
+                                <group string="Soft Skills &amp; Fit">
+                                    <field name="score_communication" widget="integer" invisible="interview_round not in ('1', '2')"/>
+                                    <field name="score_attitude" widget="integer" invisible="interview_round != '1'"/>
+                                    <field name="score_culture_fit" widget="integer" invisible="interview_round not in ('3', '4')"/>
+                                    <field name="score_teamwork" widget="integer" invisible="interview_round not in ('3', '4')"/>
+                                </group>
+                            </group>
+                            <div class="alert alert-info mt-2" role="alert">
+                                <strong>📝 Hướng dẫn:</strong> Chấm điểm từ 1-10 cho mỗi tiêu chí.
+                                Điểm tổng sẽ được tính tự động.
+                            </div>
+                        </page>
+                        <page string="Comments" name="comments">
+                            <group string="Strengths">
+                                <field name="strengths" nolabel="1" placeholder="What are the candidate's key strengths?"/>
+                            </group>
+                            <group string="Areas for Improvement">
+                                <field name="weaknesses" nolabel="1" placeholder="What areas need improvement?"/>
+                            </group>
+                            <group string="Overall Assessment">
+                                <field name="overall_comment" nolabel="1" placeholder="Provide your overall assessment of the candidate..."/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Evaluation List View -->
+    <record id="view_interview_evaluation_list" model="ir.ui.view">
+        <field name="name">hr.recruitment.interview.evaluation.list</field>
+        <field name="model">hr.recruitment.interview.evaluation</field>
+        <field name="arch" type="xml">
+            <list string="Interview Evaluations">
+                <field name="interview_id"/>
+                <field name="applicant_id"/>
+                <field name="evaluator_id"/>
+                <field name="score_technical"/>
+                <field name="score_communication"/>
+                <field name="score_teamwork"/>
+                <field name="score_problem_solving"/>
+                <field name="score_attitude"/>
+                <field name="total_score" decoration-bf="1"/>
+                <field name="recommendation" widget="badge"
+                       decoration-success="recommendation in ('strong_hire', 'hire')"
+                       decoration-warning="recommendation == 'maybe'"
+                       decoration-danger="recommendation in ('no_hire', 'strong_no_hire')"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Evaluation Action -->
+    <record id="action_interview_evaluation" model="ir.actions.act_window">
+        <field name="name">Interview Evaluations</field>
+        <field name="res_model">hr.recruitment.interview.evaluation</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

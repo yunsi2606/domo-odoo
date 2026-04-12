@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- =========================================== -->
+    <!-- RECRUITMENT REQUEST EMAIL TEMPLATES -->
+    <!-- =========================================== -->
+
+    <!-- Request Submitted for Approval -->
+    <record id="mail_template_request_submitted" model="mail.template">
+        <field name="name">Recruitment Request: Submitted for Approval</field>
+        <field name="model_id" ref="model_hr_recruitment_request"/>
+        <field name="subject">Recruitment Request {{ object.name }} - Pending Approval</field>
+        <field name="email_from">{{ (user.email_formatted or object.company_id.email_formatted) }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0; padding: 0; font-family: Arial, sans-serif;">
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center;">
+        <h1 style="color: white; margin: 0;">Yêu cầu Tuyển dụng Mới</h1>
+    </div>
+    <div style="padding: 20px; background: #f8f9fa;">
+        <p style="font-size: 14px;">
+            Một yêu cầu tuyển dụng mới đã được gửi và đang chờ phê duyệt:
+        </p>
+        <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <tr>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee; font-weight: bold; width: 35%; background: #f1f3f5;">Mã yêu cầu</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee;"><t t-out="object.name"/></td>
+            </tr>
+            <tr>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee; font-weight: bold; background: #f1f3f5;">Vị trí</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee;"><t t-out="object.job_id.name"/></td>
+            </tr>
+            <tr>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee; font-weight: bold; background: #f1f3f5;">Phòng ban</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee;"><t t-out="object.department_id.name"/></td>
+            </tr>
+            <tr>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee; font-weight: bold; background: #f1f3f5;">Số lượng</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee;"><t t-out="object.number_of_positions"/></td>
+            </tr>
+            <tr>
+                <td style="padding: 12px 16px; font-weight: bold; background: #f1f3f5;">Người yêu cầu</td>
+                <td style="padding: 12px 16px;"><t t-out="object.requested_by.name"/></td>
+            </tr>
+        </table>
+        <br/>
+        <p style="font-size: 14px;">Vui lòng xem xét và phê duyệt trong hệ thống.</p>
+        <p style="font-size: 14px;">Trân trọng,<br/><strong>Phòng Nhân sự</strong></p>
+    </div>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+    <!-- Request Approved -->
+    <record id="mail_template_request_approved" model="mail.template">
+        <field name="name">Recruitment Request: Approved</field>
+        <field name="model_id" ref="model_hr_recruitment_request"/>
+        <field name="subject">✅ Recruitment Request {{ object.name }} - Approved</field>
+        <field name="email_from">{{ (user.email_formatted or object.company_id.email_formatted) }}</field>
+        <field name="email_to">{{ object.requested_by.email }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0; padding: 0; font-family: Arial, sans-serif;">
+    <div style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); padding: 30px; text-align: center;">
+        <h1 style="color: white; margin: 0;">✅ Yêu cầu Tuyển dụng Đã Được Phê Duyệt</h1>
+    </div>
+    <div style="padding: 20px; background: #f8f9fa;">
+        <p style="font-size: 14px;">
+            Kính gửi <t t-out="object.requested_by.name"/>,
+        </p>
+        <p style="font-size: 14px;">
+            Yêu cầu tuyển dụng <strong><t t-out="object.name"/></strong> cho vị trí
+            <strong><t t-out="object.job_id.name"/></strong> đã được phê duyệt.
+        </p>
+        <p style="font-size: 14px;">
+            <strong>Phê duyệt bởi:</strong> <t t-out="object.approved_by.name"/>
+        </p>
+        <p style="font-size: 14px;">
+            Bạn có thể bắt đầu quy trình tuyển dụng trong hệ thống.
+        </p>
+        <p style="font-size: 14px;">Trân trọng,<br/><strong>Phòng Nhân sự</strong></p>
+    </div>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+    <!-- Request Rejected -->
+    <record id="mail_template_request_rejected" model="mail.template">
+        <field name="name">Recruitment Request: Rejected</field>
+        <field name="model_id" ref="model_hr_recruitment_request"/>
+        <field name="subject">❌ Recruitment Request {{ object.name }} - Rejected</field>
+        <field name="email_from">{{ (user.email_formatted or object.company_id.email_formatted) }}</field>
+        <field name="email_to">{{ object.requested_by.email }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0; padding: 0; font-family: Arial, sans-serif;">
+    <div style="background: linear-gradient(135deg, #fc5c7d 0%, #6a82fb 100%); padding: 30px; text-align: center;">
+        <h1 style="color: white; margin: 0;">❌ Yêu cầu Tuyển dụng Bị Từ Chối</h1>
+    </div>
+    <div style="padding: 20px; background: #f8f9fa;">
+        <p style="font-size: 14px;">
+            Kính gửi <t t-out="object.requested_by.name"/>,
+        </p>
+        <p style="font-size: 14px;">
+            Yêu cầu tuyển dụng <strong><t t-out="object.name"/></strong> cho vị trí
+            <strong><t t-out="object.job_id.name"/></strong> đã bị từ chối.
+        </p>
+        <t t-if="object.rejection_reason">
+            <p style="font-size: 14px; background: #fff3cd; padding: 12px; border-left: 4px solid #ffc107; border-radius: 4px;">
+                <strong>Lý do:</strong><br/>
+                <t t-out="object.rejection_reason"/>
+            </p>
+        </t>
+        <p style="font-size: 14px;">
+            Vui lòng liên hệ phòng nhân sự nếu cần thêm thông tin.
+        </p>
+        <p style="font-size: 14px;">Trân trọng,<br/><strong>Phòng Nhân sự</strong></p>
+    </div>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+    <!-- =========================================== -->
+    <!-- INTERVIEW EMAIL TEMPLATES -->
+    <!-- =========================================== -->
+
+    <!-- Interview Invitation to Candidate -->
+    <record id="mail_template_interview_invitation" model="mail.template">
+        <field name="name">Interview: Invitation to Candidate</field>
+        <field name="model_id" ref="model_hr_recruitment_interview"/>
+        <field name="subject">Thư mời Phỏng vấn - {{ object.job_id.name }}</field>
+        <field name="email_from">{{ (user.email_formatted or '') }}</field>
+        <field name="email_to">{{ object.applicant_id.email_from }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0; padding: 0; font-family: Arial, sans-serif;">
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center;">
+        <h1 style="color: white; margin: 0;">Thư Mời Phỏng Vấn</h1>
+    </div>
+    <div style="padding: 20px; background: #f8f9fa;">
+        <p style="font-size: 14px;">
+            Kính gửi <t t-out="object.applicant_id.partner_name"/>,
+        </p>
+        <p style="font-size: 14px;">
+            Chúng tôi xin trân trọng mời bạn tham dự buổi phỏng vấn cho vị trí
+            <strong><t t-out="object.job_id.name"/></strong>.
+        </p>
+        <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin: 16px 0;">
+            <tr>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee; font-weight: bold; width: 35%; background: #f1f3f5;">📅 Ngày giờ</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee;"><t t-out="object.interview_date"/></td>
+            </tr>
+            <tr>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee; font-weight: bold; background: #f1f3f5;">⏱️ Thời lượng</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee;"><t t-out="object.interview_duration"/> giờ</td>
+            </tr>
+            <tr>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee; font-weight: bold; background: #f1f3f5;">📍 Địa điểm</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee;"><t t-out="object.location or 'Sẽ được thông báo sau'"/></td>
+            </tr>
+            <tr>
+                <td style="padding: 12px 16px; font-weight: bold; background: #f1f3f5;">💻 Hình thức</td>
+                <td style="padding: 12px 16px;"><t t-out="object.interview_mode"/></td>
+            </tr>
+        </table>
+        <t t-if="object.meeting_link">
+            <p style="font-size: 14px;">
+                <strong>Link họp trực tuyến:</strong>
+                <a t-att-href="object.meeting_link"><t t-out="object.meeting_link"/></a>
+            </p>
+        </t>
+        <p style="font-size: 14px;">
+            Vui lòng xác nhận tham dự bằng cách phản hồi email này.
+        </p>
+        <p style="font-size: 14px;">Trân trọng,<br/><strong>Phòng Nhân sự</strong></p>
+    </div>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+    <!-- Interview Notification to Interviewer -->
+    <record id="mail_template_interview_interviewer" model="mail.template">
+        <field name="name">Interview: Notification to Interviewer</field>
+        <field name="model_id" ref="model_hr_recruitment_interview"/>
+        <field name="subject">Interview Scheduled: {{ object.applicant_id.partner_name }} - {{ object.job_id.name }}</field>
+        <field name="email_from">{{ (user.email_formatted or '') }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0; padding: 0; font-family: Arial, sans-serif;">
+    <div style="background: linear-gradient(135deg, #2196F3 0%, #21CBF3 100%); padding: 30px; text-align: center;">
+        <h1 style="color: white; margin: 0;">Lịch Phỏng Vấn</h1>
+    </div>
+    <div style="padding: 20px; background: #f8f9fa;">
+        <p style="font-size: 14px;">
+            Bạn đã được phân công phỏng vấn ứng viên:
+        </p>
+        <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin: 16px 0;">
+            <tr>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee; font-weight: bold; width: 35%; background: #f1f3f5;">Ứng viên</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee;"><t t-out="object.applicant_id.partner_name"/></td>
+            </tr>
+            <tr>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee; font-weight: bold; background: #f1f3f5;">Vị trí</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee;"><t t-out="object.job_id.name"/></td>
+            </tr>
+            <tr>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee; font-weight: bold; background: #f1f3f5;">Ngày giờ</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee;"><t t-out="object.interview_date"/></td>
+            </tr>
+            <tr>
+                <td style="padding: 12px 16px; font-weight: bold; background: #f1f3f5;">Vòng</td>
+                <td style="padding: 12px 16px;"><t t-out="object.interview_round"/></td>
+            </tr>
+        </table>
+        <p style="font-size: 14px;">
+            Sau buổi phỏng vấn, vui lòng đánh giá ứng viên trực tiếp trên hệ thống.
+        </p>
+        <p style="font-size: 14px;">Trân trọng,<br/><strong>Phòng Nhân sự</strong></p>
+    </div>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+    <!-- Interview Cancelled -->
+    <record id="mail_template_interview_cancelled" model="mail.template">
+        <field name="name">Interview: Cancelled</field>
+        <field name="model_id" ref="model_hr_recruitment_interview"/>
+        <field name="subject">Thông báo Hủy Phỏng vấn - {{ object.job_id.name }}</field>
+        <field name="email_from">{{ (user.email_formatted or '') }}</field>
+        <field name="email_to">{{ object.applicant_id.email_from }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0; padding: 0; font-family: Arial, sans-serif;">
+    <div style="background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); padding: 30px; text-align: center;">
+        <h1 style="color: white; margin: 0;">Thông Báo Hủy Phỏng Vấn</h1>
+    </div>
+    <div style="padding: 20px; background: #f8f9fa;">
+        <p style="font-size: 14px;">
+            Kính gửi <t t-out="object.applicant_id.partner_name"/>,
+        </p>
+        <p style="font-size: 14px;">
+            Chúng tôi rất tiếc phải thông báo rằng buổi phỏng vấn cho vị trí
+            <strong><t t-out="object.job_id.name"/></strong>
+            đã bị hủy.
+        </p>
+        <p style="font-size: 14px;">
+            Chúng tôi sẽ liên hệ lại để sắp xếp lịch mới nếu cần.
+        </p>
+        <p style="font-size: 14px;">Xin chân thành cảm ơn sự thông cảm của bạn.</p>
+        <p style="font-size: 14px;">Trân trọng,<br/><strong>Phòng Nhân sự</strong></p>
+    </div>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+    <!-- =========================================== -->
+    <!-- OFFER LETTER EMAIL TEMPLATES -->
+    <!-- =========================================== -->
+
+    <!-- Offer Letter Sent -->
+    <record id="mail_template_offer_sent" model="mail.template">
+        <field name="name">Offer Letter: Sent to Candidate</field>
+        <field name="model_id" ref="model_hr_offer_letter"/>
+        <field name="subject">🎉 Thư mời Nhận việc - {{ object.job_id.name }}</field>
+        <field name="email_from">{{ (user.email_formatted or object.company_id.email_formatted) }}</field>
+        <field name="email_to">{{ object.applicant_email }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0; padding: 0; font-family: Arial, sans-serif;">
+    <div style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); padding: 30px; text-align: center;">
+        <h1 style="color: white; margin: 0;">🎉 Thư Mời Nhận Việc</h1>
+        <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Chúc mừng bạn!</p>
+    </div>
+    <div style="padding: 20px; background: #f8f9fa;">
+        <p style="font-size: 14px;">
+            Kính gửi <t t-out="object.applicant_name"/>,
+        </p>
+        <p style="font-size: 14px;">
+            Chúng tôi vui mừng thông báo rằng bạn đã được chọn cho vị trí
+            <strong><t t-out="object.job_id.name"/></strong> tại
+            <strong><t t-out="object.company_id.name"/></strong>.
+        </p>
+        <div t-raw="object.offer_content"/>
+        <div style="background: #fff3cd; padding: 12px; border-left: 4px solid #ffc107; border-radius: 4px; margin: 16px 0;">
+            <strong>⏰ Hạn phản hồi:</strong> <t t-out="object.expiry_date"/>
+        </div>
+        <p style="font-size: 14px;">
+            Vui lòng phản hồi chấp nhận hoặc từ chối trước thời hạn trên.
+        </p>
+        <p style="font-size: 14px;">Trân trọng,<br/><strong>Phòng Nhân sự</strong><br/><t t-out="object.company_id.name"/></p>
+    </div>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+    <!-- Offer Accepted Notification (internal) -->
+    <record id="mail_template_offer_accepted" model="mail.template">
+        <field name="name">Offer Letter: Accepted</field>
+        <field name="model_id" ref="model_hr_offer_letter"/>
+        <field name="subject">✅ Offer Accepted: {{ object.applicant_name }} - {{ object.job_id.name }}</field>
+        <field name="email_from">{{ (user.email_formatted or object.company_id.email_formatted) }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0; padding: 0; font-family: Arial, sans-serif;">
+    <div style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); padding: 30px; text-align: center;">
+        <h1 style="color: white; margin: 0;">✅ Ứng viên Đã Chấp Nhận Offer</h1>
+    </div>
+    <div style="padding: 20px; background: #f8f9fa;">
+        <p style="font-size: 14px;">
+            <strong><t t-out="object.applicant_name"/></strong> đã chấp nhận thư mời nhận việc
+            cho vị trí <strong><t t-out="object.job_id.name"/></strong>.
+        </p>
+        <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <tr>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee; font-weight: bold; width: 35%; background: #f1f3f5;">Ngày bắt đầu</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid #eee;"><t t-out="object.start_date"/></td>
+            </tr>
+            <tr>
+                <td style="padding: 12px 16px; font-weight: bold; background: #f1f3f5;">Mức lương</td>
+                <td style="padding: 12px 16px;"><t t-out="object.offered_salary"/></td>
+            </tr>
+        </table>
+        <br/>
+        <p style="font-size: 14px; background: #d1ecf1; padding: 12px; border-left: 4px solid #17a2b8; border-radius: 4px;">
+            <strong>Bước tiếp theo:</strong> Tạo hồ sơ nhân viên mới trong hệ thống.
+        </p>
+    </div>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+    <!-- Offer Rejected Notification (internal) -->
+    <record id="mail_template_offer_rejected" model="mail.template">
+        <field name="name">Offer Letter: Rejected</field>
+        <field name="model_id" ref="model_hr_offer_letter"/>
+        <field name="subject">❌ Offer Rejected: {{ object.applicant_name }} - {{ object.job_id.name }}</field>
+        <field name="email_from">{{ (user.email_formatted or object.company_id.email_formatted) }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0; padding: 0; font-family: Arial, sans-serif;">
+    <div style="background: linear-gradient(135deg, #fc5c7d 0%, #6a82fb 100%); padding: 30px; text-align: center;">
+        <h1 style="color: white; margin: 0;">❌ Ứng viên Từ Chối Offer</h1>
+    </div>
+    <div style="padding: 20px; background: #f8f9fa;">
+        <p style="font-size: 14px;">
+            <strong><t t-out="object.applicant_name"/></strong> đã từ chối thư mời nhận việc
+            cho vị trí <strong><t t-out="object.job_id.name"/></strong>.
+        </p>
+        <t t-if="object.rejection_reason">
+            <p style="font-size: 14px; background: #fff3cd; padding: 12px; border-left: 4px solid #ffc107; border-radius: 4px;">
+                <strong>Lý do:</strong><br/>
+                <t t-out="object.rejection_reason"/>
+            </p>
+        </t>
+    </div>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+</odoo>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- MODULE CATEGORY -->
+    <record id="module_category_hr_employee_custom" model="ir.module.category">
+        <field name="name">HR Employee Profile</field>
+        <field name="description">Manage employee profiles with hierarchical access control</field>
+        <field name="sequence">10</field>
+        <field name="visible" eval="True"/>
+    </record>
+
+    <!-- NHÓM QUYỀN -->
+
+    <!-- Nhân viên: xem/sửa hồ sơ bản thân (trường cá nhân) -->
+    <record id="group_employee_self" model="res.groups">
+        <field name="name">Employee</field>
+        <field name="category_id" ref="module_category_hr_employee_custom"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">View and update some of your personal information (address, phone, bank). Do not edit contract and salary information.</field>
+    </record>
+
+    <!-- Quản lý chi nhánh: xem toàn bộ hồ sơ nhân viên thuộc chi nhánh -->
+    <record id="group_employee_branch_manager" model="res.groups">
+        <field name="name">Branch Manager</field>
+        <field name="category_id" ref="module_category_hr_employee_custom"/>
+        <field name="implied_ids" eval="[(4, ref('group_employee_self')), (4, ref('hr.group_hr_user'))]"/>
+        <field name="comment">View all employee profiles in the branch. Propose changes in position or contract. Do not edit sensitive salary data.</field>
+    </record>
+
+    <!-- Giám đốc: toàn quyền trên toàn hệ thống -->
+    <record id="group_employee_director" model="res.groups">
+        <field name="name">Director / HR Manager</field>
+        <field name="category_id" ref="module_category_hr_employee_custom"/>
+        <field name="implied_ids" eval="[(4, ref('group_employee_branch_manager')), (4, ref('hr.group_hr_manager'))]"/>
+        <field name="comment">Full access to view and approve all HR profile information, including contracts, salary adjustments, and important HR decisions.</field>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <!-- RECORD RULES - HR EMPLOYEE -->
+    
+    <!-- Nhân viên: chỉ thấy hồ sơ của chính mình -->
+    <record id="rule_employee_self_read" model="ir.rule">
+        <field name="name">HR Profile: Employee can only view their own profile</field>
+        <field name="model_id" ref="hr.model_hr_employee"/>
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_employee_self'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Quản lý chi nhánh: xem nhân viên cùng chi nhánh (department_type=branch) -->
+    <record id="rule_employee_branch_manager_read" model="ir.rule">
+        <field name="name">HR Profile: Branch manager can view employees in the branch</field>
+        <field name="model_id" ref="hr.model_hr_employee"/>
+        <field name="domain_force">[
+            '|',
+            ('department_id', '=', user.employee_id.department_id.id),
+            ('branch_id', '=', user.employee_id.branch_id.id)
+        ]</field>
+        <field name="groups" eval="[(4, ref('group_employee_branch_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Giám đốc: toàn quyền không giới hạn -->
+    <record id="rule_employee_director_all" model="ir.rule">
+        <field name="name">HR Profile: Director has full authority</field>
+        <field name="model_id" ref="hr.model_hr_employee"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_employee_director'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- RECORD RULES - HR EMPLOYEE DOCUMENT -->
+
+    <!-- Nhân viên: xem tài liệu của bản thân -->
+    <record id="rule_document_self" model="ir.rule">
+        <field name="name">HR Document: Employee can view their own documents</field>
+        <field name="model_id" ref="model_hr_employee_document"/>
+        <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_employee_self'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Quản lý chi nhánh: xem và sửa tài liệu nhân viên thuộc chi nhánh -->
+    <record id="rule_document_branch_manager" model="ir.rule">
+        <field name="name">HR Document: Branch manager can view and edit documents of employees in the branch</field>
+        <field name="model_id" ref="model_hr_employee_document"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_employee_branch_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Giám đốc: toàn quyền tài liệu -->
+    <record id="rule_document_director" model="ir.rule">
+        <field name="name">HR Document: Director has full authority</field>
+        <field name="model_id" ref="model_hr_employee_document"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_employee_director'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- RECORD RULES - POSITION HISTORY -->
+
+    <!-- Nhân viên: xem lịch sử vị trí của bản thân -->
+    <record id="rule_position_history_self" model="ir.rule">
+        <field name="name">Position History: Employee can view their own position history</field>
+        <field name="model_id" ref="model_hr_position_history"/>
+        <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_employee_self'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Quản lý chi nhánh: toàn bộ lịch sử -->
+    <record id="rule_position_history_branch_manager" model="ir.rule">
+        <field name="name">Position History: Branch manager can view all position history</field>
+        <field name="model_id" ref="model_hr_position_history"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_employee_branch_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Giám đốc: toàn quyền lịch sử -->
+    <record id="rule_position_history_director" model="ir.rule">
+        <field name="name">Position History: Director has full authority</field>
+        <field name="model_id" ref="model_hr_position_history"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_employee_director'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+</odoo>

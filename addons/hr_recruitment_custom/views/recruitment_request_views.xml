@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- RECRUITMENT REQUEST VIEWS -->
+
+    <!-- Form View -->
+    <record id="view_recruitment_request_form" model="ir.ui.view">
+        <field name="name">hr.recruitment.request.form</field>
+        <field name="model">hr.recruitment.request</field>
+        <field name="arch" type="xml">
+            <form string="Recruitment Request">
+                <header>
+                    <button name="action_submit" type="object" string="Submit for Approval"
+                            class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_approve" type="object" string="Approve"
+                            class="oe_highlight"
+                            invisible="state != 'submitted'"
+                            groups="hr_recruitment_custom.group_recruitment_approver"/>
+                    <button name="action_reject_confirm" type="object" string="Reject"
+                            class="btn-danger"
+                            invisible="state != 'submitted'"
+                            groups="hr_recruitment_custom.group_recruitment_approver"/>
+                    <button name="action_start_recruitment" type="object" string="Start Recruitment"
+                            class="oe_highlight"
+                            invisible="state != 'approved'"/>
+                    <button name="action_mark_filled" type="object" string="Mark as Filled"
+                            class="oe_highlight"
+                            invisible="state != 'in_progress'"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            invisible="state in ('filled', 'cancelled')"/>
+                    <button name="action_reset_to_draft" type="object" string="Reset to Draft"
+                            invisible="state in ('draft', 'in_progress', 'filled')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,approved,in_progress,filled"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_applicants" type="object"
+                                class="oe_stat_button" icon="fa-users">
+                            <field name="applicant_count" widget="statinfo" string="Applicants"/>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-check-circle" type="object"
+                                name="action_view_applicants">
+                            <field name="hired_count" widget="statinfo" string="Hired"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Position Details">
+                            <field name="job_id"/>
+                            <field name="department_id"/>
+                            <field name="number_of_positions"/>
+                            <field name="employment_type"/>
+                            <field name="reason"/>
+                            <field name="priority" widget="priority"/>
+                        </group>
+                        <group string="Budget &amp; Timeline">
+                            <field name="salary_min"/>
+                            <field name="salary_max"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="date_expected"/>
+                            <field name="date_deadline"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Requestor">
+                            <field name="requested_by"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Approval">
+                            <field name="approved_by"/>
+                            <field name="approval_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Job Description" name="description">
+                            <group>
+                                <field name="job_description" nolabel="1" placeholder="Describe the job responsibilities and requirements..."/>
+                            </group>
+                        </page>
+                        <page string="Skill Requirements" name="skills">
+                            <group>
+                                <field name="skill_requirements" nolabel="1" placeholder="List required skills..."/>
+                            </group>
+                            <group>
+                                <field name="experience_requirements"/>
+                                <field name="education_requirements"/>
+                            </group>
+                        </page>
+                        <page string="Rejection" name="rejection"
+                              invisible="state != 'rejected'">
+                            <group>
+                                <field name="rejection_reason"/>
+                            </group>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- List View -->
+    <record id="view_recruitment_request_list" model="ir.ui.view">
+        <field name="name">hr.recruitment.request.list</field>
+        <field name="model">hr.recruitment.request</field>
+        <field name="arch" type="xml">
+            <list string="Recruitment Requests"
+                  decoration-info="state == 'draft'"
+                  decoration-warning="state == 'submitted'"
+                  decoration-success="state in ('approved', 'in_progress')"
+                  decoration-muted="state in ('cancelled', 'rejected')"
+                  decoration-bf="state == 'filled'">
+                <field name="name"/>
+                <field name="job_id"/>
+                <field name="department_id"/>
+                <field name="number_of_positions"/>
+                <field name="employment_type"/>
+                <field name="reason"/>
+                <field name="priority" widget="priority"/>
+                <field name="salary_min" optional="show"/>
+                <field name="salary_max" optional="show"/>
+                <field name="requested_by"/>
+                <field name="date_deadline"/>
+                <field name="applicant_count" string="Applicants"/>
+                <field name="hired_count" string="Hired"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'submitted'"
+                       decoration-success="state in ('approved', 'in_progress', 'filled')"
+                       decoration-danger="state in ('cancelled', 'rejected')"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="view_recruitment_request_kanban" model="ir.ui.view">
+        <field name="name">hr.recruitment.request.kanban</field>
+        <field name="model">hr.recruitment.request</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="job_id"/>
+                <field name="department_id"/>
+                <field name="number_of_positions"/>
+                <field name="priority"/>
+                <field name="state"/>
+                <field name="applicant_count"/>
+                <field name="hired_count"/>
+                <field name="requested_by"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="o_kanban_card_header">
+                            <strong><field name="name"/></strong>
+                            <field name="priority" widget="priority"/>
+                        </div>
+                        <div class="o_kanban_card_content">
+                            <div><strong><field name="job_id"/></strong></div>
+                            <div><field name="department_id"/></div>
+                            <div>Positions: <field name="number_of_positions"/></div>
+                            <div>Applicants: <field name="applicant_count"/> | Hired: <field name="hired_count"/></div>
+                        </div>
+                        <div class="o_kanban_card_footer">
+                            <field name="requested_by" widget="many2one_avatar_user"/>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_recruitment_request_search" model="ir.ui.view">
+        <field name="name">hr.recruitment.request.search</field>
+        <field name="model">hr.recruitment.request</field>
+        <field name="arch" type="xml">
+            <search string="Search Recruitment Requests">
+                <field name="name"/>
+                <field name="job_id"/>
+                <field name="department_id"/>
+                <field name="requested_by"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Pending Approval" name="submitted" domain="[('state', '=', 'submitted')]"/>
+                <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="In Progress" name="in_progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter string="Filled" name="filled" domain="[('state', '=', 'filled')]"/>
+                <separator/>
+                <filter string="Urgent" name="urgent" domain="[('priority', '=', '3')]"/>
+                <filter string="High Priority" name="high" domain="[('priority', '=', '2')]"/>
+                <separator/>
+                <filter string="My Requests" name="my_requests" domain="[('requested_by', '=', uid)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Department" name="group_department" context="{'group_by': 'department_id'}"/>
+                    <filter string="Job Position" name="group_job" context="{'group_by': 'job_id'}"/>
+                    <filter string="Priority" name="group_priority" context="{'group_by': 'priority'}"/>
+                    <filter string="Requested By" name="group_requested_by" context="{'group_by': 'requested_by'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_recruitment_request" model="ir.actions.act_window">
+        <field name="name">Recruitment Requests</field>
+        <field name="res_model">hr.recruitment.request</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_recruitment_request_search"/>
+        <field name="context">{'search_default_my_requests': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first recruitment request
+            </p>
+            <p>
+                Start the recruitment process by creating a request for a new position.
+                The request will be sent for approval before recruitment begins.
+            </p>
+        </field>
+    </record>
+
+    <!-- Action: Pending Approval -->
+    <record id="action_recruitment_request_pending" model="ir.actions.act_window">
+        <field name="name">Pending Approval</field>
+        <field name="res_model">hr.recruitment.request</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_recruitment_request_search"/>
+        <field name="domain">[('state', '=', 'submitted')]</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_cod_reconcile" name="COD Reconciliation"
+              parent="account.menu_finance_receivables"
+              action="action_cod_reconcile_wizard"
+              sequence="99"/>
+</odoo>

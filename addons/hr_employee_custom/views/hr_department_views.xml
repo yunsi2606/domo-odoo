@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- VIEWS MỞ RỘNG hr.department -->
+
+    <!-- Mở rộng form view của hr.department -->
+    <record id="view_hr_department_form_extended" model="ir.ui.view">
+        <field name="name">hr.department.form.extended</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="hr.view_department_form"/>
+        <field name="arch" type="xml">
+            <!-- Thêm field loại đơn vị ngay sau tên -->
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="department_type" widget="radio" class="d-inline-flex gap-3 ms-2"/>
+            </xpath>
+            <!-- Thêm thông tin chi nhánh bên dưới sheet -->
+            <xpath expr="//sheet" position="inside">
+                <group string="Branch Information" invisible="department_type != 'branch'">
+                    <group>
+                        <field name="branch_address"/>
+                        <field name="branch_phone"/>
+                        <field name="branch_email"/>
+                    </group>
+                    <group>
+                        <field name="branch_manager_id"/>
+                        <field name="total_employee_count" string="Tổng nhân viên"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

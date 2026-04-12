@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="cod_reconcile_wizard_view_form" model="ir.ui.view">
+        <field name="name">cod.reconcile.wizard.form</field>
+        <field name="model">cod.reconcile.wizard</field>
+        <field name="arch" type="xml">
+            <form string="COD Reconciliation">
+                <sheet>
+                    <group string="Configuration">
+                        <group>
+                            <field name="carrier"/>
+                            <field name="payment_date"/>
+                        </group>
+                        <group>
+                            <field name="journal_id" options="{'no_create':True}"/>
+                            <field name="file_data" filename="filename" widget="binary"/>
+                            <field name="filename" invisible="1"/>
+                        </group>
+                    </group>
+                    <footer invisible="not line_ids">
+                        <group string="Summary" class="text-end">
+                            <field name="total_matched" readonly="1" string="Matched Deliveries"/>
+                            <field name="total_amount" readonly="1" widget="monetary" string="Total COD Amount"/>
+                        </group>
+                    </footer>
+
+                    <separator string="Parsed Lines" invisible="not line_ids"/>
+                    <field name="line_ids" invisible="not line_ids" readonly="1">
+                        <list decoration-success="is_delivered and invoice_id"
+                              decoration-warning="is_delivered and not invoice_id"
+                              decoration-danger="not is_delivered"
+                              decoration-muted="not is_delivered">
+                            <field name="tracking_number"/>
+                            <field name="carrier_status"/>
+                            <field name="is_delivered" widget="boolean"/>
+                            <field name="cod_amount" widget="monetary"/>
+                            <field name="picking_id"/>
+                            <field name="invoice_id"/>
+                            <field name="reconcile"/>
+                        </list>
+                    </field>
+                </sheet>
+                <footer>
+                    <button name="action_parse_file" type="object" string="1. Parse File"
+                            class="btn-secondary" invisible="line_ids"/>
+                    <button name="action_parse_file" type="object" string="Re-parse"
+                            class="btn-secondary" invisible="not line_ids"/>
+                    <button name="action_reconcile" type="object"
+                            string="2. Reconcile Payments" class="btn-primary"
+                            invisible="not line_ids"
+                            confirm="This will register payments for all matched delivered invoices. Continue?"/>
+                    <button special="cancel" string="Close"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_cod_reconcile_wizard" model="ir.actions.act_window">
+        <field name="name">COD Reconciliation</field>
+        <field name="res_model">cod.reconcile.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

@@ -31,3 +31,6 @@ cloudflared/*.pem
 
 # Odoo manifest dump (auto-generated)
 manifest.json
+
+# Virtual enviroment
+venv/

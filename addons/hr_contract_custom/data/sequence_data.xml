@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sequence for Contract Reference: HD-001, HD-002... -->
+        <record id="seq_hr_contract" model="ir.sequence">
+            <field name="name">HR Contract Reference</field>
+            <field name="code">hr.contract.reference</field>
+            <field name="prefix">HD-</field>
+            <field name="padding">1</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

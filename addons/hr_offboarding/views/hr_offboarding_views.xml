@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Offboarding Form -->
+    <record id="hr_offboarding_view_form" model="ir.ui.view">
+        <field name="name">hr.offboarding.form</field>
+        <field name="model">hr.offboarding</field>
+        <field name="arch" type="xml">
+            <form string="Offboarding &amp; Asset Recovery">
+                <header>
+                    <button name="action_notify" string="Send Notification" type="object"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_start" string="Start Process" type="object"
+                            class="btn-primary" invisible="state != 'notified'"/>
+                    <button name="action_submit_review" string="Submit for Director Approval" type="object"
+                            class="btn-primary" invisible="state != 'in_progress'"/>
+                    <button name="action_director_approve" string="Approve &amp; Finalize" type="object"
+                            class="btn-success"
+                            invisible="state != 'review'"
+                            groups="hr_offboarding.group_offboarding_manager"
+                            confirm="This will archive the employee and close their contract. Proceed?"/>
+                    <button name="action_print_minutes" string="Print Minutes" type="object"
+                            class="btn-secondary"
+                            invisible="state not in ('review','done')"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state in ('done','cancelled')"/>
+                    <button name="action_reset_draft" string="Reset to Draft" type="object"
+                            invisible="state not in ('notified','cancelled')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,notified,in_progress,review,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Employee">
+                            <field name="employee_id" readonly="state != 'draft'"
+                                   options="{'no_create':True}"/>
+                            <field name="department_id" readonly="1"/>
+                            <field name="branch_manager_id" options="{'no_create':True}"/>
+                            <field name="contract_id" options="{'no_create':True}"/>
+                        </group>
+                        <group string="Resignation">
+                            <field name="resign_reason"/>
+                            <field name="date_resign"/>
+                            <field name="date_last_work"/>
+                            <field name="date_asset_deadline"/>
+                        </group>
+                    </group>
+                    <field name="resign_note" placeholder="Notes about resignation..."/>
+
+                    <!-- Asset Checklist -->
+                    <separator string="Asset Return Checklist"/>
+                    <field name="line_ids" readonly="state in ('review','done')">
+                        <list editable="bottom"
+                              decoration-success="return_state == 'returned_ok'"
+                              decoration-warning="return_state == 'returned_damaged'"
+                              decoration-danger="return_state == 'missing'"
+                              decoration-muted="return_state == 'pending'">
+                            <field name="asset_id" options="{'no_create':True}"/>
+                            <field name="asset_code" readonly="1"/>
+                            <field name="asset_value" widget="monetary" readonly="1"/>
+                            <field name="return_state"/>
+                            <field name="received_date"/>
+                            <field name="compensation_amount" widget="monetary"
+                                   invisible="return_state == 'returned_ok'"/>
+                            <field name="compensation_type"
+                                   invisible="return_state == 'returned_ok'"/>
+                            <field name="note"/>
+                        </list>
+                    </field>
+
+                    <!-- Summary -->
+                    <group class="oe_subtotal_footer" invisible="total_assets == 0">
+                        <field name="total_assets" readonly="1"/>
+                        <field name="returned_assets" readonly="1"/>
+                        <field name="damaged_assets" readonly="1"/>
+                        <field name="missing_assets" readonly="1"/>
+                        <field name="compensation_amount" readonly="1"
+                               class="oe_subtotal_footer_separator"
+                               invisible="compensation_amount == 0"/>
+                    </group>
+
+                    <!-- Confirmation blocks -->
+                    <group string="Confirmation" invisible="state not in ('review','done')">
+                        <field name="manager_confirmed"/>
+                        <field name="minutes_signed"/>
+                        <field name="settlement_done"/>
+                        <field name="director_approved_by" readonly="1"/>
+                        <field name="director_approved_date" readonly="1"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Offboarding List -->
+    <record id="hr_offboarding_view_list" model="ir.ui.view">
+        <field name="name">hr.offboarding.list</field>
+        <field name="model">hr.offboarding</field>
+        <field name="arch" type="xml">
+            <list string="Offboarding Records"
+                  decoration-success="state == 'done'"
+                  decoration-warning="state == 'review'"
+                  decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="date_resign"/>
+                <field name="date_last_work"/>
+                <field name="total_assets"/>
+                <field name="returned_assets"/>
+                <field name="missing_assets"/>
+                <field name="compensation_amount" widget="monetary"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'done'"
+                       decoration-info="state == 'review'"
+                       decoration-warning="state == 'in_progress'"
+                       decoration-muted="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Search -->
+    <record id="hr_offboarding_view_search" model="ir.ui.view">
+        <field name="name">hr.offboarding.search</field>
+        <field name="model">hr.offboarding</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <filter string="Draft" name="draft" domain="[('state','=','draft')]"/>
+                <filter string="In Progress" name="in_progress" domain="[('state','=','in_progress')]"/>
+                <filter string="Pending Approval" name="review" domain="[('state','=','review')]"/>
+                <filter string="Done" name="done" domain="[('state','=','done')]"/>
+                <filter string="Has Compensation" name="has_comp"
+                        domain="[('compensation_amount','>',0)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Employee" name="group_employee" context="{'group_by':'employee_id'}"/>
+                    <filter string="Department" name="group_department" context="{'group_by':'department_id'}"/>
+                    <filter string="Month" name="group_month" context="{'group_by':'date_resign:month'}"/>
+                    <filter string="Status" name="group_status" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_hr_offboarding" model="ir.actions.act_window">
+        <field name="name">Offboarding Records</field>
+        <field name="res_model">hr.offboarding</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hr_offboarding_view_search"/>
+    </record>
+
+</odoo>

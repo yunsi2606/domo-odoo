@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_payslip" model="ir.actions.report">
+        <field name="name">Payslip PDF</field>
+        <field name="model">hr.payslip.custom</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hr_payroll_custom.report_payslip_custom_document</field>
+        <field name="report_file">hr_payroll_custom.report_payslip_custom_document</field>
+        <field name="print_report_name">'Payslip_%s' % (object.name.replace('/','_'))</field>
+    </record>
+</odoo>

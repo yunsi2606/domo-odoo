@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pos_session_form_inherit" model="ir.ui.view">
+        <field name="name">pos.session.sync.form</field>
+        <field name="model">pos.session</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_session_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_manual_sync_sales" type="object" string="Sync Sales to Payroll"
+                        class="btn-secondary"
+                        invisible="state != 'closed'"
+                        help="Manually re-sync session sales data to payroll records"/>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <group string="Payroll Sync" invisible="state != 'closed'">
+                    <field name="sales_synced" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

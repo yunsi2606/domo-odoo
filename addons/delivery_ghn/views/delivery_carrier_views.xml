@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="delivery_carrier_ghn_form" model="ir.ui.view">
+        <field name="name">delivery.carrier.ghn.form</field>
+        <field name="model">delivery.carrier</field>
+        <field name="inherit_id" ref="delivery.view_delivery_carrier_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="GHN Config" invisible="shipping_provider != 'ghn'">
+                    <group>
+                        <field name="ghn_token" password="True"/>
+                        <field name="ghn_shop_id"/>
+                        <field name="ghn_service_id" help="2=Express, 3=Standard, 5=Economy"/>
+                    </group>
+                </page>
+                <page string="GHTK Config" invisible="shipping_provider != 'ghtk'">
+                    <group>
+                        <field name="ghtk_token" password="True"/>
+                        <field name="ghtk_pick_province"/>
+                        <field name="ghtk_pick_district"/>
+                        <field name="ghtk_pick_address"/>
+                    </group>
+                </page>
+            </xpath>
+            <field name="delivery_type" position="after">
+                <field name="shipping_provider"/>
+            </field>
+        </field>
+    </record>
+</odoo>

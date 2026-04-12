@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- RECRUITMENT CUSTOM MENUS -->
+
+    <!-- Main Menu -->
+    <menuitem id="menu_recruitment_root"
+              name="Recruitment"
+              web_icon="hr_recruitment_custom,static/description/icon.png"
+              groups="hr_recruitment_custom.group_recruitment_user"
+              sequence="31"/>
+
+    <!-- Recruitment Process -->
+    <menuitem id="menu_recruitment_process"
+              name="Recruitment Process"
+              parent="menu_recruitment_root"
+              sequence="10"/>
+
+    <menuitem id="menu_recruitment_request"
+              name="Recruitment Requests"
+              parent="menu_recruitment_process"
+              action="action_recruitment_request"
+              sequence="10"/>
+
+    <menuitem id="menu_recruitment_request_pending"
+              name="Pending Approval"
+              parent="menu_recruitment_process"
+              action="action_recruitment_request_pending"
+              groups="hr_recruitment_custom.group_recruitment_approver"
+              sequence="15"/>
+
+    <!-- Applicants -->
+    <menuitem id="menu_applicants"
+              name="Applicants"
+              parent="menu_recruitment_root"
+              action="hr_recruitment.crm_case_categ0_act_job"
+              sequence="20"/>
+
+    <!-- Interviews -->
+    <menuitem id="menu_interviews"
+              name="Interviews"
+              parent="menu_recruitment_root"
+              sequence="30"/>
+
+    <menuitem id="menu_interview_list"
+              name="All Interviews"
+              parent="menu_interviews"
+              action="action_interview"
+              sequence="10"/>
+
+    <menuitem id="menu_interview_evaluations"
+              name="Evaluations"
+              parent="menu_interviews"
+              action="action_interview_evaluation"
+              sequence="20"/>
+
+    <!-- Offers -->
+    <menuitem id="menu_offers"
+              name="Offer Letters"
+              parent="menu_recruitment_root"
+              action="action_offer_letter"
+              sequence="40"/>
+
+    <!-- Configuration -->
+    <menuitem id="menu_recruitment_config"
+              name="Configuration"
+              parent="menu_recruitment_root"
+              groups="hr_recruitment_custom.group_recruitment_manager"
+              sequence="90"/>
+
+    <menuitem id="menu_source_channels"
+              name="Source Channels"
+              parent="menu_recruitment_config"
+              action="action_source_channel"
+              sequence="10"/>
+
+</odoo>
